@@ -22,7 +22,8 @@ PRIMARY KEY(idCategory)
 
 DROP TABLE IF EXISTS person;
 CREATE TABLE person(
-idPerson int NOT NULL, 
+idPerson int auto_increment,
+idCard int (15) NOT NULL, 
 namePerson varchar(50) NOT NULL COLLATE utf8_spanish_ci,
 firstLastNamePerson varchar(50) NOT NULL COLLATE utf8_spanish_ci,
 secondLastNamePerson varchar(50) NOT NULL COLLATE utf8_spanish_ci,
