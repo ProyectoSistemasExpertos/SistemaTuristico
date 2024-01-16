@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Housing;
+use App\Models\Person;
 use App\Models\Preference;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -13,6 +15,7 @@ class ControllerHousings extends Controller
     {
         if (!$id) {
             $housing = Housing::join('person','person.idPerson','=','housing.idPerson')
+            ->join('booking','booking.idBooking','=','housing.idBooking')
             ->select(
                 'housing.*',
                 'person.idCard',
@@ -20,7 +23,8 @@ class ControllerHousings extends Controller
                 'person.firstLastNamePerson',
                 'person.secondLastNamePerson',
                 'person.personPhone',
-                'person.personEmail'
+                'person.personEmail',
+                'booking.*'
             )
             ->get();
             return response()->json($housing);
@@ -32,13 +36,15 @@ class ControllerHousings extends Controller
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
             $housing = Housing::join('person','person.idPerson','=','housing.idPerson')
+            ->join('booking','booking.idBooking','=','housing.idBooking')
             ->where('housing.idHousing','=',$id)
             ->select(
                 'housing.*',
                 'person.idCard',
                 'person.namePerson',
                 'person.firstLastNamePerson',
-                'person.secondLastNamePerson'
+                'person.secondLastNamePerson',
+                'booking.*'
             )
             ->get();
             return response()->json($housing);
@@ -54,13 +60,14 @@ class ControllerHousings extends Controller
                 'final_date' => 'required',
                 'arrival_date' => 'required',
                 'total_person' => 'required',
-                'idPerson' => 'required'
+                'idPerson' => 'required',
+                'idBooking'=>'required'
             ]);
 
             $isHousingExists =  Housing::whereIn('idHousing', [$request->input('idHousing')])->first();
 
             if ($isHousingExists) {
-                if ($isHousingExists->idRecommendation == $request->input('idRecommendation')) {
+                if ($isHousingExists->idHousing == $request->input('idHousing')) {
                     return response()->json(['error' => 'La reservación ya ha sido registrado'], 400);
                 }
             }
@@ -73,6 +80,7 @@ class ControllerHousings extends Controller
             $housing->arrival_date = $input['arrival_date'];
             $housing->total_person = $input['total_person'];
             $housing->idPerson = $input['idPerson'];
+            $housing->idBooking = $input['idBooking'];
             $housing->save();
             return response()->json($housing);
 
@@ -96,14 +104,19 @@ class ControllerHousings extends Controller
                 'final_date' => 'required',
                 'arrival_date' => 'required',
                 'total_person' => 'required',
-                'idPerson' => 'required'
+                'idPerson' => 'required',
+                'idBooking'=>'required'
             ]);
             $housing = Housing::find($id);
-            $isHousingExists =  Housing::where('idPerson', [$request->input('idPerson')])
-            ->first();
+            $isHousingExists =  Housing::where('idPerson', [$request->input('idPerson')])->first();
+           
             if ($isHousingExists) {
                 if ($housing->idPerson != $request->input('idPerson')) {
                     return response()->json(['error' => 'No es posible cambiar la persona de esta recomendación'], 400);
+                }elseif ($housing->idBooking != $request->input('idBooking')) {
+                    return response()->json(['error' => 'El lugar no se puede cambiar'], 400);
+                }elseif ($housing->idPerson != $request->input('idPerson')) {
+                    return response()->json(['error' => 'El usuario no se puede cambiar'], 400);
                 }
             }
             
@@ -117,6 +130,7 @@ class ControllerHousings extends Controller
                 $housing->arrival_date = $request->arrival_date;
                 $housing->total_person = $request->total_person;
                 $housing->idPerson = $request->idPerson;
+                $housing->idBooking = $request->idBooking;
                 $housing->save();
                 return response()->json($housing);
                 

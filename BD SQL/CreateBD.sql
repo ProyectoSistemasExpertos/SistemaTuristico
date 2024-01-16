@@ -8,21 +8,14 @@ CREATE DATABASE touristSystem DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci
 USE touristSystem;
 
 
-/*---------------------------rol table-------------------------------------*/
 
-DROP TABLE IF EXISTS rol;
-CREATE TABLE rol(
-idRol int NOT NULL, 
-typeRol varchar(50) NOT NULL COLLATE utf8_spanish_ci,
-PRIMARY KEY(idRol)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 
 /*---------------------------category table-------------------------------------*/
 
 DROP TABLE IF EXISTS category;
 CREATE TABLE category(
-idCategory int NOT NULL, 
+idCategory int NOT NULL auto_increment, 
 typeCategory varchar(50) NOT NULL COLLATE utf8_spanish_ci,
 PRIMARY KEY(idCategory)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -40,7 +33,7 @@ personPhone int(50) NOT NULL,
 personAddress varchar(100) NOT NULL COLLATE utf8_spanish_ci,
 personEmail varchar(100) NOT NULL COLLATE utf8_spanish_ci,
 personPassword varchar(255) NOT NULL COLLATE utf8_spanish_ci,
-idRol varchar(25) NOT NULL COLLATE utf8_spanish_ci,
+rolDescription varchar(25) NOT NULL COLLATE utf8_spanish_ci,
 token varchar(255),
 PRIMARY KEY(idPerson)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -49,7 +42,7 @@ PRIMARY KEY(idPerson)
 
 DROP TABLE IF EXISTS recommendation;
 CREATE TABLE recommendation(
-idRecommendation int NOT NULL, 
+idRecommendation int NOT NULL auto_increment, 
 idPerson int NOT NULL,
 idCategory int NOT NULL,
 PRIMARY KEY(idRecommendation),
@@ -61,32 +54,19 @@ FOREIGN KEY(idCategory) REFERENCES category(idCategory)
 
 DROP TABLE IF EXISTS preference;
 CREATE TABLE preference(
-idPreference int NOT NULL, 
+idPreference int NOT NULL auto_increment, 
 idPerson int NOT NULL,
 idCategory int NOT NULL,
 PRIMARY KEY(idPreference),
 FOREIGN KEY(idPerson) REFERENCES person(idPerson),
 FOREIGN KEY(idCategory) REFERENCES category(idCategory)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-/*---------------------------housing table-------------------------------------*/
-
-DROP TABLE IF EXISTS housing;
-CREATE TABLE housing(
-idHousing int(25) NOT NULL auto_increment,
-initial_date date,
-final_date date,
-arrival_date date,
-total_person int,
-idPerson int NOT NULL,
-PRIMARY KEY(idHousing),
-FOREIGN KEY(idPerson) REFERENCES person(idPerson)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 /*---------------------------Booking table-------------------------------------*/
 
 DROP TABLE IF EXISTS booking;
 CREATE TABLE booking(
-idBooking int(25) NOT NULL,
+idBooking int(25) NOT NULL auto_increment,
 description varchar(255) NOT NULL COLLATE utf8_spanish_ci,
 state boolean,
 price float,
@@ -101,10 +81,26 @@ FOREIGN KEY(idPerson) REFERENCES person(idPerson)
 
 DROP TABLE IF EXISTS booking_Gallery;
 CREATE TABLE booking_Gallery(
-idBooking_gallery int(25) NOT NULL,
+idBooking_gallery int(25) NOT NULL auto_increment,
 image varchar(255) NOT NULL COLLATE utf8_spanish_ci,
 idBooking int NOT NULL,
 PRIMARY KEY(idBooking_gallery),
+FOREIGN KEY(idBooking) REFERENCES booking(idBooking)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+/*---------------------------housing table-------------------------------------*/
+
+DROP TABLE IF EXISTS housing;
+CREATE TABLE housing(
+idHousing int(25) NOT NULL auto_increment,
+initial_date date,
+final_date date,
+arrival_date date,
+total_person int,
+idPerson int NOT NULL,
+idBooking int NOT NULL,
+PRIMARY KEY(idHousing),
+FOREIGN KEY(idPerson) REFERENCES person(idPerson),
 FOREIGN KEY(idBooking) REFERENCES booking(idBooking)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -112,7 +108,7 @@ FOREIGN KEY(idBooking) REFERENCES booking(idBooking)
 
 DROP TABLE IF EXISTS valoration;
 CREATE TABLE valoration(
-idValoration int(25) NOT NULL,
+idValoration int(25) NOT NULL auto_increment,
 score float(2,1) NOT NULL,
 commentary varchar(255) NOT NULL COLLATE utf8_spanish_ci,
 idPerson int NOT NULL,

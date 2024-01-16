@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    use HasFactory;
+    protected $table = 'booking';
+    protected $primaryKey = 'idBooking';
+    public $timestamps = false;
+
+    public function user(){
+        return $this->belongsTo(Person::class);
+    }
 }

@@ -10,4 +10,12 @@ class Housing extends Model
     protected $table = 'housing';
     protected $primaryKey = 'idHousing';
     public $timestamps = false;
+
+    public function booking(){
+        return $this->belongsTo(Booking::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(Person::class);
+    }
 }
