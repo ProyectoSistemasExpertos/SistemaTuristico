@@ -8,6 +8,15 @@ CREATE DATABASE touristSystem DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci
 USE touristSystem;
 
 
+/*---------------------------rol table-------------------------------------*/
+
+DROP TABLE IF EXISTS rol;
+CREATE TABLE rol(
+idRol int NOT NULL, 
+typeRol varchar(50) NOT NULL COLLATE utf8_spanish_ci,
+PRIMARY KEY(idRol)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
 
 /*---------------------------category table-------------------------------------*/
 
@@ -31,7 +40,7 @@ personPhone int(50) NOT NULL,
 personAddress varchar(100) NOT NULL COLLATE utf8_spanish_ci,
 personEmail varchar(100) NOT NULL COLLATE utf8_spanish_ci,
 personPassword varchar(255) NOT NULL COLLATE utf8_spanish_ci,
-rolDescription varchar(50) NOT NULL COLLATE utf8_spanish_ci,
+idRol varchar(25) NOT NULL COLLATE utf8_spanish_ci,
 token varchar(255),
 PRIMARY KEY(idPerson)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -63,7 +72,7 @@ FOREIGN KEY(idCategory) REFERENCES category(idCategory)
 
 DROP TABLE IF EXISTS housing;
 CREATE TABLE housing(
-idHousing int(25) NOT NULL,
+idHousing int(25) NOT NULL auto_increment,
 initial_date date,
 final_date date,
 arrival_date date,

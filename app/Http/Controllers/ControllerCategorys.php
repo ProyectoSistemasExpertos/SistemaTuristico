@@ -74,8 +74,15 @@ class ControllerCategorys extends Controller
     } //End of update
 
     public function destroy($id){
-        $category = Category::where('idCategory',$id)->first();
-        $category->delete();
-        return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
+        $category = Category::where('idCategory', $id)->first();
+        if (!$category) {
+            return response()->json(['error' => 'La categoría no existe'], 404);
+        }
+        try {
+            $category->delete();
+            return response()->json(['message' => 'Se ha eliminado correctamente!'], 200);
+        } catch (QueryException $e) {
+            return response()->json(['error' => 'No se pudo eliminar la categoría', 'exception' => $e->getMessage()], 500);
+        }
     }
 }

@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\ControllerBookings;
 use App\Http\Controllers\ControllerCategorys;
+use App\Http\Controllers\ControllerHousing;
+use App\Http\Controllers\ControllerHousings;
 use App\Http\Controllers\ControllerPersons;
-use App\Http\Controllers\ControllerRecommendation;
+use App\Http\Controllers\ControllerPreferences;
+use App\Http\Controllers\ControllerRecommendations;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,12 +38,26 @@ Route::put('/category/update/{id}', [ControllerCategorys::class, 'update']);
 Route::delete('/category/delete/{id}',[ControllerCategorys::class,'destroy']);
 
 /* -------------------------------------------Recommmendation-----------------------------------------  */
-Route::get('/recommendation/{id?}',[ControllerRecommendation::class,'index']);
-Route::post('/recommendation/create',[ControllerRecommendation::class, 'store']);
-Route::put('/recommendation/update/{id}', [ControllerRecommendation::class, 'update']);
-Route::delete('/recommendation/delete/{id}',[ControllerRecommendation::class,'destroy']);
+Route::get('/recommendation/{id?}',[ControllerRecommendations::class,'index']);
+Route::post('/recommendation/create',[ControllerRecommendations::class, 'store']);
+Route::put('/recommendation/update/{id}', [ControllerRecommendations::class, 'update']);
+Route::delete('/recommendation/delete/{id}',[ControllerRecommendations::class,'destroy']);
 
+/* -------------------------------------------Preference-----------------------------------------  */
+Route::get('/preference/{id?}',[ControllerPreferences::class,'index']);
+Route::post('/preference/create',[ControllerPreferences::class, 'store']);
+Route::put('/preference/update/{id}', [ControllerPreferences::class, 'update']);
+Route::delete('/preference/delete/{id}',[ControllerPreferences::class,'destroy']);
 
+/* -------------------------------------------Housing-----------------------------------------  */
+Route::get('/housing/{id?}',[ControllerHousings::class,'index']);
+Route::post('/housing/create',[ControllerHousings::class, 'store']);
+Route::put('/housing/update/{id}', [ControllerHousings::class, 'update']);
+Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);
 
-
+/* -------------------------------------------Booking-----------------------------------------  */
+Route::get('/booking/{id?}',[ControllerBookings::class,'index']);
+Route::post('/booking/create',[ControllerBookings::class, 'store']);
+Route::put('/booking/update/{id}', [ControllerBookings::class, 'update']);
+Route::delete('/booking/delete/{id}',[ControllerBookings::class,'destroy']);
 

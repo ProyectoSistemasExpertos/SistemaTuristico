@@ -10,4 +10,8 @@ class Category extends Model
     protected $table = 'category';
     protected $primaryKey = 'idCategory';
     public $timestamps = false;
+
+    public function recommendation(){
+        return $this->belongsTo(Recommendation::class);
+    }
 }

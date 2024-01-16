@@ -11,5 +11,9 @@ class Person extends Model
     protected $primaryKey = 'idPerson';
     public $timestamps = false;
 
-    
+    public function recomendation(){
+        return $this->belongsTo(Recommendation::class);
+    }
 }
+
+
