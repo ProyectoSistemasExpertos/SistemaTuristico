@@ -82,7 +82,7 @@ FOREIGN KEY(idPerson) REFERENCES person(idPerson)
 DROP TABLE IF EXISTS booking_Gallery;
 CREATE TABLE booking_Gallery(
 idBooking_gallery int(25) NOT NULL auto_increment,
-image varchar(255) NOT NULL COLLATE utf8_spanish_ci,
+image varchar(255) COLLATE utf8_spanish_ci,
 idBooking int NOT NULL,
 PRIMARY KEY(idBooking_gallery),
 FOREIGN KEY(idBooking) REFERENCES booking(idBooking)

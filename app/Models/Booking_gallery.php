@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking_gallery extends Model
 {
-    use HasFactory;
+    protected $table = 'booking_Gallery';
+    protected $primaryKey = 'idBooking_gallery';
+    public $timestamps = false;
 }

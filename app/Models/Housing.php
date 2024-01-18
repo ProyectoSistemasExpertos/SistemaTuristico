@@ -11,10 +11,10 @@ class Housing extends Model
     protected $primaryKey = 'idHousing';
     public $timestamps = false;
 
+   
     public function booking(){
-        return $this->belongsTo(Booking::class);
+        return $this->hasOne(Booking::class, 'idBooking');
     }
-
     public function user(){
         return $this->belongsTo(Person::class);
     }

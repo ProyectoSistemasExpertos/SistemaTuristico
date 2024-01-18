@@ -55,7 +55,6 @@ class ControllerHousings extends Controller
     {
         try {
             $request->validate([
-                'idHousing' => 'required',
                 'initial_date' => 'required',
                 'final_date' => 'required',
                 'arrival_date' => 'required',
@@ -64,17 +63,16 @@ class ControllerHousings extends Controller
                 'idBooking'=>'required'
             ]);
 
-            $isHousingExists =  Housing::whereIn('idHousing', [$request->input('idHousing')])->first();
+            $isHousingExists =  Housing::whereIn('idBooking', [$request->input('idBooking')])->first();
 
             if ($isHousingExists) {
-                if ($isHousingExists->idHousing == $request->input('idHousing')) {
+                if ($isHousingExists->idBooking == $request->input('idBooking')) {
                     return response()->json(['error' => 'La reservación ya ha sido registrado'], 400);
                 }
             }
 
             $input = $request->all();
             $housing = new Housing();
-            $housing->idHousing = $input['idHousing'];
             $housing->initial_date = $input['initial_date'];
             $housing->final_date = $input['final_date'];
             $housing->arrival_date = $input['arrival_date'];
@@ -82,6 +80,14 @@ class ControllerHousings extends Controller
             $housing->idPerson = $input['idPerson'];
             $housing->idBooking = $input['idBooking'];
             $housing->save();
+
+            $booking = Booking::find($input['idBooking']);
+            if($booking){
+                $booking->state = '0';
+                $booking->save();
+            }
+
+            
             return response()->json($housing);
 
         } catch (QueryException $e) {
@@ -124,7 +130,6 @@ class ControllerHousings extends Controller
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
                 
             } else {
-                $housing->idHousing = $id;
                 $housing->initial_date = $request->initial_date;
                 $housing->final_date = $request->final_date;
                 $housing->arrival_date = $request->arrival_date;

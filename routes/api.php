@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ControllerBooking_gallerys;
 use App\Http\Controllers\ControllerBookings;
 use App\Http\Controllers\ControllerCategorys;
 use App\Http\Controllers\ControllerHousing;
@@ -7,6 +8,7 @@ use App\Http\Controllers\ControllerHousings;
 use App\Http\Controllers\ControllerPersons;
 use App\Http\Controllers\ControllerPreferences;
 use App\Http\Controllers\ControllerRecommendations;
+use App\Http\Controllers\ControllerValorations;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,4 +62,16 @@ Route::get('/booking/{id?}',[ControllerBookings::class,'index']);
 Route::post('/booking/create',[ControllerBookings::class, 'store']);
 Route::put('/booking/update/{id}', [ControllerBookings::class, 'update']);
 Route::delete('/booking/delete/{id}',[ControllerBookings::class,'destroy']);
+
+/* -------------------------------------------Booking_gallery-----------------------------------------  */
+Route::get('/booking_gallery/{id?}',[ControllerBooking_gallerys::class,'index']);
+Route::post('/booking_gallery/create',[ControllerBooking_gallerys::class, 'store']);
+Route::put('/booking_gallery/update/{id}', [ControllerBooking_gallerys::class, 'update']);
+Route::delete('/booking_gallery/delete/{id}',[ControllerBooking_gallerys::class,'destroy']);
+
+/* -------------------------------------------Valoration-----------------------------------------  */
+Route::get('/valoration/{id?}',[ControllerValorations::class,'index']);
+Route::post('/valoration/create',[ControllerValorations::class, 'store']);
+Route::put('/valoration/update/{id}', [ControllerValorations::class, 'update']);
+Route::delete('/valoration/delete/{id}',[ControllerValorations::class,'destroy']);
 

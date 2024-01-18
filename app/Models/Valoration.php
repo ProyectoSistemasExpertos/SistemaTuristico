@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Valoration extends Model
 {
-    use HasFactory;
+    protected $table = 'valoration';
+    protected $primaryKey = 'idValoration';
+    public $timestamps = false;
 }

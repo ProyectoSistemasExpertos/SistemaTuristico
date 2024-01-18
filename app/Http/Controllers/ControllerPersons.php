@@ -27,7 +27,6 @@ class ControllerPersons extends Controller
     {
         try {
             $request->validate([
-                //'idPerson' => 'required',
                 'idCard' => 'required',
                 'namePerson' => 'required',
                 'firstLastNamePerson' => 'required',
@@ -81,7 +80,6 @@ class ControllerPersons extends Controller
         try {
 
             $request->validate([
-                //'idPerson' => 'required',
                 'idCard' => 'required',
                 'namePerson' => 'required',
                 'firstLastNamePerson' => 'required',
@@ -98,7 +96,6 @@ class ControllerPersons extends Controller
             if (!$person) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
-                //$person->idPerson = $request->$id;
                 $person->idCard = $request->idCard;
                 $person->namePerson = $request->namePerson;
                 $person->firstLastNamePerson = $request->firstLastNamePerson;

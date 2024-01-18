@@ -24,13 +24,11 @@ class ControllerCategorys extends Controller
     {
         try {
             $request->validate([
-                'idCategory' => 'required',
                 'typeCategory' => 'required'
             ]);
 
             $input = $request->all();
             $category = new Category();
-            $category->idCategory = $input['idCategory'];
             $category->typeCategory = $input['typeCategory'];
             $category->save();
 
@@ -51,7 +49,6 @@ class ControllerCategorys extends Controller
     {
         try {
             $request->validate([
-                'idCategory' => 'required',
                 'typeCategory' => 'required'
             ]);
 
@@ -60,7 +57,6 @@ class ControllerCategorys extends Controller
             if (!$category) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
-                $category->idCategory = $request->idCategory;
                 $category->typeCategory = $request->typeCategory;
                 $category->save();
                 return response()->json($category);
