@@ -12,16 +12,14 @@ class ControllerBookings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking = Booking::join('person', 'person.idPerson', '=', 'booking.idPerson')
-                ->leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+            $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
                 ->select(
-                    'booking.*',
-                    'person.idCard',
-                    'person.namePerson',
-                    'person.firstLastNamePerson',
-                    'person.secondLastNamePerson',
-                    'person.personPhone',
-                    'person.personEmail',
+                    'booking.idBooking',
+                    'booking.description',
+                    'booking.state',
+                    'booking.price',
+                    'booking.location',
+                    'booking.totalPossibleReservation',
                     'booking_gallery.idBooking_gallery',
                     'booking_gallery.image'
                 )
@@ -46,8 +44,7 @@ class ControllerBookings extends Controller
                     'person.personPhone',
                     'person.personEmail',
                     'booking_gallery.idBooking_gallery',
-                    '
-                booking_gallery.image'
+                    'booking_gallery.image'
                 )
                 ->get();
             return response()->json($booking);
