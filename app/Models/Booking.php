@@ -16,6 +16,6 @@ class Booking extends Model
     }
    
     public function booking_gallery(){
-        return $this->hasOne(Booking_gallery::class, 'idBooking');
+        return $this->hasMany(Booking_gallery::class, 'idBooking');
     }
 }
