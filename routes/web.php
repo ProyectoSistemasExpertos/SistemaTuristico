@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ControllerLogin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::view('/register', "register")->name('register');
+Route::view('/privada', "privada")->middleware('auth')->name('privada');
+Route::view('/login', "login")->name('login');
+
+Route::post('/register',[ControllerLogin::class,'register']);
+Route::post('/login',[ControllerLogin::class,'login'])->name('inicia-sesion');
+Route::get('/logout',[ControllerLogin::class,'logout'])->name('logout');
