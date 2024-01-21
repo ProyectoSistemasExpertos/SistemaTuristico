@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ControllerLogin extends Controller
 {
 
@@ -22,21 +24,35 @@ class ControllerLogin extends Controller
 
         $user = new User();
 
-        $user->name = $request->name;
-        $user->idCard = $request->idCard;
-        $user->firstLastName = $request->firstLastName;
-        $user->secondLastName = $request->secondLastName;
-        $user->phone = $request->phone;
-        $user->Address = $request->Address;
-        $user->rol = 1;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        //cosnulta para saber si el email ya existe en la BD
+        $verifed_email = User::query()->where('email', '=', $request->email)->exists();
 
-        $user->save();
+        if($this->userEmpty($request)){
+            echo("No pueden haber datos vacios");
+        }else{
 
-        Auth::login($user);
+            if(!$verifed_email){
+                $user->name = $request->name;
+                $user->idCard = $request->idCard;
+                $user->firstLastName = $request->firstLastName;
+                $user->secondLastName = $request->secondLastName;
+                $user->phone = $request->phone;
+                $user->Address = $request->Address;
+                $user->rol = 1;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+    
+                $user->save();
+    
+                Auth::login($user);
+    
+                return redirect(route('privada'));
+            }else{
 
-        return redirect(route('privada'));
+                echo("Al parecer ya existe una cuenta con este correo electrónico");
+            }
+        
+        }
 
     }
 
@@ -66,6 +82,18 @@ class ControllerLogin extends Controller
         $request->session()->regenerateToken();
 
         return redirect(route('login'));
+    }
+
+    //se valida que los datos del registro no vayan vacios
+    private function userEmpty(Request $request){
+
+        $user = new User();
+        if($request->name == null || $request->idCard == null || $request->firstLastName == null ||
+        $request->secondLastName == null || $request->phone == null || $request->Address == null ||
+        $request->email == null || $request->password == null){
+            return true;
+        }
+            return false;
     }
 }
 ?>
