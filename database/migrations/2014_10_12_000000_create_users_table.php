@@ -19,6 +19,17 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->integer('idCard'); 
+            $table->string('firstLastName');
+            $table->string('secondLastName');
+            $table->integer('phone'); 
+            $table->string('Address');
+            $table->integer('rol');
+
+            $table->collation = 'utf8_unicode_ci';
+            $table->charset = 'utf8';
+            $table->engine = 'InnoDB';
         });
     }
 
