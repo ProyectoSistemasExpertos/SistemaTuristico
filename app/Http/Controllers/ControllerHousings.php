@@ -14,16 +14,16 @@ class ControllerHousings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $housing = Housing::join('person','person.idPerson','=','housing.idPerson')
+            $housing = Housing::join('users','users.id','=','housing.idPerson')
             ->join('booking','booking.idBooking','=','housing.idBooking')
             ->select(
                 'housing.*',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
-                'person.secondLastNamePerson',
-                'person.personPhone',
-                'person.personEmail',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
+                'users.secondLastName',
+                'users.phone',
+                'users.email',
                 'booking.*'
             )
             ->get();
@@ -35,15 +35,15 @@ class ControllerHousings extends Controller
             if(!$housing){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $housing = Housing::join('person','person.idPerson','=','housing.idPerson')
+            $housing = Housing::join('users','users.id','=','housing.idPerson')
             ->join('booking','booking.idBooking','=','housing.idBooking')
             ->where('housing.idHousing','=',$id)
             ->select(
                 'housing.*',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
-                'person.secondLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
+                'users.secondLastName',
                 'booking.*'
             )
             ->get();

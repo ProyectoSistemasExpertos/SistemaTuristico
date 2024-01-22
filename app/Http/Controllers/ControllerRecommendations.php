@@ -11,14 +11,14 @@ class ControllerRecommendations extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $recommendation = Recommendation::join('person','person.idPerson','=','recommendation.idPerson')
+            $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
             ->join('category','category.idCategory','=','recommendation.idCategory')
             ->select(
                 'recommendation.idRecommendation',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
-                'person.secondLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
+                'users.secondLastName',
                 'category.idCategory',
                 'category.typeCategory'
             )
@@ -31,15 +31,15 @@ class ControllerRecommendations extends Controller
             if(!$recommendation){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $recommendation = Recommendation::join('person','person.idPerson','=','recommendation.idPerson')
+            $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
             ->join('category','category.idCategory','=','recommendation.idCategory')
             ->where('recommendation.idRecommendation','=',$id)
             ->select(
                 'recommendation.idRecommendation',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
-                'person.secondLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
+                'users.secondLastName',
                 'category.idCategory',
                 'category.typeCategory'
             )

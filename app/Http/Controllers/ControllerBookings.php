@@ -32,17 +32,17 @@ class ControllerBookings extends Controller
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $booking = Booking::join('person', 'person.idPerson', '=', 'booking.idPerson')
+            $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
                 ->where('booking.idBooking', '=', $id)
                 ->select(
                     'booking.*',
-                    'person.idCard',
-                    'person.namePerson',
-                    'person.firstLastNamePerson',
-                    'person.secondLastNamePerson',
-                    'person.personPhone',
-                    'person.personEmail',
+                    'users.idCard',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'users.phone',
+                    'users.email',
                     'booking_gallery.idBooking_gallery',
                     'booking_gallery.image'
                 )

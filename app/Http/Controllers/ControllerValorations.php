@@ -11,14 +11,14 @@ class ControllerValorations extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking = Valoration::join('person','person.idPerson','=','valoration.idPerson')
+            $booking = Valoration::join('users','users.id','=','valoration.idPerson')
             ->join('booking','booking.idBooking','=','valoration.idBooking')
             ->join('booking_gallery','booking_gallery.idBooking','=','booking.idBooking')
             ->select(
                 'valoration.*',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
                 'booking.idBooking',
                 'booking.description',
                 'booking_gallery.idBooking_gallery',
@@ -33,15 +33,15 @@ class ControllerValorations extends Controller
             if(!$booking){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $booking = Valoration::join('person','person.idPerson','=','valoration.idPerson')
+            $booking = Valoration::join('users','users.id','=','valoration.idPerson')
             ->join('booking','booking.idBooking','=','valoration.idBooking')
             ->join('booking_gallery','booking_gallery.idBooking','=','booking.idBooking')
             ->where('booking.idBooking','=',$id)
             ->select(
                 'valoration.*',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
                 'booking.idBooking',
                 'booking.description',
                 'booking_gallery.idBooking_gallery',

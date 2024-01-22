@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('firstLastName');
             $table->string('secondLastName');
             $table->integer('phone'); 
-            $table->string('Address');
-            $table->integer('rol');
+            $table->string('address');
+            $table->string('rol');
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';

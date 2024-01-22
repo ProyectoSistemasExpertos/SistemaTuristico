@@ -28,21 +28,21 @@ class ControllerPersons extends Controller
         try {
             $request->validate([
                 'idCard' => 'required',
-                'namePerson' => 'required',
-                'firstLastNamePerson' => 'required',
-                'secondLastNamePerson' => 'required',
-                'personPhone' => 'required',
-                'personAddress' => 'required',
-                'personEmail' => 'required',
-                'personPassword' => 'required',
-                'rolDescription' => 'required'
+                'name' => 'required',
+                'firstLastName' => 'required',
+                'secondLastName' => 'required',
+                'phone' => 'required',
+                'address' => 'required',
+                'email' => 'required',
+                'password' => 'required',
+                'rol' => 'required'
             ]);
-            $isPersonExists =  Person::whereIn('personEmail', [$request->input('personEmail')])
+            $isPersonExists =  Person::whereIn('email', [$request->input('email')])
                 ->orWhereIn('idCard', [$request->input('idCard')])
                 ->first();
 
             if ($isPersonExists) {
-                if ($isPersonExists->personEmail == $request->input('personEmail')) {
+                if ($isPersonExists->personEmail == $request->input('email')) {
                     return response()->json(['error' => 'El correo ya ha sido registrado'], 400);
                 } elseif ($isPersonExists->idCard == $request->input('idCard')) {
                     return response()->json(['error' => 'La cédula ya ha sido registrada'], 400);
@@ -51,14 +51,14 @@ class ControllerPersons extends Controller
             $input = $request->all();
             $person = new Person();
             $person->idCard = $input['idCard'];
-            $person->namePerson = $input['namePerson'];
-            $person->firstLastNamePerson = $input['firstLastNamePerson'];
-            $person->secondLastNamePerson = $input['secondLastNamePerson'];
-            $person->personPhone = $input['personPhone'];
-            $person->personAddress = $input['personAddress'];
-            $person->personEmail = $input['personEmail'];
-            $person->personPassword = Hash::make($input['personPassword']);
-            $person->rolDescription = $input['rolDescription'];
+            $person->name = $input['name'];
+            $person->firstLastName = $input['firstLastName'];
+            $person->secondLastName = $input['secondLastName'];
+            $person->phone = $input['phone'];
+            $person->address = $input['address'];
+            $person->email = $input['email'];
+            $person->password = Hash::make($input['password']);
+            $person->rol = $input['rol'];
 
             $person->save();
 
@@ -81,14 +81,14 @@ class ControllerPersons extends Controller
 
             $request->validate([
                 'idCard' => 'required',
-                'namePerson' => 'required',
-                'firstLastNamePerson' => 'required',
-                'secondLastNamePerson' => 'required',
-                'personPhone' => 'required',
-                'personAddress' => 'required',
-                'personEmail' => 'required',
-                'personPassword' => 'required',
-                'rolDescription' => 'required'
+                'name' => 'required',
+                'firstLastName' => 'required',
+                'secondLastName' => 'required',
+                'phone' => 'required',
+                'address' => 'required',
+                'email' => 'required',
+                'password' => 'required',
+                'rol' => 'required'
             ]);
 
             $person = Person::find($id);
@@ -97,14 +97,14 @@ class ControllerPersons extends Controller
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
                 $person->idCard = $request->idCard;
-                $person->namePerson = $request->namePerson;
-                $person->firstLastNamePerson = $request->firstLastNamePerson;
-                $person->secondLastNamePerson = $request->secondLastNamePerson;
-                $person->personPhone = $request->personPhone;
-                $person->personAddress = $request->personAddress;
-                $person->personEmail = $request->personEmail;
-                $person->personPassword = Hash::make($request->personPassword);
-                $person->rolDescription = $request->rolDescription;
+                $person->name = $request->name;
+                $person->firstLastName = $request->firstLastName;
+                $person->secondLastName = $request->secondLastName;
+                $person->phone = $request->phone;
+                $person->address = $request->address;
+                $person->email = $request->email;
+                $person->password = Hash::make($request->password);
+                $person->rol = $request->rol;
                 $person->save();
 
                 return response()->json($person,);
@@ -122,18 +122,42 @@ class ControllerPersons extends Controller
         try {
             $person = Person::findOrFail($id);
 
+            // Check and delete recommendations
             $recommendations = Recommendation::where('idPerson', $id)->get();
             foreach ($recommendations as $recommendation) {
                 $recommendation->delete();
             }
 
+            // Check and delete preferences
             $preferences = Preference::where('idPerson', $id)->get();
             foreach ($preferences as $preference) {
                 $preference->delete();
             }
 
+            // Check if recommendations and preferences were deleted
+            $recommendationsCount = count($recommendations);
+            $preferencesCount = count($preferences);
+            $deletedMessage = '';
+
+            if ($recommendationsCount > 0) {
+                $deletedMessage .= "Se han eliminado $recommendationsCount recomendaciones. ";
+            }
+
+            if ($preferencesCount > 0) {
+                $deletedMessage .= "Se han eliminado $preferencesCount preferencias. ";
+            }
+
+            // Delete the person
             $person->delete();
-            return response()->json(['message' => 'Se ha eliminado correctamente!'], 200);
+
+            // Return response with appropriate message
+            if ($deletedMessage !== '') {
+                $message = 'Se ha eliminado correctamente. ' . $deletedMessage;
+            } else {
+                $message = 'Se ha eliminado correctamente!';
+            }
+
+            return response()->json(['message' => $message], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'No se encontró el usuario'], 404);
         } catch (QueryException $e) {
@@ -143,5 +167,6 @@ class ControllerPersons extends Controller
                 return response()->json(['error' => $e->getMessage()], 500);
             }
         }
-    }
+    } //end destroy
+
 }

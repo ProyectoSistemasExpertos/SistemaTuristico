@@ -11,14 +11,14 @@ class ControllerPreferences extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $recommendation = Preference::join('person','person.idPerson','=','preference.idPerson')
+            $recommendation = Preference::join('users','users.id','=','preference.idPerson')
             ->join('category','category.idCategory','=','preference.idCategory')
             ->select(
                 'preference.idPreference',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
-                'person.secondLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
+                'users.secondLastName',
                 'category.idCategory',
                 'category.typeCategory'
             )
@@ -31,15 +31,15 @@ class ControllerPreferences extends Controller
             if(!$recommendation){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $recommendation = Preference::join('person','person.idPerson','=','preference.idPerson')
+            $recommendation = Preference::join('users','users.id','=','preference.idPerson')
             ->join('category','category.idCategory','=','preference.idCategory')
             ->where('preference.idPreference','=',$id)
             ->select(
                 'preference.idPreference',
-                'person.idCard',
-                'person.namePerson',
-                'person.firstLastNamePerson',
-                'person.secondLastNamePerson',
+                'users.idCard',
+                'users.name',
+                'users.firstLastName',
+                'users.secondLastName',
                 'category.idCategory',
                 'category.typeCategory'
             )
@@ -52,14 +52,12 @@ class ControllerPreferences extends Controller
     {
         try {
             $request->validate([
-                'idPreference' => 'required',
                 'idPerson' => 'required',
                 'idCategory'=> 'required'
             ]);
 
             $input = $request->all();
             $preference = new Preference();
-            $preference->idPreference = $input['idPreference'];
             $preference->idPerson = $input['idPerson'];
             $preference->idCategory = $input['idCategory'];
             $preference->save();
@@ -85,7 +83,6 @@ class ControllerPreferences extends Controller
     {
         try {
             $request->validate([
-                'idPreference' => 'required',
                 'idPerson' => 'required',
                 'idCategory' => 'required'
             ]);
@@ -94,7 +91,6 @@ class ControllerPreferences extends Controller
             if (!$preference) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
-                $preference->idPreference = $request->idPreference;
                 $preference->idPerson = $request->idPerson;
                 $preference->idCategory = $request->idCategory;
                 $preference->save();

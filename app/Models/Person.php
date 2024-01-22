@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
-    protected $table = 'person';
-    protected $primaryKey = 'idPerson';
+    protected $table = 'users';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     public function recomendation(){
