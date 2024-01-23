@@ -7,44 +7,58 @@ use App\Models\Booking_gallery;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+
 class ControllerBookings extends Controller
 {
     public function index($id = null)
     {
         if (!$id) {
             $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->join('users','users.id','=','booking.idPerson')
+                ->join('category','category.idCategory','=','booking.idCategory')
                 ->select(
-                    'booking.idBooking',
-                    'booking.description',
-                    'booking.state',
-                    'booking.price',
-                    'booking.location',
-                    'booking.totalPossibleReservation',
+                    'booking.*',
                     'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image'
+                    'booking_gallery.image',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.email',
+                    'users.idCard',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'users.phone',
+                    'users.address',
+                    'users.rol',
+                    'category.typeCategory'
+
                 )
                 ->get();
             return response()->json($booking);
         } else {
-
             $booking = Booking::findorfail($id);
 
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->join('users','users.id','=','booking.idPerson')
+                ->join('category','category.idCategory','=','booking.idCategory')
                 ->where('booking.idBooking', '=', $id)
                 ->select(
                     'booking.*',
-                    'users.idCard',
+                    'booking_gallery.idBooking_gallery',
+                    'booking_gallery.image',
+                    'users.id as idPerson',
                     'users.name',
+                    'users.email',
+                    'users.idCard',
                     'users.firstLastName',
                     'users.secondLastName',
                     'users.phone',
-                    'users.email',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image'
+                    'users.address',
+                    'users.rol',
+                    'category.typeCategory'
                 )
                 ->get();
             return response()->json($booking);
@@ -78,6 +92,7 @@ class ControllerBookings extends Controller
             $booking->price = $input['price'];
             $booking->location = $input['location'];
             $booking->totalPossibleReservation = $input['totalPossibleReservation'];
+            $booking->uploadDate = Carbon::now()->format('d-m-Y');
             $booking->idPerson = $input['idPerson'];
             $booking->save();
 
@@ -96,11 +111,11 @@ class ControllerBookings extends Controller
         }
     }
 
-    //
     public function update(Request $request, $id)
     {
         try {
             $request->validate([
+                'tittle' => 'required',
                 'description' => 'required',
                 'state' => 'required',
                 'price' => 'required',
@@ -121,12 +136,14 @@ class ControllerBookings extends Controller
             if (!$booking) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
+                $booking->tittle = $request->tittle;
                 $booking->description = $request->description;
                 $booking->state = $request->state;
                 $booking->price = $request->price;
                 $booking->location = $request->location;
                 $booking->totalPossibleReservation = $request->totalPossibleReservation;
                 $booking->idPerson = $request->idPerson;
+                $booking->idCategory = $request->idCategory;
                 $booking->save();
                 return response()->json($booking);
             } //end if exists
@@ -163,10 +180,9 @@ class ControllerBookings extends Controller
         }
     }//End destroy
 
-
-    public function filter_by_category($id){
+    public function filter_by_category($id) {
         try {
-        $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
+            $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
                 ->where('booking.idCategory', '=', $id)
                 ->select(
@@ -181,14 +197,14 @@ class ControllerBookings extends Controller
                     'booking_gallery.image'
                 )
                 ->get();
-                    if($booking){
-                        return response()->json($booking);
-                    }else{
-                        return response()->json(['error' => 'No hay registros con ese idCategory'], 400);
-                    }
-                } catch (QueryException $e) {
-                    return response()->json(['error' => $e->getMessage()], 500);
-                }
-                
-    }//end filter_by_category
-}
+    
+            if ($booking->isEmpty()) {
+                return response()->json(['error' => 'No hay registros con ese idCategory'], 404);
+            }
+    
+            return response()->json($booking);
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }   
+    }
+}//End controllerBooking

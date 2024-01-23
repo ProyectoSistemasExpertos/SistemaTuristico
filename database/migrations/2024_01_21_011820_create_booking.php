@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('booking', function (Blueprint $table) {
             $table->id('idBooking');
+            $table->string('tittle');
             $table->string('description');
             $table->boolean('state');
             $table->float('price');
             $table->string('location');
             $table->integer('totalPossibleReservation');
+            $table->timestamp('uploadDate')->nullable();
             $table->integer('idPerson')->references('id')->on('users');
             $table->integer('idCategory')->references('idCategory')->on('category');
+            
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
