@@ -165,6 +165,7 @@ class ControllerBookings extends Controller
 
 
     public function filter_by_category($id){
+        try {
         $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
                 ->where('booking.idCategory', '=', $id)
@@ -180,7 +181,14 @@ class ControllerBookings extends Controller
                     'booking_gallery.image'
                 )
                 ->get();
-
-                return response()->json($booking);
+                    if($booking){
+                        return response()->json($booking);
+                    }else{
+                        return response()->json(['error' => 'No hay registros con ese idCategory'], 400);
+                    }
+                } catch (QueryException $e) {
+                    return response()->json(['error' => $e->getMessage()], 500);
+                }
+                
     }//end filter_by_category
 }
