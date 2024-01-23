@@ -19,7 +19,7 @@ class ControllerValorations extends Controller
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
-                'booking.idBooking',
+                'booking.idBooking', 
                 'booking.description',
                 'booking_gallery.idBooking_gallery',
                 'booking_gallery.image'

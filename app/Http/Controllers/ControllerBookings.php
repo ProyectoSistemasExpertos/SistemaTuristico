@@ -161,5 +161,26 @@ class ControllerBookings extends Controller
                 return response()->json(['error' => 'Error de base de datos.'], 500);
             }
         }
-    }
+    }//End destroy
+
+
+    public function filter_by_category($id){
+        $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->where('booking.idCategory', '=', $id)
+                ->select(
+                    'booking.*',
+                    'users.idCard',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'users.phone',
+                    'users.email',
+                    'booking_gallery.idBooking_gallery',
+                    'booking_gallery.image'
+                )
+                ->get();
+
+                return response()->json($booking);
+    }//end filter_by_category
 }

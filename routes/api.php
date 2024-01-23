@@ -62,12 +62,13 @@ Route::get('/booking/{id?}',[ControllerBookings::class,'index']);
 Route::post('/booking/create',[ControllerBookings::class, 'store']);
 Route::put('/booking/update/{id}', [ControllerBookings::class, 'update']);
 Route::delete('/booking/delete/{id}',[ControllerBookings::class,'destroy']);
+Route::get('/booking/filter_category/{id}',[ControllerBookings::class,'filter_by_category']);
 
 /* -------------------------------------------Booking_gallery-----------------------------------------  */
 Route::get('/booking_gallery/{id?}',[ControllerBooking_gallerys::class,'index']);
 Route::post('/booking_gallery/create',[ControllerBooking_gallerys::class, 'store']);
 Route::put('/booking_gallery/update/{id}', [ControllerBooking_gallerys::class, 'update']);
-Route::delete('/booking_gallery/delete/{id}',[ControllerBooking_gallerys::class,'destroy']);
+Route::get('/booking_gallery/delete/{id}',[ControllerBooking_gallerys::class,'destroy']);
 
 /* -------------------------------------------Valoration-----------------------------------------  */
 Route::get('/valoration/{id?}',[ControllerValorations::class,'index']);

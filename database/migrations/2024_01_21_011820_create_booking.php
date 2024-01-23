@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('location');
             $table->integer('totalPossibleReservation');
             $table->integer('idPerson')->references('id')->on('users');
+            $table->integer('idCategory')->references('idCategory')->on('category');
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
