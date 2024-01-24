@@ -44,6 +44,7 @@ Route::get('/recommendation/{id?}',[ControllerRecommendations::class,'index']);
 Route::post('/recommendation/create',[ControllerRecommendations::class, 'store']);
 Route::put('/recommendation/update/{id}', [ControllerRecommendations::class, 'update']);
 Route::delete('/recommendation/delete/{id}',[ControllerRecommendations::class,'destroy']);
+Route::get('/recommendation/showRecommendation/{idPerson}', [ControllerRecommendations::class, 'showRecommendation']);
 
 /* -------------------------------------------Preference-----------------------------------------  */
 Route::get('/preference/{id?}',[ControllerPreferences::class,'index']);

@@ -14,11 +14,11 @@ class ControllerRecommendations extends Controller
             $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
             ->join('category','category.idCategory','=','recommendation.idCategory')
             ->select(
-                'recommendation.idRecommendation',
-                'users.idCard',
-                'users.name',
-                'users.firstLastName',
-                'users.secondLastName',
+                'recommendation.*',
+                //'users.idCard',
+                //'users.name',
+                //'users.firstLastName',
+                //'users.secondLastName',
                 'category.idCategory',
                 'category.typeCategory'
             )
@@ -35,12 +35,12 @@ class ControllerRecommendations extends Controller
             ->join('category','category.idCategory','=','recommendation.idCategory')
             ->where('recommendation.idRecommendation','=',$id)
             ->select(
-                'recommendation.idRecommendation',
-                'users.idCard',
-                'users.name',
-                'users.firstLastName',
-                'users.secondLastName',
-                'category.idCategory',
+                'recommendation.*',
+                //'users.idCard',
+              //  'users.name',
+              //  'users.firstLastName',
+              //  'users.secondLastName',
+              //  'category.idCategory',
                 'category.typeCategory'
             )
             ->get();
@@ -52,30 +52,34 @@ class ControllerRecommendations extends Controller
     {
         try {
             $request->validate([
-                'idRecommendation' => 'required',
                 'idPerson' => 'required',
                 'idCategory'=> 'required'
             ]);
 
-            $isRecommendationExists =  Recommendation::whereIn('idRecommendation', [$request->input('idRecommendation')])
-            ->orWhereIn('idPerson', [$request->input('idPerson')])
+            $isRecommendationExists =  Recommendation::where('idPerson', [$request->input('idPerson')])
+            ->where('idCategory', [$request->input('idCategory')])
             ->first();
 
-            if ($isRecommendationExists) {
-                if ($isRecommendationExists->idRecommendation == $request->input('idRecommendation')) {
-                    return response()->json(['error' => 'La recomendación ya ha sido registrado'], 400);
-                } elseif ($isRecommendationExists->idPerson == $request->input('idPerson')) {
-                    return response()->json(['error' => 'La persona ya ha sido registrada'], 400);
-                }
+            if (!$isRecommendationExists) {
+                $input = $request->all();
+                $recommendation = new Recommendation();
+                $recommendation->idPerson = $input['idPerson'];
+                $recommendation->idCategory = $input['idCategory'];
+                $recommendation->counter = 0;
+                $recommendation->save();
+                return response()->json($recommendation);
+//$isRecommendationExists->idCategory == $request->input('idCategory')
+            }else{
+                $updateRecommendation = Recommendation::findOrFail($isRecommendationExists->idRecommendation);
+                $updateRecommendation->idPerson = $request->idPerson;
+                $updateRecommendation->idCategory = $request->idCategory;
+                $updateRecommendation->counter = $request->counter;
+                $updateRecommendation->save();
+                return response()->json($updateRecommendation);
+                
             }
 
-            $input = $request->all();
-            $recommendation = new Recommendation();
-            $recommendation->idRecommendation = $input['idRecommendation'];
-            $recommendation->idPerson = $input['idPerson'];
-            $recommendation->idCategory = $input['idCategory'];
-            $recommendation->save();
-            return response()->json($recommendation);
+         
 
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
@@ -110,9 +114,9 @@ class ControllerRecommendations extends Controller
             if (!$recommendation) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
-                $recommendation->idRecommendation = $request->idRecommendation;
                 $recommendation->idPerson = $request->idPerson;
                 $recommendation->idCategory = $request->idCategory;
+                $recommendation->counter = $request->counter;
                 $recommendation->save();
                 return response()->json($recommendation);
             }//end if exists
@@ -128,5 +132,22 @@ class ControllerRecommendations extends Controller
         $recommendation = Recommendation::where('idRecommendation',$id)->first();
         $recommendation->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
-    }
+    }//End of destroy
+
+    public function showRecommendation($id){
+        $recommendations = Recommendation::where('idPerson', $id)->get();
+
+
+        if($recommendations->isEmpty()){
+            return response()->json(['message' => 'No se encontraron recomendaciones para el idPerson dado.'], 404);
+        }
+
+        $maxCounters = $recommendations->max('counter');
+        $recommendationWithMaxContadores = $recommendations->where('counter', $maxCounters)->first();
+
+        return response()->json([
+            'maxContadores' => $maxCounters,
+            'recommendationWithMaxContadores' => $recommendationWithMaxContadores,
+        ], 200);
+    }//End of makeRecommendation
 }
