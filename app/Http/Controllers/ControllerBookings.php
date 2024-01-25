@@ -94,7 +94,7 @@ class ControllerBookings extends Controller
             $booking->price = $input['price'];
             $booking->location = $input['location'];
             $booking->totalPossibleReservation = $input['totalPossibleReservation'];
-            $booking->uploadDate = Carbon::now();
+            $booking->uploadDate = Carbon::now()->format('Y-m-d');
             $booking->idPerson = $input['idPerson'];
             $booking->idCategory = $input['idCategory'];
             $booking->save();

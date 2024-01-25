@@ -19,7 +19,7 @@ return new class extends Migration
             $table->float('price');
             $table->string('location');
             $table->integer('totalPossibleReservation');
-            $table->timestamp('uploadDate')->nullable();
+            $table->timestamp('uploadDate');
             $table->integer('idPerson')->references('id')->on('users');
             $table->integer('idCategory')->references('idCategory')->on('category');
             
