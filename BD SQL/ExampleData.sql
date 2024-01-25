@@ -1,10 +1,12 @@
 USE touristSystem;
 #Debe Ponerse dentro de phpmyadmin
-INSERT INTO `category` (`idCategory`, `typeCategory`) VALUES (NULL, 'Playa'), (NULL, 'Montaña'),(NULL,'Ciudad Turística');
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `idCard`, `firstLastName`, `secondLastName`, `phone`, `address`, `rol`) VALUES (NULL, 'Patrick', 'test@test.com', NULL, '123', NULL, NULL, NULL, '1', 'Lisby', 'Cordoba', '83582141', 'Limon', 'Cliente');
-INSERT INTO `booking` (`idBooking`, `tittle`,`description`, `state`, `price`, `location`, `totalPossibleReservation`,`uploadDate`, `idPerson`,`idCategory`) VALUES (NULL, 'Hotel Cueva','Este es un mensaje para mostrar lo estupido que puede ser mike pidiendo cosas a las 9:48 pm, tengo 3 versiones en 35 minutos de meet :)', '1', '12500', 'Limón', '5','2024-01-09', '1','1');
-INSERT INTO `booking_gallery` (`idBooking_gallery`, `image`, `idBooking`) VALUES (NULL, 'no tengo ', '1');
-INSERT INTO `housing` (`idHousing`, `initial_date`, `final_date`, `arrival_date`, `total_person`, `idPerson`, `idBooking`) VALUES (NULL, '2024-01-09', '2024-01-10', '2024-01-09', '3', '1', '1');
-INSERT INTO `preference` (`idPreference`, `idPerson`, `idCategory`) VALUES (NULL, '1', '1');
-INSERT INTO `recommendation` (`idRecommendation`, `idPerson`, `idCategory`) VALUES (NULL, '1', '1');
-INSERT INTO `valoration` (`idValoration`, `score`, `commentary`, `idPerson`, `idBooking`) VALUES (NULL, '5', 'Todo bien pa\'', '1', '1');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `idCard`, `firstLastName`, `secondLastName`, `phone`, `address`, `rol`) VALUES (NULL, 'Patrick', 'lisby2103@gmail.com', NULL, '123', NULL, NULL, NULL, '1', 'Lisby', 'Cordoba', '88582141', 'Limon', 'Cliente'),(NULL, 'Rondo', 'rondo@gmail.com', NULL, '123', NULL, NULL, NULL, '1', 'Ron', 'Macarron', '88582141', 'Limon', 'Cliente');
+INSERT INTO `category` (`idCategory`, `typeCategory`) VALUES (NULL, 'Montaña'),(NULL, 'Playa'),(NULL, 'Ciudad');
+INSERT INTO `booking` (`idBooking`, `title`, `description`, `state`, `price`, `location`, `totalPossibleReservation`, `uploadDate`, `idPerson`, `idCategory`) VALUES (NULL, 'Playa Limon', 'Bienvenido a nuestro encantador hospedaje de playa, donde la serenidad del océano se encuentra con la comodidad y la hospitalidad. Ubicado en un rincón paradisíaco, nuestro alojamiento ofrece a los huéspedes la escapada perfecta para relajarse y rejuvenecer.', '1', '12000', 'Limon', '5', NULL, '1', '2'), (NULL, 'Montaña Limon', 'Bienvenido a nuestro encantador hospedaje de montaña, donde la serenidad del océano se encuentra con la comodidad y la hospitalidad. Ubicado en un rincón paradisíaco, nuestro alojamiento ofrece a los huéspedes la escapada perfecta para relajarse y rejuvenecer.', '1', '12000', 'Limon', '2', NULL, '1', '1'),
+ (NULL, 'Ciudad Limon', 'Bienvenido a nuestro encantador hospedaje de ciduad, donde la serenidad del océano se encuentra con la comodidad y la hospitalidad. Ubicado en un rincón paradisíaco, nuestro alojamiento ofrece a los huéspedes la escapada perfecta para relajarse y rejuvenecer.', '1', '12000', 'Limon', '2', NULL, '1', '3');
+ INSERT INTO `booking_gallery` (`idBooking_gallery`, `image`, `idBooking`) VALUES ('1', 'JKSAJDPOSA', '1'),('2', '1DSADSA', '2'),('3', '1DSADSA', '3');
+ INSERT INTO `housing` (`idHousing`, `initial_date`, `final_date`, `arrival_date`, `total_person`, `idPerson`, `idBooking`) VALUES (NULL, '2024-01-10', '2024-01-11', '2024-01-10', '3', '1', '1'), (NULL, '2024-01-22', '2024-01-25', '2024-01-23', '2', '2', '2');
+ INSERT INTO `preference` (`idPreference`, `idPerson`, `idCategory`) VALUES (NULL, '1', '1'), (NULL, '1', '2'),
+(NULL, '2', '1');
+INSERT INTO `recommendation` (`idRecommendation`, `idPerson`, `counter`, `idCategory`) VALUES (NULL, '1', '0', '1'), (NULL, '1', '0', '2');
+INSERT INTO `valoration` (`idValoration`, `score`, `commentary`, `idPerson`, `idBooking`) VALUES (NULL, '5', 'DOKSJAODJSAOD', '1', '1'), (NULL, '1', 'SADDKOSAJNOD', '2', '1');

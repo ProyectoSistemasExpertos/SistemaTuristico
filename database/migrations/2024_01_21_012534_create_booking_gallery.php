@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('booking_gallery', function (Blueprint $table) {
             $table->id('idBooking_gallery');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->integer('idBooking')->references('idBooking')->on('booking');
 
             $table->collation = 'utf8_unicode_ci';

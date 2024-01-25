@@ -74,7 +74,8 @@ class ControllerBookings extends Controller
                 'price' => 'required',
                 'location' => 'required',
                 'totalPossibleReservation' => 'required',
-                'idPerson' => 'required'
+                'idPerson' => 'required',
+                'idCategory'=>'required'
             ]);
 
             $isBookingExists = Booking::whereIn('idBooking', [$request->input('idBooking')])->first();
@@ -87,13 +88,15 @@ class ControllerBookings extends Controller
 
             $input = $request->all();
             $booking = new Booking();
+            $booking->title = $input['title'];
             $booking->description = $input['description'];
             $booking->state = $input['state'];
             $booking->price = $input['price'];
             $booking->location = $input['location'];
             $booking->totalPossibleReservation = $input['totalPossibleReservation'];
-            $booking->uploadDate = Carbon::now()->format('d-m-Y');
+            $booking->uploadDate = Carbon::now();
             $booking->idPerson = $input['idPerson'];
+            $booking->idCategory = $input['idCategory'];
             $booking->save();
 
             //Create booking_gallery
@@ -106,7 +109,7 @@ class ControllerBookings extends Controller
             if ($errorCode == 1452) {
                 return response()->json(['error' => 'Error de FK: el estado especificado o rol no existe.'], 400);
             } else {
-                return response()->json(['error' => 'Error de base de datos.'], 500);
+                return response()->json(['error' => $e->getMessage()], 500);
             }
         }
     }
@@ -184,6 +187,7 @@ class ControllerBookings extends Controller
         try {
             $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->join('category','category.idCategory','=','booking.idCategory')
                 ->where('booking.idCategory', '=', $id)
                 ->select(
                     'booking.*',
@@ -194,7 +198,8 @@ class ControllerBookings extends Controller
                     'users.phone',
                     'users.email',
                     'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image'
+                    'booking_gallery.image',
+                    'category.typeCategory'
                 )
                 ->get();
     
