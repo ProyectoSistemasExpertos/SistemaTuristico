@@ -57,6 +57,8 @@ Route::get('/housing/{id?}',[ControllerHousings::class,'index']);
 Route::post('/housing/create',[ControllerHousings::class, 'store']);
 Route::put('/housing/update/{id}', [ControllerHousings::class, 'update']);
 Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);
+Route::get('/housing/history_by_booking/{idBooking}',[ControllerHousings::class,'history_by_booking']);
+Route::get('/housing/history_by_user/{idUser}',[ControllerHousings::class,'history_by_user']);
 
 /* -------------------------------------------Booking-----------------------------------------  */
 Route::get('/booking/{id?}',[ControllerBookings::class,'index']);
@@ -64,8 +66,6 @@ Route::post('/booking/create',[ControllerBookings::class, 'store']);
 Route::put('/booking/update/{id}', [ControllerBookings::class, 'update']);
 Route::delete('/booking/delete/{id}',[ControllerBookings::class,'destroy']);
 Route::get('/booking/filter_category/{idCategory}',[ControllerBookings::class,'filter_by_category']);
-Route::get('/booking/history_by_booking/{idBooking}',[ControllerBookings::class,'history_by_booking']);
-Route::get('/booking/history_by_user/{idUser}',[ControllerBookings::class,'history_by_user']);
 
 /* -------------------------------------------Booking_gallery-----------------------------------------  */
 Route::get('/booking_gallery/{id?}',[ControllerBooking_gallerys::class,'index']);

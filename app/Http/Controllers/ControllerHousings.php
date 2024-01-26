@@ -154,5 +154,69 @@ class ControllerHousings extends Controller
         $housing = Housing::where('idHousing',$id)->first();
         $housing->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
-    }
+    }//End of destroy
+
+    public function history_by_booking($idBooking)
+    {
+        try {
+            $booking = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
+                ->join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->where('housing.idBooking', '=', $idBooking)
+                ->select(
+                    'booking.*',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'booking_gallery.idBooking_gallery',
+                    'booking_gallery.image',
+                    'housing.idHousing',
+                    'housing.initial_date',
+                    'housing.final_date',
+                    'housing.arrival_date',
+                    'housing.total_person'
+                )
+                ->get();
+            if ($booking->isEmpty()) {
+                return response()->json(['error' => 'No hay registros'], 404);
+            }
+
+            return response()->json($booking);
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    } //end of history_by_booking
+
+    public function history_by_user($idUser)
+    {
+        try {
+            $users = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
+                ->join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->where('housing.idPerson', '=', $idUser)
+                ->select(
+                    'booking.*',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'booking_gallery.idBooking_gallery',
+                    'booking_gallery.image',
+                    'housing.idHousing',
+                    'housing.initial_date',
+                    'housing.final_date',
+                    'housing.arrival_date',
+                    'housing.total_person'
+                )
+                ->get();
+            if ($users->isEmpty()) {
+                return response()->json(['error' => 'No hay registros'], 404);
+            }
+
+            return response()->json($users);
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }//End of try-catch
+    } //end of History_by_user
 }
