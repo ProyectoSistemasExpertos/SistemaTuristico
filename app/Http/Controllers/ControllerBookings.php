@@ -15,8 +15,8 @@ class ControllerBookings extends Controller
     {
         if (!$id) {
             $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('users','users.id','=','booking.idPerson')
-                ->join('category','category.idCategory','=','booking.idCategory')
+                ->join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
                 ->select(
                     'booking.*',
                     'booking_gallery.idBooking_gallery',
@@ -41,9 +41,9 @@ class ControllerBookings extends Controller
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-                $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('users','users.id','=','booking.idPerson')
-                ->join('category','category.idCategory','=','booking.idCategory')
+            $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
                 ->where('booking.idBooking', '=', $id)
                 ->select(
                     'booking.*',
@@ -75,7 +75,7 @@ class ControllerBookings extends Controller
                 'location' => 'required',
                 'totalPossibleReservation' => 'required',
                 'idPerson' => 'required',
-                'idCategory'=>'required'
+                'idCategory' => 'required'
             ]);
 
             $isBookingExists = Booking::whereIn('idBooking', [$request->input('idBooking')])->first();
@@ -181,13 +181,14 @@ class ControllerBookings extends Controller
                 return response()->json(['error' => 'Error de base de datos.'], 500);
             }
         }
-    }//End destroy
+    } //End destroy
 
-    public function filter_by_category($id) {
+    public function filter_by_category($id)
+    {
         try {
             $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('category','category.idCategory','=','booking.idCategory')
+                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
                 ->where('booking.idCategory', '=', $id)
                 ->select(
                     'booking.*',
@@ -202,14 +203,78 @@ class ControllerBookings extends Controller
                     'category.typeCategory'
                 )
                 ->get();
-    
+
             if ($booking->isEmpty()) {
                 return response()->json(['error' => 'No hay registros con ese idCategory'], 404);
             }
-    
+
             return response()->json($booking);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        }   
-    }
+        }
+    } //End filter_by_category
+
+    public function history_by_booking($idBooking)
+    {
+        try {
+            $booking = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
+                ->join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->where('housing.idBooking', '=', $idBooking)
+                ->select(
+                    'booking.*',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'booking_gallery.idBooking_gallery',
+                    'booking_gallery.image',
+                    'housing.idHousing',
+                    'housing.initial_date',
+                    'housing.final_date',
+                    'housing.arrival_date',
+                    'housing.total_person'
+                )
+                ->get();
+            if ($booking->isEmpty()) {
+                return response()->json(['error' => 'No hay registros'], 404);
+            }
+
+            return response()->json($booking);
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    } //end of history_by_booking
+
+    public function history_by_user($idUser)
+    {
+        try {
+            $booking = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
+                ->join('users', 'users.id', '=', 'booking.idPerson')
+                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                ->where('housing.idPerson', '=', $idUser)
+                ->select(
+                    'booking.*',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'booking_gallery.idBooking_gallery',
+                    'booking_gallery.image',
+                    'housing.idHousing',
+                    'housing.initial_date',
+                    'housing.final_date',
+                    'housing.arrival_date',
+                    'housing.total_person'
+                )
+                ->get();
+            if ($booking->isEmpty()) {
+                return response()->json(['error' => 'No hay registros'], 404);
+            }
+
+            return response()->json($booking);
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }//End of try-catch
+    } //end of History_by_user
 }//End controllerBooking
