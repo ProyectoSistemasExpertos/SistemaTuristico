@@ -27,9 +27,9 @@ class ControllerLogin extends Controller
         //cosnulta para saber si el email ya existe en la BD
         $verifed_email = User::query()->where('email', '=', $request->email)->exists();
 
-        if($this->userEmpty($request)){
+        /*if($this->userEmpty($request)){
             echo("No pueden haber datos vacios");
-        }else{
+        }else{*/
 
             if(!$verifed_email){
                 $user->name = $request->name;
@@ -37,7 +37,7 @@ class ControllerLogin extends Controller
                 $user->firstLastName = $request->firstLastName;
                 $user->secondLastName = $request->secondLastName;
                 $user->phone = $request->phone;
-                $user->Address = $request->Address;
+                $user->address = $request->address;
                 $user->rol = 1;
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
@@ -50,7 +50,7 @@ class ControllerLogin extends Controller
             }else{
 
                 echo("Al parecer ya existe una cuenta con este correo electrónico");
-            }
+           // }
         
         }
 
