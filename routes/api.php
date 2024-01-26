@@ -9,6 +9,7 @@ use App\Http\Controllers\ControllerPersons;
 use App\Http\Controllers\ControllerPreferences;
 use App\Http\Controllers\ControllerRecommendations;
 use App\Http\Controllers\ControllerValorations;
+use App\Http\Controllers\ControllerLogin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+/* -------------------------------------------Login-----------------------------------------  */
+Route::post('/register',[ControllerLogin::class,'register']);
+Route::post('/login',[ControllerLogin::class,'login']);
+Route::get('/logout',[ControllerLogin::class,'logout']);
 /* -------------------------------------------Person-----------------------------------------  */
 Route::get('/person/{id?}',[ControllerPersons::class,'index']);
 Route::post('/person/create',[ControllerPersons::class, 'store']);
