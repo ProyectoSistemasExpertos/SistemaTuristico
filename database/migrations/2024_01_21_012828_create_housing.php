@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('arrival_date');
             $table->integer('total_person');
             $table->integer('idPerson')->references('id')->on('users');
-            $table->integer('idBooking')->references('idBooking')->on('booking');;
+            $table->integer('idBooking')->references('idBooking')->on('booking');
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';

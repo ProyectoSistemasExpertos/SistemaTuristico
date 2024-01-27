@@ -213,6 +213,4 @@ class ControllerBookings extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     } //End filter_by_category
-
-   
 }//End controllerBooking

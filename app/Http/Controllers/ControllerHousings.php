@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Housing;
-use App\Models\Person;
-use App\Models\Preference;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ControllerHousings extends Controller
 {
@@ -100,8 +99,7 @@ class ControllerHousings extends Controller
         } //End try-catch
     } //End of store
 
-
-    //
+    
     public function update(Request $request, $id)
     {
         try {
@@ -156,37 +154,57 @@ class ControllerHousings extends Controller
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
     }//End of destroy
 
-    public function history_by_booking($idBooking)
+    public function history_by_bookings($id)
     {
         try {
-            $booking = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
-                ->join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->where('housing.idBooking', '=', $idBooking)
-                ->select(
-                    'booking.*',
-                    'users.id as idUser',
-                    'users.name',
-                    'users.firstLastName',
-                    'users.secondLastName',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image',
-                    'housing.idHousing',
-                    'housing.initial_date',
-                    'housing.final_date',
-                    'housing.arrival_date',
-                    'housing.total_person'
-                )
-                ->get();
-            if ($booking->isEmpty()) {
-                return response()->json(['error' => 'No hay registros'], 404);
+            if (!$id) {
+                // No se proporcionó ningún ID de reserva
+                return response()->json(['error' => 'No se proporcionó ningún ID de reserva'], 404);
+            } else {
+                // Obtener el idBooking más común en la tabla Housing
+                $mostCommonBooking = DB::table('housing')
+                    ->select('idBooking', DB::raw('COUNT(*) as count'))
+                    ->groupBy('idBooking')
+                    ->orderByDesc('count')
+                    ->first();
+    
+                if (!$mostCommonBooking) {
+                    return response()->json(['error' => 'No hay registros en la tabla Housing'], 404);
+                }
+    
+                $mostCommonIdBooking = $mostCommonBooking->idBooking;
+    
+                // Recuperar los datos de booking correspondientes al idBooking más común
+                $bookings = Housing::join('booking', 'housing.idBooking', '=', 'booking.idBooking')
+                    ->join('users', 'users.id', '=', 'booking.idPerson')
+                    ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+                    ->where('housing.idBooking', $mostCommonIdBooking)
+                    ->select(
+                        'booking.*',
+                        'users.id as idUser',
+                        'users.name',
+                        'users.firstLastName',
+                        'users.secondLastName',
+                        'booking_gallery.idBooking_gallery',
+                        'booking_gallery.image',
+                        'housing.idHousing',
+                        'housing.initial_date',
+                        'housing.final_date',
+                        'housing.arrival_date',
+                        'housing.total_person'
+                    )
+                    ->get();
+    
+                if ($bookings->isEmpty()) {
+                    return response()->json(['error' => 'No hay registros'], 404);
+                }
+    
+                return response()->json($bookings);
             }
-
-            return response()->json($booking);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    } //end of history_by_booking
+    }//End history_by_bookings
 
     public function history_by_user($idUser)
     {
@@ -213,10 +231,10 @@ class ControllerHousings extends Controller
             if ($users->isEmpty()) {
                 return response()->json(['error' => 'No hay registros'], 404);
             }
-
             return response()->json($users);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }//End of try-catch
     } //end of History_by_user
-}
+
+}//End of controllerHousing

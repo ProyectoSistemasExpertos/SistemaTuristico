@@ -146,7 +146,6 @@ class ControllerRecommendations extends Controller
         $recommendationWithMaxContadores = $recommendations->where('counter', $maxCounters)->first();
 
         return response()->json([
-            'maxContadores' => $maxCounters,
             'recommendationWithMaxContadores' => $recommendationWithMaxContadores,
         ], 200);
     }//End of makeRecommendation

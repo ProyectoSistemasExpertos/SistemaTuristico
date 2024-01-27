@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('secondLastName');
             $table->integer('phone'); 
             $table->string('address');
-            $table->string('rol');
+            $table->integer('idRol')->references('idRol')->on('rol');
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
