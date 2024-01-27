@@ -56,12 +56,21 @@ class ControllerPreferences extends Controller
                 'idCategory'=> 'required'
             ]);
 
-            $input = $request->all();
-            $preference = new Preference();
-            $preference->idPerson = $input['idPerson'];
-            $preference->idCategory = $input['idCategory'];
-            $preference->save();
-            return response()->json($preference);
+            $isPreferencesExists =  Preference::where('idPerson', [$request->input('idPerson')])
+            ->where('idCategory', [$request->input('idCategory')])
+            ->first();
+
+            if($isPreferencesExists){
+                $input = $request->all();
+                $preference = new Preference();
+                $preference->idPerson = $input['idPerson'];
+                $preference->idCategory = $input['idCategory'];
+                $preference->save();
+                return response()->json($preference);
+            }else{
+                return response()->json("Ya ha sido creado el registro",200);
+            }
+           
 
         } catch (QueryException $e) {
             $errorCode = $e->getCode();

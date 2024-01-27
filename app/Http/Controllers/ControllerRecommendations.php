@@ -73,14 +73,11 @@ class ControllerRecommendations extends Controller
                 $updateRecommendation = Recommendation::findOrFail($isRecommendationExists->idRecommendation);
                 $updateRecommendation->idPerson = $request->idPerson;
                 $updateRecommendation->idCategory = $request->idCategory;
-                $updateRecommendation->counter = $request->counter;
+                $updateRecommendation->counter = $updateRecommendation->counter+1;
                 $updateRecommendation->save();
                 return response()->json($updateRecommendation);
                 
             }
-
-         
-
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1452) {
