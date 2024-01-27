@@ -60,7 +60,7 @@ class ControllerPreferences extends Controller
             ->where('idCategory', [$request->input('idCategory')])
             ->first();
 
-            if($isPreferencesExists){
+            if(!$isPreferencesExists){
                 $input = $request->all();
                 $preference = new Preference();
                 $preference->idPerson = $input['idPerson'];
@@ -71,7 +71,6 @@ class ControllerPreferences extends Controller
                 return response()->json("Ya ha sido creado el registro",200);
             }
            
-
         } catch (QueryException $e) {
             $errorCode = $e->getCode();
             //var_dump($errorCode);die();
@@ -85,7 +84,6 @@ class ControllerPreferences extends Controller
         }
         
     } //End of store
-
 
     //está teniendo problemas!
     public function update(Request $request, $id)
@@ -117,5 +115,32 @@ class ControllerPreferences extends Controller
         $preference = Preference::where('idPreference',$id)->first();
         $preference->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
-    }
+    }//end of destroy
+
+    public function history_by_preferences($idPerson){
+
+        $preference = Preference::join('users','users.id','preference.idPerson')
+        ->join('booking','booking.idPerson','users.id')
+        ->join('booking_gallery','booking_gallery.idBooking','booking.idBooking')
+        ->join('housing','housing.idBooking','booking.idBooking')
+        ->join('category','category.idCategory','preference.idCategory')
+        ->where('booking.idPerson',$idPerson)
+        ->select(
+            'preference.*',
+            'category.typeCategory',
+            'users.name',
+            'users.firstLastName',
+            'users.secondLastName',
+            'booking.idBooking',
+            'booking.title',
+            'booking_gallery.idBooking_gallery',
+            'booking_gallery.image',
+            'housing.idHousing',
+            'housing.initial_date',
+            'housing.final_date'
+        )
+        ->get();
+
+        return response()->json($preference, 200);
+    }//end of history_by_preferences
 }

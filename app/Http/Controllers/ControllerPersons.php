@@ -26,6 +26,7 @@ class ControllerPersons extends Controller
     public function store(Request $request)
     {
         try {
+        
             $request->validate([
                 'idCard' => 'required',
                 'name' => 'required',
@@ -35,12 +36,12 @@ class ControllerPersons extends Controller
                 'address' => 'required',
                 'email' => 'required',
                 'password' => 'required',
-                'rol' => 'required'
+                'idRol' => 'required'
             ]);
             $isPersonExists =  Person::whereIn('email', [$request->input('email')])
                 ->orWhereIn('idCard', [$request->input('idCard')])
                 ->first();
-
+                
             if ($isPersonExists) {
                 if ($isPersonExists->personEmail == $request->input('email')) {
                     return response()->json(['error' => 'El correo ya ha sido registrado'], 400);
@@ -48,6 +49,7 @@ class ControllerPersons extends Controller
                     return response()->json(['error' => 'La cédula ya ha sido registrada'], 400);
                 }
             }
+              
             $input = $request->all();
             $person = new Person();
             $person->idCard = $input['idCard'];
@@ -58,9 +60,10 @@ class ControllerPersons extends Controller
             $person->address = $input['address'];
             $person->email = $input['email'];
             $person->password = Hash::make($input['password']);
-            $person->rol = $input['rol'];
-
+            $person->idRol = $input['idRol'];
+          
             $person->save();
+          
 
             return response()->json($person, 201);
         } catch (QueryException $e) {
@@ -88,7 +91,7 @@ class ControllerPersons extends Controller
                 'address' => 'required',
                 'email' => 'required',
                 'password' => 'required',
-                'rol' => 'required'
+                'idRol' => 'required'
             ]);
 
             $person = Person::find($id);
@@ -104,7 +107,7 @@ class ControllerPersons extends Controller
                 $person->address = $request->address;
                 $person->email = $request->email;
                 $person->password = Hash::make($request->password);
-                $person->rol = $request->rol;
+                $person->idRol = $request->idRol;
                 $person->save();
 
                 return response()->json($person,);
