@@ -29,7 +29,7 @@ class ControllerBookings extends Controller
                     'users.secondLastName',
                     'users.phone',
                     'users.address',
-                    'users.rol',
+                    'users.idRol',
                     'category.typeCategory'
 
                 )
@@ -57,7 +57,7 @@ class ControllerBookings extends Controller
                     'users.secondLastName',
                     'users.phone',
                     'users.address',
-                    'users.rol',
+                    'users.idRol',
                     'category.typeCategory'
                 )
                 ->get();
