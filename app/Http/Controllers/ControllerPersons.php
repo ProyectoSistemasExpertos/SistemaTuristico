@@ -23,6 +23,17 @@ class ControllerPersons extends Controller
         }
     } //End of index
 
+    public function findCard(Request $request)
+    {
+        $person =  Person::WhereIn('idCard', [$request->input('idCard')])
+                ->first();
+        if ($person) {
+            return response()->json($person);
+        } else {
+            return response()->json(['error' => 'No se encontró ninguna persona con el idCard proporcionado.'], 404);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
