@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\PasswordResetToken;
+use App\Http\Controllers\ControllerMail;
 
 class ControllerAuth extends Controller
 {
@@ -72,37 +74,31 @@ class ControllerAuth extends Controller
     }
 
     public function forgotPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
+{
+    $request->validate([
+        'email' => 'required|email',
+    ]);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            return response()->json(['error' => 'Correo electrónico no encontrado'], 404);
-        }
-
-        $resetToken = $this->generateResetToken($user);
-
-        // Envía el correo de recuperación de contraseña
-        Mail::to($user->email)->send(new ResetPasswordMail($resetToken));
-
-        return response()->json(['message' => 'Correo de recuperación enviado exitosamente'], 200);
+    $user = User::where('email', $request->email)->first();
+    if (!$user) {
+        return response()->json(['error' => 'Correo electrónico no encontrado'], 404);
     }
 
-    private function generateResetToken(User $user)
-    {
-        $token = sha1(time() . $user->email . $user->password);
+    // Elimina tokens antiguos para el mismo usuario
+    PasswordResetToken::where('email', $user->email)->delete();
 
-        // Guarda el token en la base de datos o en una tabla específica para restablecimiento de contraseña
-        // Esto puede depender de tu implementación específica
+    // Genera un nuevo token    
+    
 
-        // Ejemplo:
-        // $user->update(['reset_token' => $token]);
+    $resetToken = PasswordResetToken::create([
+        'email' => $user->email,
+        'token' => bin2hex(random_bytes(32)), // Genera un token aleatorio
+    ]);
+    printf('Usuario: '.$resetToken);
+    $mailController = new ControllerMail();
+    return $mailController->sendResetPasswordEmail($user->email, $resetToken->token);
+}
 
-        return $token;
-    }
 
     public function resetPassword(Request $request)
     {
@@ -134,7 +130,8 @@ class ControllerAuth extends Controller
         // Esto puede depender de tu implementación específica
 
         // Ejemplo:
-        // $user->update(['reset_token' => null]);
+        $user = User::where('email', $request->email)->first();
+        //$user->update(['reset_token' => null]);
 
         return response()->json(['message' => 'Contraseña restablecida exitosamente'], 200);
     }
