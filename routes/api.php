@@ -35,7 +35,6 @@ Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword']);
 Route::post('/reset-password',[ControllerAuth::class,'resetPassword']);
 Route::get('/logout',[ControllerAuth::class,'logout']);
 /* -------------------------------------------Person-----------------------------------------  */
-Route::post('/person',[ControllerPersons::class,'findCard']);
 Route::get('/person/{id?}',[ControllerPersons::class,'index']);
 Route::post('/person/create',[ControllerPersons::class, 'store']);
 Route::put('/person/update/{id}', [ControllerPersons::class, 'update']);

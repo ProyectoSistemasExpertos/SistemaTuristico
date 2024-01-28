@@ -14,30 +14,32 @@ class ControllerPersons extends Controller
 {
     public function index($id = null)
     {
-        if (!$id) {
-            $person = Person::all();
-            return response()->json($person);
-        } else {
-            $person = Person::findorfail($id);
-            return response()->json($person);
-        }
-    } //End of index
+        try {
+            if (!$id) {
+                $person = Person::all();
+                return response()->json($person);
+            } else {
+                $person = Person::where('id', $id)->first();
 
-    public function findCard(Request $request)
-    {
-        $person =  Person::WhereIn('idCard', [$request->input('idCard')])
-                ->first();
-        if ($person) {
-            return response()->json($person);
-        } else {
-            return response()->json(['error' => 'No se encontró ninguna persona con el idCard proporcionado.'], 404);
+                $isPersonExists =  Person::where('idCard', $id)
+                    ->first();
+                if ($person) {
+                    return response()->json($person, 200);
+                } else if ($isPersonExists) {
+                    return response()->json($isPersonExists, 201);
+                } else {
+                    return response()->json("No existe un registro", 404);
+                }
+            }
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function store(Request $request)
     {
         try {
-        
+
             $request->validate([
                 'idCard' => 'required',
                 'name' => 'required',
@@ -52,7 +54,7 @@ class ControllerPersons extends Controller
             $isPersonExists =  Person::whereIn('email', [$request->input('email')])
                 ->orWhereIn('idCard', [$request->input('idCard')])
                 ->first();
-                
+
             if ($isPersonExists) {
                 if ($isPersonExists->personEmail == $request->input('email')) {
                     return response()->json(['error' => 'El correo ya ha sido registrado'], 400);
@@ -60,7 +62,7 @@ class ControllerPersons extends Controller
                     return response()->json(['error' => 'La cédula ya ha sido registrada'], 400);
                 }
             }
-              
+
             $input = $request->all();
             $person = new Person();
             $person->idCard = $input['idCard'];
@@ -72,9 +74,9 @@ class ControllerPersons extends Controller
             $person->email = $input['email'];
             $person->password = Hash::make($input['password']);
             $person->idRol = $input['idRol'];
-          
+
             $person->save();
-          
+
 
             return response()->json($person, 201);
         } catch (QueryException $e) {
