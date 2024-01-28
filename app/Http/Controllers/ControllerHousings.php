@@ -13,39 +13,39 @@ class ControllerHousings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $housing = Housing::join('users','users.id','=','housing.idPerson')
-            ->join('booking','booking.idBooking','=','housing.idBooking')
-            ->select(
-                'housing.*',
-                'users.idCard',
-                'users.name',
-                'users.firstLastName',
-                'users.secondLastName',
-                'users.phone',
-                'users.email',
-                'booking.*'
-            )
-            ->get();
+            $housing = Housing::join('users', 'users.id', '=', 'housing.idPerson')
+                ->join('booking', 'booking.idBooking', '=', 'housing.idBooking')
+                ->select(
+                    'housing.*',
+                    'users.idCard',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'users.phone',
+                    'users.email',
+                    'booking.*'
+                )
+                ->get();
             return response()->json($housing);
         } else {
 
             $housing = Housing::findorfail($id);
-            
-            if(!$housing){
+
+            if (!$housing) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $housing = Housing::join('users','users.id','=','housing.idPerson')
-            ->join('booking','booking.idBooking','=','housing.idBooking')
-            ->where('housing.idHousing','=',$id)
-            ->select(
-                'housing.*',
-                'users.idCard',
-                'users.name',
-                'users.firstLastName',
-                'users.secondLastName',
-                'booking.*'
-            )
-            ->get();
+            $housing = Housing::join('users', 'users.id', '=', 'housing.idPerson')
+                ->join('booking', 'booking.idBooking', '=', 'housing.idBooking')
+                ->where('housing.idHousing', '=', $id)
+                ->select(
+                    'housing.*',
+                    'users.idCard',
+                    'users.name',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'booking.*'
+                )
+                ->get();
             return response()->json($housing);
         }
     } //End of index
@@ -59,7 +59,7 @@ class ControllerHousings extends Controller
                 'arrival_date' => 'required',
                 'total_person' => 'required',
                 'idPerson' => 'required',
-                'idBooking'=>'required'
+                'idBooking' => 'required'
             ]);
 
             $isHousingExists =  Housing::whereIn('idBooking', [$request->input('idBooking')])->first();
@@ -70,25 +70,32 @@ class ControllerHousings extends Controller
                 }
             }
 
+
             $input = $request->all();
+            $idBooking = $input['idBooking'];
+            //var_dump($idBooking);die();//si setea el id
+            $booking = Booking::where('idBooking', $idBooking)->first();
             $housing = new Housing();
-            $housing->initial_date = $input['initial_date'];
-            $housing->final_date = $input['final_date'];
-            $housing->arrival_date = $input['arrival_date'];
-            $housing->total_person = $input['total_person'];
-            $housing->idPerson = $input['idPerson'];
-            $housing->idBooking = $input['idBooking'];
-            $housing->save();
 
-            $booking = Booking::find($input['idBooking']);
-            if($booking){
-                $booking->state = '0';
-                $booking->save();
+            if ($booking->totalPossibleReservation >=  $input['total_person']) {
+                $housing->initial_date = $input['initial_date'];
+                $housing->final_date = $input['final_date'];
+                $housing->arrival_date = $input['arrival_date'];
+                $housing->total_person = $input['total_person'];
+                $housing->idPerson = $input['idPerson'];
+                $housing->idBooking = $input['idBooking'];
+
+                $housing->save();
+
+                $booking = Booking::find($input['idBooking']);
+                if ($booking) {
+                    $booking->state = '0';
+                    $booking->save();
+                }
+                return response()->json($housing);
+            }else{
+                return response()->json(['error' => 'La cantidad de personas supera a la capacidad del hospedaje'], 400);
             }
-
-            
-            return response()->json($housing);
-
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1452) {
@@ -99,7 +106,7 @@ class ControllerHousings extends Controller
         } //End try-catch
     } //End of store
 
-    
+
     public function update(Request $request, $id)
     {
         try {
@@ -109,24 +116,23 @@ class ControllerHousings extends Controller
                 'arrival_date' => 'required',
                 'total_person' => 'required',
                 'idPerson' => 'required',
-                'idBooking'=>'required'
+                'idBooking' => 'required'
             ]);
             $housing = Housing::find($id);
             $isHousingExists =  Housing::where('idPerson', [$request->input('idPerson')])->first();
-           
+
             if ($isHousingExists) {
                 if ($housing->idPerson != $request->input('idPerson')) {
                     return response()->json(['error' => 'No es posible cambiar la persona de esta recomendación'], 400);
-                }elseif ($housing->idBooking != $request->input('idBooking')) {
+                } elseif ($housing->idBooking != $request->input('idBooking')) {
                     return response()->json(['error' => 'El lugar no se puede cambiar'], 400);
-                }elseif ($housing->idPerson != $request->input('idPerson')) {
+                } elseif ($housing->idPerson != $request->input('idPerson')) {
                     return response()->json(['error' => 'El usuario no se puede cambiar'], 400);
                 }
             }
-            
+
             if (!$housing) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
-                
             } else {
                 $housing->initial_date = $request->initial_date;
                 $housing->final_date = $request->final_date;
@@ -136,23 +142,23 @@ class ControllerHousings extends Controller
                 $housing->idBooking = $request->idBooking;
                 $housing->save();
                 return response()->json($housing);
-                
-            }//end if exists
+            } //end if exists
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1452) {
                 return response()->json(['error' => 'Error de FK: La categoría o estado especificada no existe.'], 400);
-            }else {
+            } else {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
         } //End try-catch
     } //End of update
 
-    public function destroy($id){
-        $housing = Housing::where('idHousing',$id)->first();
+    public function destroy($id)
+    {
+        $housing = Housing::where('idHousing', $id)->first();
         $housing->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
-    }//End of destroy
+    } //End of destroy
 
     public function history_by_bookings($id)
     {
@@ -167,13 +173,13 @@ class ControllerHousings extends Controller
                     ->groupBy('idBooking')
                     ->orderByDesc('count')
                     ->first();
-    
+
                 if (!$mostCommonBooking) {
                     return response()->json(['error' => 'No hay registros en la tabla Housing'], 404);
                 }
-    
+
                 $mostCommonIdBooking = $mostCommonBooking->idBooking;
-    
+
                 // Recuperar los datos de booking correspondientes al idBooking más común
                 $bookings = Housing::join('booking', 'housing.idBooking', '=', 'booking.idBooking')
                     ->join('users', 'users.id', '=', 'booking.idPerson')
@@ -194,17 +200,17 @@ class ControllerHousings extends Controller
                         'housing.total_person'
                     )
                     ->get();
-    
+
                 if ($bookings->isEmpty()) {
                     return response()->json(['error' => 'No hay registros'], 404);
                 }
-    
+
                 return response()->json($bookings);
             }
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    }//End history_by_bookings
+    } //End history_by_bookings
 
     public function history_by_user($idUser)
     {
@@ -234,7 +240,7 @@ class ControllerHousings extends Controller
             return response()->json($users);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        }//End of try-catch
+        } //End of try-catch
     } //end of History_by_user
 
 }//End of controllerHousing
