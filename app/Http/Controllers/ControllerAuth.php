@@ -32,7 +32,7 @@ class ControllerAuth extends Controller
             'secondLastName' => $request->secondLastName,
             'phone' => $request->phone,
             'address' => $request->address,
-            'rol' => 1,
+            'idRol' => 2,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
