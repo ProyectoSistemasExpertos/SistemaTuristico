@@ -5,16 +5,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
 
+
 class ControllerMail extends Controller
 {
     public function sendResetPasswordEmail($email, $token)
     {
         try {
-            Mail::to($email)->send(new ResetPasswordMail($token));
+            $resetLink = 'http://localhost:3000/reset-password/' . $token;
+            
+            Mail::to($email)->send(new ResetPasswordMail($resetLink));
             
             return response()->json(['message' => 'Correo de recuperación enviado exitosamente'], 200);
         } catch (\Exception $e) {
-            
+            dd($e->getMessage());
             return response()->json(['error' => 'Error al enviar el correo de recuperación',$e], 500);
         }
     }

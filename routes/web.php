@@ -17,7 +17,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::view('/register', "register")->name('register');
-Route::view('/privada', "privada")->middleware('auth')->name('privada');
-Route::view('/login', "login")->name('login');

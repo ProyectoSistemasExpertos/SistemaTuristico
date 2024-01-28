@@ -36,11 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
-            'port' => env('MAIL_PORT', 587),
+            'host' => env('MAIL_HOST', 'live.smtp.mailtrap.io'),
+            'port' => env('MAIL_PORT', 25),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME','mail.jdev2001@gmail.com'),
-            'password' => env('MAIL_PASSWORD','jdev2001'),
+            'username' => env('MAIL_USERNAME','api'),
+            'password' => env('MAIL_PASSWORD','09381ee3de49763abe9a2af902962434'),
             'timeout' => null,
         ],
 
