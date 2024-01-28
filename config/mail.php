@@ -40,7 +40,7 @@ return [
             'port' => env('MAIL_PORT', 25),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME','api'),
-            'password' => env('MAIL_PASSWORD','09381ee3de49763abe9a2af902962434'),
+            'password' => env('MAIL_PASSWORD','6699c2be3d49557d9e57fc940b373add'),
             'timeout' => null,
         ],
 
