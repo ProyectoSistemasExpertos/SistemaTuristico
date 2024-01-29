@@ -11,7 +11,7 @@
                             <h1 class="text-gray-800 font-bold text-xl">Iniciar sesión</h1>
                                 <p class="text-gray-400">
                                     ¿No tienes una cuenta?
-                                    <a href="register" class="text-sm text-purple-700 hover:text-purple-700">
+                                    <a href="register.show" class="text-sm text-purple-700 hover:text-purple-700">
                                         <strong> Regístrate</strong> 
                                     </a>
                                 </p>
@@ -50,7 +50,7 @@
 
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm ml-auto">
-                                        <a href="forgot-password" class="text-purple-700 hover:text-purple-600">
+                                        <a href="forgotpass.show" class="text-purple-700 hover:text-purple-600">
                                            <strong>¿Olvidaste tu contraseña?</strong> 
                                         </a>
                                     </div>

@@ -25,13 +25,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-/*
+
 Route::get('/', function () {
-<<<<<<< Updated upstream
-    return view('body.modules.history_by_bookings');
-=======
     return view('auth.login');
->>>>>>> Stashed changes
 });
 
 
@@ -45,9 +41,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register',[ControllerAuth::class,'register'])->name('register');;
 Route::post('/login',[ControllerAuth::class,'login'])->name('login');
-Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('forgotPassword');;
-Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('resetPassword');;
+Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('forgot.password');;
+Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reset.password');;
 Route::get('/logout',[ControllerAuth::class,'logout'])->name('logout');
+/* -------------------------------------------ViewsLogin-----------------------------------------  */
+Route::get('/register',[ControllerAuth::class,'showRegisterForm'])->name('register.show');
+Route::get('/login',[ControllerAuth::class,'showLoginForm'])->name('login.show');
+Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('forgotpass.show');
+Route::get('/reset-password',[ControllerAuth::class,'showResetPasswordForm'])->name('resetpass.show');
 
 /* -------------------------------------------Person-----------------------------------------  */
 Route::get('/person/{id?}',[ControllerPersons::class,'index'])->name('person.index');
