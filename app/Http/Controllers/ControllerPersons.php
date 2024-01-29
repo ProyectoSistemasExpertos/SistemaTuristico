@@ -9,9 +9,19 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class ControllerPersons extends Controller
 {
+
+    public function dataUser($id)
+{
+    $user = User::find($id);
+
+    return view('body/modules/profile', compact ('user'));
+}
+
+
     public function index($id = null)
     {
         try {
@@ -102,9 +112,6 @@ class ControllerPersons extends Controller
                 'secondLastName' => 'required',
                 'phone' => 'required',
                 'address' => 'required',
-                'email' => 'required',
-                'password' => 'required',
-                'idRol' => 'required'
             ]);
 
             $person = Person::find($id);
@@ -118,9 +125,6 @@ class ControllerPersons extends Controller
                 $person->secondLastName = $request->secondLastName;
                 $person->phone = $request->phone;
                 $person->address = $request->address;
-                $person->email = $request->email;
-                $person->password = Hash::make($request->password);
-                $person->idRol = $request->idRol;
                 $person->save();
 
                 return response()->json($person,);
@@ -128,7 +132,7 @@ class ControllerPersons extends Controller
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1452) {
-                return response()->json(['error' => 'Error de FK: La categoría o estado especificada no existe.'], 400);
+                return view('body/modules/profile', compact ('person'));
             }
         } //End try-catch
     } //End of update

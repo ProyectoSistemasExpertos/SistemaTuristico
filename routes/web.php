@@ -46,6 +46,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+//Route::view('profile', "body/modules/profile")->name('profile');
+Route::get('/profile/{id}', [ControllerPersons::class, 'dataUser'])->name('profile');
+
+Route::put('/update/{id}', [ControllerPersons::class, 'update'])->name('update');
+
 /* -------------------------------------------Login-----------------------------------------  */
 Route::post('/register',[ControllerAuth::class,'register']);
 Route::post('/login',[ControllerAuth::class,'login']);
