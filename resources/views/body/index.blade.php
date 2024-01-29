@@ -118,7 +118,11 @@
                                     <label for="lblTotalPossibleReservation" class="control-label">Reserva Total Posible</label>
                                     <input name="totalPossibleReservation" id="totalPossibleReservation" class="form-control" type="number" value="" required>
                                 </div>
-                                <!-- ENTRADA PARA SELECCIONAR SU ESTADO -->
+                                <!-- ENTRADA PARA SELECCIONAR UNA IMAGEN -->
+                                <div class="form-group">
+                                    <label for="image" class="control-label">Subir Imagen</label>
+                                    <input type="file" id="image" name="image" class="form-control-file" accept="image/*">
+                                </div>
                                 <div class="form-group">
                                     <label for="inputEstado" class="control-label">Categoría</label>
                                     <div>
@@ -147,12 +151,6 @@
                 </div>
             </div>
         </div> <!-- FIN VENTANA MODAL CREAR CATEGORIA -->
-
-
-
-
-
-
 
     </section>
 </div>
