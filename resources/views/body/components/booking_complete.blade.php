@@ -38,7 +38,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                        <a href="{{ route('booking.index') }}" class="btn btn-primary">Volver</a>
+                        <a href="{{ route('booking.index') }}" class="btn btn-primary mb-2">Volver</a>
                             @if (!empty($item->image))
                             <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva">
                             @else
