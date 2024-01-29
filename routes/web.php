@@ -11,6 +11,7 @@ use App\Http\Controllers\ControllerPreferences;
 use App\Http\Controllers\ControllerRecommendations;
 use App\Http\Controllers\ControllerValorations;
 use App\Http\Controllers\ControllerAuth;
+use App\Http\Controllers\ControllerDashboard;
 use App\Http\Controllers\ControllerRoles;
 use Illuminate\Support\Facades\Route;
 
@@ -57,23 +58,24 @@ Route::post('/login',[ControllerAuth::class,'login']);
 Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword']);
 Route::post('/reset-password',[ControllerAuth::class,'resetPassword']);
 Route::get('/logout',[ControllerAuth::class,'logout']);
+
 /* -------------------------------------------Person-----------------------------------------  */
-Route::get('/person/{id?}',[ControllerPersons::class,'index']);
-Route::post('/person/create',[ControllerPersons::class, 'store']);
-Route::put('/person/update/{id}', [ControllerPersons::class, 'update']);
-Route::delete('/person/delete/{id}',[ControllerPersons::class,'destroy']);
+Route::get('/person/{id?}',[ControllerPersons::class,'index'])->name('person.index');
+Route::post('/person/create',[ControllerPersons::class, 'store'])->name('person.store');
+Route::put('/person/update/{id}', [ControllerPersons::class, 'update'])->name('person.update');
+Route::delete('/person/delete/{id}',[ControllerPersons::class,'destroy'])->name('person.destroy');
 
 /* -------------------------------------------Rol-----------------------------------------  */
-Route::get('/rol/{id?}',[ControllerRoles::class,'index']);
-Route::post('/rol/create',[ControllerRoles::class, 'store']);
-Route::put('/rol/update/{id}', [ControllerRoles::class, 'update']);
-Route::delete('/rol/delete/{id}',[ControllerRoles::class,'destroy']);
+Route::get('/rol/{id?}',[ControllerRoles::class,'index'])->name('rol.index');
+Route::post('/rol/create',[ControllerRoles::class, 'store'])->name('rol.store');
+Route::put('/rol/update/{id}', [ControllerRoles::class, 'update'])->name('rol.update');
+Route::delete('/rol/delete/{id}',[ControllerRoles::class,'destroy'])->name('rol.destroy');
 
 /* -------------------------------------------Category-----------------------------------------  */
-Route::get('/category/{id?}',[ControllerCategorys::class,'index']);
-Route::post('/category/create',[ControllerCategorys::class, 'store']);
-Route::put('/category/update/{id}', [ControllerCategorys::class, 'update']);
-Route::delete('/category/delete/{id}',[ControllerCategorys::class,'destroy']);
+Route::get('/category/{id?}',[ControllerCategorys::class,'index'])->name('category.index');
+Route::post('/category/create',[ControllerCategorys::class, 'store'])->name('category.create');
+Route::put('/category/update/{id}', [ControllerCategorys::class, 'update'])->name('category.update');
+Route::delete('/category/delete/{id}',[ControllerCategorys::class,'destroy'])->name('category.destroy');
 
 /* -------------------------------------------Recommmendation-----------------------------------------  */
 Route::get('/recommendation/{id?}',[ControllerRecommendations::class,'index']);
@@ -99,11 +101,11 @@ Route::get('/housing/history_by_user/{idUser}',[ControllerHousings::class,'histo
 Route::get('/housing/history_by_bookings/{idBookings?}',[ControllerHousings::class,'history_by_bookings']);
 
 /* -------------------------------------------Booking-----------------------------------------  */
-Route::get('/booking/{id?}',[ControllerBookings::class,'index']);
-Route::post('/booking/create',[ControllerBookings::class, 'store']);
-Route::put('/booking/update/{id}', [ControllerBookings::class, 'update']);
-Route::delete('/booking/delete/{id}',[ControllerBookings::class,'destroy']);
-Route::get('/booking/filter_category/{idCategory}',[ControllerBookings::class,'filter_by_category']);
+Route::get('/booking/{id?}',[ControllerBookings::class,'index'])->name('booking.index');
+Route::post('/booking/create',[ControllerBookings::class, 'store'])->name('booking.create');
+Route::put('/booking/update/{id}', [ControllerBookings::class, 'update'])->name('booking.update');
+Route::delete('/booking/delete/{id}',[ControllerBookings::class,'destroy'])->name('booking.destroy');
+Route::get('/booking/filter_category/{idCategory}',[ControllerBookings::class,'filter_by_category'])->name('booking.filter_by_category');
 
 /* -------------------------------------------Booking_gallery-----------------------------------------  */
 Route::get('/booking_gallery/{id?}',[ControllerBooking_gallerys::class,'index']);
