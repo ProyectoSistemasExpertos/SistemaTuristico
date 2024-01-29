@@ -9,7 +9,7 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-md-6 mb-4">
                     <h1 class="m-0">BODY -> QUITARLO</h1>
                     <div class="box-header with-border">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateBooking">
@@ -21,15 +21,13 @@
 
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
+        
     </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-        <!-- Bootstrap JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
-
+     
         @php
         $categoryIcons = [
         1 => ['icon' => 'fa-mountain'],
@@ -77,7 +75,7 @@
         <div id="modalCreateBooking" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="post" action="">
+                    <form method="post" action="{{ route('booking.create') }}">
                         @csrf
                         <!--=====================================
                     CABEZA DEL MODAL
@@ -97,9 +95,10 @@
                             <div class="box-body">
                                 <!-- ENTRADA PARA EL NOMBRE -->
                                 <div class="form-group">
-                                    <label for="inputName" class="control-label">Nombre Categoría</label>
-                                    <input type="hidden" id="idPerson" name="idPerson" value="idPerson var">
+                                    
+                                    <input type="hidden" id="idPerson" name="idPerson" value="1">
                                     <input type="hidden" id="state" name="state" value="1">
+                                    <label for="inputName" class="control-label">Nombre Categoría</label>
                                     <input name="title" id="title" class="form-control" type="text" value="" required>
                                 </div>
                                 <div class="form-group">
@@ -112,7 +111,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="lblLocation" class="control-label">Ubicación</label>
-                                    <input name="location" id="location" class="form-control" type="number" value="" required>
+                                    <select class="form-select input-lg" name="location" id="location" required>
+                                            
+                                            <option value="San José">San José</option>
+                                            <option value="Alajuela">Alajuela</option>
+                                            <option value="Heredia">Heredia</option>
+                                            <option value="Cartago">Cartago</option>
+                                            <option value="Guanacaste">Guanacaste</option>
+                                            <option value="Puntarenas">Puntarenas</option>
+                                            <option value="Limón">Limón</option>
+                                            
+                                        </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="lblTotalPossibleReservation" class="control-label">Reserva Total Posible</label>
