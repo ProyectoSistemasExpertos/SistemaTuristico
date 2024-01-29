@@ -218,7 +218,7 @@ class ControllerHousings extends Controller
             $users = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
                 ->join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->where('housing.idPerson', '=', 2)
+                ->where('housing.idPerson', '=', $idUser)
                 ->select(
                     'booking.*',
                     'users.id as idUser',

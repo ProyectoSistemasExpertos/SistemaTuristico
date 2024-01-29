@@ -34,37 +34,6 @@
         </div>
     </nav>
 
-    <!-- Agrega el modal -->
-    <div class="modal fade" id="nuevoDestinoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Creación de Nuevo Destino</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Contenido del formulario o cualquier otro contenido para la creación de destino -->
-                    <!-- Puedes agregar un formulario aquí -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <!-- Puedes agregar un botón de guardar en el formulario si es necesario -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mueve el script al final del documento -->
-    <script>
-        function openModal() {
-            var myModal = new bootstrap.Modal(document.getElementById('nuevoDestinoModal'));
-            myModal.show();
-        }
-    </script>
-
-    <!-- Agrega la librería de Bootstrap 5 JS al final del documento -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
