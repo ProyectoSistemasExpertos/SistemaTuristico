@@ -11,6 +11,10 @@ class Booking extends Model
     protected $primaryKey = 'idBooking';
     public $timestamps = false;
 
+    protected $fillable = [
+        'title', 'description', 'state', 'price', 'location', 'totalPossibleReservation', 'uploadDate', 'idPerson', 'idCategory'
+    ];
+
     public function user(){
         return $this->belongsTo(Person::class);
     }

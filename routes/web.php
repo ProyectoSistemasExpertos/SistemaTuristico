@@ -78,11 +78,11 @@ Route::put('/category/update/{id}', [ControllerCategorys::class, 'update'])->nam
 Route::delete('/category/delete/{id}',[ControllerCategorys::class,'destroy'])->name('category.destroy');
 
 /* -------------------------------------------Recommmendation-----------------------------------------  */
-Route::get('/recommendation/{id?}',[ControllerRecommendations::class,'index']);
-Route::post('/recommendation/create',[ControllerRecommendations::class, 'store']);
-Route::put('/recommendation/update/{id}', [ControllerRecommendations::class, 'update']);
-Route::delete('/recommendation/delete/{id}',[ControllerRecommendations::class,'destroy']);
-Route::get('/recommendation/showRecommendation/{idPerson}', [ControllerRecommendations::class, 'showRecommendation']);
+Route::get('/recommendation/{id?}',[ControllerRecommendations::class,'index'])->name('recommendation.index');
+Route::post('/recommendation/create',[ControllerRecommendations::class, 'store'])->name('recommendation.create');
+Route::put('/recommendation/update/{id}', [ControllerRecommendations::class, 'update'])->name('recommendation.update');
+Route::delete('/recommendation/delete/{id}',[ControllerRecommendations::class,'destroy'])->name('recommendation.delete');
+Route::get('/recommendation/showRecommendation/{idPerson}', [ControllerRecommendations::class, 'showRecommendation'])->name('recommendation.showRecommendation');
 
 /* -------------------------------------------Preference-----------------------------------------  */
 Route::get('/preference/{id?}',[ControllerPreferences::class,'index']);

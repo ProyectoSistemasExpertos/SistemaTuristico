@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Booking_gallery;
 use App\Models\Category;
+use App\Models\Valoration;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class ControllerBookings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
                 ->join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('category', 'category.idCategory', '=', 'booking.idCategory')
                 ->select(
@@ -32,99 +33,101 @@ class ControllerBookings extends Controller
                     'users.address',
                     'users.idRol',
                     'category.typeCategory'
-
                 )
                 ->get();
 
-                $category = Category::all();
-            return view('body.index',compact('booking','category'));
+            $category = Category::all();
+            $valoration = [];
+
+            foreach ($bookings as $booking) {
+                $averageScore = Valoration::where('idBooking', $booking->idBooking)->avg('score');
+                $valoration[$booking->idBooking] = $averageScore;
+            }
+
+            return view('body.index', compact('bookings', 'category', 'valoration'));
         } else {
             $booking = Booking::findorfail($id);
 
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $booking = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
-                ->where('booking.idBooking', '=', $id)
-                ->select(
-                    'booking.*',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image',
-                    'users.id as idPerson',
-                    'users.name',
-                    'users.email',
-                    'users.idCard',
-                    'users.firstLastName',
-                    'users.secondLastName',
-                    'users.phone',
-                    'users.address',
-                    'users.idRol',
-                    'category.typeCategory'
-                )
-                ->get();
-                return view('body.index',compact('booking'));
+            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
+            ->join('users', 'users.id', '=', 'booking.idPerson')
+            ->join('category', 'category.idCategory', '=', 'booking.idCategory')
+            ->where('booking.idBooking', '=', $id)
+            ->select(
+                'booking.*',
+                'booking_gallery.idBooking_gallery',
+                'booking_gallery.image',
+                'users.id as idUser',
+                'users.name',
+                'users.email',
+                'users.idCard',
+                'users.firstLastName',
+                'users.secondLastName',
+                'users.phone',
+                'users.address',
+                'users.idRol',
+                'category.typeCategory'
+            )
+            ->get();
+
+        $category = Category::all();
+        $valoration = [];
+
+        foreach ($bookings as $booking) {
+            $averageScore = Valoration::where('idBooking', $booking->idBooking)->avg('score');
+            $valoration[$booking->idBooking] = $averageScore;
+        }
+
+        return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
+          
         }
     } //End of index
 
     public function store(Request $request)
-{
-    try {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'state' => 'required',
-            'price' => 'required',
-            'location' => 'required',
-            'totalPossibleReservation' => 'required',
-            'idPerson' => 'required',
-            'idCategory' => 'required',
-            'image' => 'nullable|image'
-        ]);
+    {
+        try {
+            $input = $request->all();
 
-        $input = $request->all();
+            // Verificar si se envió una imagen y guardarla
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $file = $request->file('image');
+                $filename = date('YmdHi') . '_' . $file->getClientOriginalName();
+                $file->move(public_path('upload/booking_images'), $filename);
+                $input['image'] = $filename;
+            } else {
+                $input['image'] = null; // No se ha proporcionado ninguna imagen
+            }
 
-        // Verificar si se envió una imagen y guardarla
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = date('YmdHi') . '_' . $file->getClientOriginalName(); // Añadir una marca de tiempo para evitar conflictos de nombres
-            $file->move(public_path('upload/booking_images'), $filename);
-            $input['image'] = $filename;
-        }
+            $booking = new Booking();
+            $booking->fill($input); // Llenar el modelo con los datos del formulario
+            $booking->uploadDate = now()->toDateTimeString(); // Carbon se encargará de dar formato adecuado
+            $booking->save();
 
-        $booking = new Booking();
-        $booking->title = $input['title'];
-        $booking->description = $input['description'];
-        $booking->state = $input['state'];
-        $booking->price = $input['price'];
-        $booking->location = $input['location'];
-        $booking->totalPossibleReservation = $input['totalPossibleReservation'];
-        $booking->uploadDate = now()->toDateTimeString(); // Carbon se encargará de dar formato adecuado
-        $booking->idPerson = $input['idPerson'];
-        $booking->idCategory = $input['idCategory'];
-        $booking->save();
+            // Crear booking_gallery solo si hay una imagen
+            if ($input['image'] !== null) {
+                $booking_gallery = new Booking_gallery(['image' => $input['image']]);
+                $booking->booking_gallery()->save($booking_gallery);
+            }
 
-        // Crear booking_gallery
-        $booking_gallery = new Booking_gallery();
-        $booking->booking_gallery()->save($booking_gallery);
+            $notification = [
+                'message' => 'El hospedaje se guardó con éxito',
+                'alert-type' => 'success'
+            ];
 
-        // Guardar la ruta de la imagen en la base de datos si se cargó una imagen
-        if (!empty($input['image'])) {
-            $booking_gallery->image = $input['image'];
-            $booking_gallery->save();
-        }
-
-        return response()->json($booking);
-    } catch (QueryException $e) {
-        $errorCode = $e->errorInfo[1];
-        if ($errorCode == 1452) {
-            return response()->json(['error' => 'Error de FK: el estado especificado o rol no existe.'], 400);
-        } else {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return redirect()->route('booking.index')->with($notification);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1];
+            if ($errorCode == 1452) {
+                return response()->json(['error' => 'Error de FK: el estado especificado o rol no existe.'], 400);
+            } else {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
         }
     }
-}
+
+
 
 
     public function update(Request $request, $id)

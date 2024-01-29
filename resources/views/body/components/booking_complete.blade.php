@@ -11,12 +11,7 @@
             <div class="row mb-2">
                 <div class="col-md-6 mb-4">
                     <h1 class="m-0">BODY -> QUITARLO</h1>
-                    <div class="box-header with-border">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateBooking">
-                            Crear Hospedake-IT DOES NOT WORK
-                        </button>
-
-                    </div>
+                   
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
@@ -43,7 +38,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                      
+                        <a href="{{ route('booking.index') }}" class="btn btn-primary">Volver</a>
                             @if (!empty($item->image))
                             <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva">
                             @else
@@ -68,8 +63,12 @@
                             <p class="card-text"><strong>Precio por noche:</strong> ₡{{ $item->price }}</p>
                             <p class="card-text"><strong>Total de habitaciones disponibles:</strong> {{ $item->totalPossibleReservation }}</p>
                             <p class="card-text"><strong>Tipo de propiedad:</strong> {{ $item->typeCategory }}</p>
+                            <p class="card-text"><strong>Subido por:</strong> {{ $item->name }} {{ $item->firstLastName }} {{ $item->secondLastName }}</p>
+                            <p class="card-text"><strong>Telefono:</strong> {{ $item->phone }}</p>
+                            <p class="card-text"><strong>Correo:</strong> {{ $item->email }}</p>
+
                         </div>
-                        <a href="{{ route('booking.index', $item->idBooking) }}" class="btn btn-primary">Ver más</a>
+                        <a href="" class="btn btn-primary">Reservar</a>
                     </div>
                 </div>
             </div>
