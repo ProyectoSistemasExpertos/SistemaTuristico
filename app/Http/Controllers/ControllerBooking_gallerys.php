@@ -25,10 +25,10 @@ class ControllerBooking_gallerys extends Controller
             $booking_gallery =Booking_gallery::findorfail($id);
             
             if(!$booking_gallery){
-                return response()->json(['error' => 'No existe recomendación con este código'], 400);
+                return response()->json(['error' => 'No existe imagen con este código'], 400);
             }
             $booking_gallery = Booking_gallery::join('booking','booking.idBooking','=','booking_gallery.idBooking')
-            ->where('booking_gallery.idBooking_gallery','=',$id)
+            ->where('booking_gallery.idBooking','=',$id)
             ->select(
                 'booking.*',
                 'booking_gallery.idBooking_gallery',
@@ -44,23 +44,17 @@ class ControllerBooking_gallerys extends Controller
     try {
         $request->validate([
             'idBooking' => 'required',
+            //'image'=>'nullable|image|dimensions:min_width = 200, min_height = 200'
+            'image'=>'nullable|image'
         ]);
 
-        $isBookingExists = Booking_gallery::whereIn('idBooking', [$request->input('idBooking')])->first();
-
-        if ($isBookingExists) {
-            if ($isBookingExists->idRecommendation == $request->input('idRecommendation')) {
-                return response()->json(['error' => 'La relacion de booking_gallery ya ha sido registrada'], 400);
-            }
-        }
-
         $input = $request->all();
-        $booking = new Booking_gallery();
-        $booking->image = $input['image'];
-        $booking->idBooking = $input['idBooking'];
-        $booking->save();
+        $booking_gallery = new Booking_gallery();
+        $booking_gallery->image = $input['image'];
+        $booking_gallery->idBooking = $input['idBooking'];
+        $booking_gallery->save();
 
-        return response()->json($booking);
+        return response()->json($booking_gallery,201);
 
     } catch (QueryException $e) {
         $errorCode = $e->errorInfo[1];
@@ -76,7 +70,7 @@ class ControllerBooking_gallerys extends Controller
     {
         try {
             $request->validate([
-                'image' => 'required',
+                'image' => 'required|image|dimensions:min_width = 200, min_height = 200',
                 'idBooking' => 'required',
             ]);
 

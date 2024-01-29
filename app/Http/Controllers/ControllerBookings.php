@@ -69,21 +69,28 @@ class ControllerBookings extends Controller
     {
         try {
             $request->validate([
+                'title' => 'required',
                 'description' => 'required',
                 'state' => 'required',
                 'price' => 'required',
                 'location' => 'required',
                 'totalPossibleReservation' => 'required',
                 'idPerson' => 'required',
-                'idCategory' => 'required'
+                'idCategory' => 'required',
+                'image' => 'nullable|image'
             ]);
 
             $isBookingExists = Booking::whereIn('idBooking', [$request->input('idBooking')])->first();
-
             if ($isBookingExists) {
                 if ($isBookingExists->idRecommendation == $request->input('idRecommendation')) {
                     return response()->json(['error' => 'La publicación ya ha sido registrada'], 400);
                 }
+            }
+
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('booking_images', 'public');
             }
 
             $input = $request->all();
@@ -103,6 +110,11 @@ class ControllerBookings extends Controller
             $booking_gallery = new Booking_gallery();
             $booking->booking_gallery()->save($booking_gallery);
 
+            if ($imagePath) {
+                $booking_gallery->image = $imagePath;
+                $booking_gallery->save();
+            }//end ifIm
+
             return response()->json($booking);
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
@@ -111,8 +123,8 @@ class ControllerBookings extends Controller
             } else {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
-        }
-    }
+        }//end of catch
+    }//end of store
 
     public function update(Request $request, $id)
     {
