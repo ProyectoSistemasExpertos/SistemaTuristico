@@ -113,4 +113,26 @@ class ControllerBooking_gallerys extends Controller
         $booking_gallery->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
     }
+
+    public function slider()
+    {
+        // Define la función de las settings aquí
+        $settings = [
+            'dots' => true,
+            'infinite' => true,
+            'speed' => 500,
+            'slidesToShow' => 1,
+            'slidesToScroll' => 1,
+            'autoplay' => true,
+            'autoplaySpeed' => 3000,
+        ];
+        $imageUrls = [
+            "https://www.govisitcostarica.co.cr/images/photos/desk-la-paz-waterfall-costa-rica(1).jpg",
+            "https://www.govisitcostarica.co.cr/images/photos/desk-montezuma-waterfall-on-the-nicoya-peninsula-near-santa-teresa.jpg",
+            "https://www.govisitcostarica.co.cr/images/photos/desk-hills-in-monteverde.jpg",
+            "https://www.govisitcostarica.co.cr/images/photos/desk-cloudforest-monteverde.jpg",
+            "https://www.govisitcostarica.co.cr/images/photos/desk-corcovado-national-park-beach-sunset.jpg"
+        ];
+        return view('components.slider', compact('settings','imageUrls'));
+    }
 }
