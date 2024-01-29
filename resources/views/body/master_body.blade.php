@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>appMarket</title>
+  <title>Sistema Turístico</title>
 
   <!-- COLOCAR EL ICONO EN LA PESTAÑA DE LA APP -->
   <link rel="icon" type="image/png" href="{{ asset('backend/assets/dist/img/logo.gif') }}" />
@@ -34,11 +34,11 @@
   </div>-->
 
     <!-- Navbar -->
-    @include('auth.body.navbar')
+    @include('body.navbar')
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    @include('auth.body.sidebar')
+    @include('body.sidebar')
     <!-- /.sidebar -->
 
 
@@ -93,28 +93,7 @@
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-  <script>
-    @if(Session::has('message'))
-    var type = "{{ Session::get('alert-type','info') }}"
-    switch (type) {
-      case 'info':
-        toastr.info(" {{ Session::get('message') }} ");
-        break;
-
-      case 'success':
-        toastr.success(" {{ Session::get('message') }} ");
-        break;
-
-      case 'warning':
-        toastr.warning(" {{ Session::get('message') }} ");
-        break;
-
-      case 'error':
-        toastr.error(" {{ Session::get('message') }} ");
-        break;
-    }
-    @endif
-  </script>
+  
 
   <!-- SWEET ALERT 2 -->
   <!-- https://sweetalert2.github.io/ -->
