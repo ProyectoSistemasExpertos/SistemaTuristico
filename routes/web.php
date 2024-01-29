@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 
@@ -48,11 +48,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 /* -------------------------------------------Login-----------------------------------------  */
+
 Route::post('/register',[ControllerAuth::class,'register']);
-Route::post('/login',[ControllerAuth::class,'login']);
+Route::post('/login',[ControllerAuth::class,'login'])->name('login');
 Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword']);
 Route::post('/reset-password',[ControllerAuth::class,'resetPassword']);
-Route::get('/logout',[ControllerAuth::class,'logout']);
+Route::get('/logout',[ControllerAuth::class,'logout'])->name('logout');
+Route::get('/register',[ControllerAuth::class,'showRegisterForm'])->name('register');
+Route::get('/login',[ControllerAuth::class,'showLoginForm'])->name('login.show');
+Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('password.request');
+Route::get('/reset-password',[ControllerAuth::class,'showResetPasswordForm'])->name('password.reset');
 
 /* -------------------------------------------Person-----------------------------------------  */
 Route::get('/person/{id?}',[ControllerPersons::class,'index'])->name('person.index');
