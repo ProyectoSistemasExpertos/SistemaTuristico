@@ -218,7 +218,7 @@ class ControllerHousings extends Controller
             $users = Booking::join('housing', 'housing.idBooking', '=', 'booking.idBooking')
                 ->join('users', 'users.id', '=', 'booking.idPerson')
                 ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->where('housing.idPerson', '=', $idUser)
+                ->where('housing.idPerson', '=', 2)
                 ->select(
                     'booking.*',
                     'users.id as idUser',
@@ -234,13 +234,20 @@ class ControllerHousings extends Controller
                     'housing.total_person'
                 )
                 ->get();
+
             if ($users->isEmpty()) {
-                return response()->json(['error' => 'No hay registros'], 404);
+                return view('history_by_user', ['users' => []]);
             }
-            return response()->json($users);
+
+            return view('body/modules/history_by_user', compact('users'));
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        } //End of try-catch
-    } //end of History_by_user
+        }
+    } //End history_by_user
 
+    //Prueba, se debe eliminar
+    public function showNavbarView()
+    {
+        return view('body.navbar');
+    }
 }//End of controllerHousing

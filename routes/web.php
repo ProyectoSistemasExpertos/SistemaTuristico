@@ -25,22 +25,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+/*
 Route::get('/', function () {
-    return view('home');
+    return view('body.modules.history_by_bookings');
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -98,7 +88,12 @@ Route::post('/housing/create',[ControllerHousings::class, 'store']);
 Route::put('/housing/update/{id}', [ControllerHousings::class, 'update']);
 Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);
 Route::get('/housing/history_by_user/{idUser}',[ControllerHousings::class,'history_by_user']);
-Route::get('/housing/history_by_bookings/{idBookings?}',[ControllerHousings::class,'history_by_bookings']);
+//Route::get('/housing/history_by_bookings/{idBookings?}',[ControllerHousings::class,'history_by_bookings']);
+
+Route::get('/history-by-user/{idUser}', [ControllerHousings::class, 'history_by_user'])->name('history_by_user');
+//prueba mike
+Route::get('/nav-bar', [ControllerHousings::class, 'showNavbarView']);
+/* End housing */
 
 /* -------------------------------------------Booking-----------------------------------------  */
 Route::get('/booking/{id?}',[ControllerBookings::class,'index'])->name('booking.index');
@@ -118,4 +113,5 @@ Route::get('/valoration/{id?}',[ControllerValorations::class,'index']);
 Route::post('/valoration/create',[ControllerValorations::class, 'store']);
 Route::put('/valoration/update/{id}', [ControllerValorations::class, 'update']);
 Route::delete('/valoration/delete/{id}',[ControllerValorations::class,'destroy']);
+
 
