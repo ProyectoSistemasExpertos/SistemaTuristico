@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recommendation extends Model
 {
-    protected $table = 'recommendation';
+    protected $table = 'recommendations';
     protected $primaryKey = 'idRecommendation';
     public $timestamps = false;
 

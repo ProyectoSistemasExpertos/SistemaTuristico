@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('valoration', function (Blueprint $table) {
+        Schema::create('valorations', function (Blueprint $table) {
             $table->id('idValoration');
             $table->float('score', 2, 1);
             $table->string('commentary');
-            $table->integer('idPerson')->references('id')->on('users');
-            $table->integer('idBooking')->references('idBooking')->on('booking');;
+            $table->unsignedBigInteger('idPerson');
+            $table->foreign('idPerson')->references('id')->on('users'); // Ajusta según el nombre real de tu tabla de categorías
+            $table->unsignedBigInteger('idBooking');
+            $table->foreign('idBooking')->references('idBooking')->on('bookings'); // Ajusta según el nombre real de tu tabla de categorías
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('valoration');
+        Schema::dropIfExists('valorations');
     }
 };

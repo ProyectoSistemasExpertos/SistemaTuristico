@@ -14,14 +14,6 @@ use App\Models\User;
 class ControllerPersons extends Controller
 {
 
-    public function dataUser($id)
-{
-    $user = User::find($id);
-
-    return view('body/modules/profile', compact ('user'));
-}
-
-
     public function index($id = null)
     {
         try {
@@ -99,7 +91,12 @@ class ControllerPersons extends Controller
         } //End try-catch
     } //End of store
 
+    public function profile( $id){
 
+        $user = User::findOrFail($id);
+
+        return view('body/modules/profile', compact ('user'));
+    }
     //está teniendo problemas!
     public function update(Request $request, $id)
     {
@@ -112,27 +109,38 @@ class ControllerPersons extends Controller
                 'secondLastName' => 'required',
                 'phone' => 'required',
                 'address' => 'required',
+                'idCategory' => 'required',
             ]);
+            //$person =  Person::where('idCard', $request->input('idCard'))->first();
 
-            $person = Person::find($id);
+            //$isPersonExists =  Person::whereIn('idCard', [$request->input('idCard')]);
+            //dd ($isPersonExists);
+            //$user = Person::find($isPersonExists->id);
+            $user = User::findOrFail($id);
 
-            if (!$person) {
+            if (!$user) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
-                $person->idCard = $request->idCard;
-                $person->name = $request->name;
-                $person->firstLastName = $request->firstLastName;
-                $person->secondLastName = $request->secondLastName;
-                $person->phone = $request->phone;
-                $person->address = $request->address;
-                $person->save();
+                $user->idCard = $request->idCard;
+                $user->name = $request->name;
+                $user->firstLastName = $request->firstLastName;
+                $user->secondLastName = $request->secondLastName;
+                $user->phone = $request->phone;
+                $user->address = $request->address;
+                $user->save();
 
-                return response()->json($person,);
+                $user->preferences = $user->preferences()->get();
+
+                foreach ($user->preferences as $preference) {
+                    $category = $preference->categories;
+                }
+
+                return view('body.modules.profile', compact ('user'));
             } //end if exists
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1452) {
-                return view('body/modules/profile', compact ('person'));
+                return response()->json(['error' => 'Error de FK: La categoría o estado especificada no existe.'], 400);
             }
         } //End try-catch
     } //End of update

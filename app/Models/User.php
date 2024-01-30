@@ -10,6 +10,14 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    public function preferences()
+    {
+        return $this->hasMany(Preference::class, 'idPerson');
+    }
+    public function categories() {
+        return $this->belongsTo(Category::class, 'idCategory');
+    }
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**

@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('housing', function (Blueprint $table) {
+        Schema::create('housings', function (Blueprint $table) {
             $table->id('idHousing');
             $table->date('initial_date');
             $table->date('final_date');
             $table->date('arrival_date');
             $table->integer('total_person');
-            $table->integer('idPerson')->references('id')->on('users');
-            $table->integer('idBooking')->references('idBooking')->on('booking');
+            $table->unsignedBigInteger('idPerson');
+            $table->foreign('idPerson')->references('id')->on('users'); // Ajusta según el nombre real de tu tabla de categorías
+            $table->unsignedBigInteger('idBooking');
+            $table->foreign('idBooking')->references('idBooking')->on('bookings'); // Ajusta según el nombre real de tu tabla de categorías
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('housing');
+        Schema::dropIfExists('housings');
     }
 };

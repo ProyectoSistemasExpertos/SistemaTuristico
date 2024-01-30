@@ -64,11 +64,14 @@
                     </div>
                     <!-- Información del usuario y botón de edición -->
                     <div class="col-md-9 user-info">
-                    <h3>{{$user->name}}{{$user->firstLastName}}{{$user->secondLastName}}</h3>
+                    <h3>{{$user->name}} {{$user->firstLastName}} {{$user->secondLastName}}</h3>
                         <p>{{$user->idCard}}</p>
                         <p>{{$user->email}}</p>
                         <p>{{$user->phone}}</p>
                         <p>{{$user->address}}</p>
+                        @foreach ($user->preferences as $preference)
+                        <p>{{ $preference->idCategory }}</p>  
+                        @endforeach
                         <!-- Más campos según sea necesario -->
 
                         <!-- Botón de edición -->
@@ -79,53 +82,8 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Actualizar datos</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Contenido del formulario -->
-                <form action="{{ route('update', $person->id)}}" method="post">
-                @csrf
-                @method('put')
-                    <div class="form-group">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre" value="{{$user->name}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="firstLastName">Primer apellido:</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre"value="{{$user->firstLastName}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="secondLastName">Segundo apellido:</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre"value="{{$user->secondLastName}}"required>
-                    </div>
-                    <div class="form-group">
-                        <label for="idCard">Cedula:</label>
-                        <input type="text" class="form-control" id="email" placeholder="Ingrese su correo electrónico" value="{{$user->idCard}}"required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Teléfono:</label>
-                        <input type="text" class="form-control" id="phone" placeholder="Ingrese su correo electrónico"value="{{$user->phone}}"required>
-                    </div>
-                    <div class="form-group">
-                        <label for="correo">Dirección:</label>
-                        <input type="text" class="form-control" id="correo" placeholder="Ingrese su correo electrónico"value="{{$user->address}}"required>
-                    </div>
-                    <!-- Otros campos del formulario según sea necesario -->
-
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Incluir el modal desde otro archivo -->
+@include('body/modules/updateUser')
 
 <!-- Scripts de Bootstrap y Popper.js (necesario para algunas funcionalidades de Bootstrap) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
