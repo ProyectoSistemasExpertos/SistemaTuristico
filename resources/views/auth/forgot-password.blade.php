@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-35">
             <div class="card-body">
-            <form method="POST" action="{{ route('forgot.password') }}">
+            <form method="POST" action="{{ route('send-password-reset-link') }}">
                 @csrf
                 <div class="mb-7">
                     <h3 class="font-semibold text-2xl text-gray-800">¿Olvidaste tu Contraseña?</h3>
@@ -18,10 +18,10 @@
                     <div>
                         <input
                             id="email"
+                            name="email"
                             placeholder="Correo"
                             class="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400"
                             type="email"
-                            value=""
                             required autofocus
                            
                         />

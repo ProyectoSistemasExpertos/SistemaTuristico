@@ -87,71 +87,63 @@ class ControllerAuth extends Controller
     // Elimina tokens antiguos para el mismo usuario
     PasswordResetToken::where('email', $user->email)->delete();
 
-    // Genera un nuevo token    
-    
-
     $resetToken = PasswordResetToken::create([
         'email' => $user->email,
         'token' => bin2hex(random_bytes(32)), // Genera un token aleatorio
     ]);
     printf('Usuario: '.$resetToken);
     $mailController = new ControllerMail();
-    return $mailController->sendResetPasswordEmail($user->email, $resetToken->token);
+    $mailController->sendResetPasswordEmail($user->email, $resetToken->token);
+    return view('auth.login');
 }
 
 
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-            'token' => 'required',
-        ]);
+public function resetPassword(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:6',
+        'token' => 'required',
+    ]);
 
-        $user = User::where('email', $request->email)->first();
+    $user = User::where('email', $request->email)->first();
 
-        if (!$user) {
-            return response()->json(['error' => 'Correo electrónico no encontrado'], 404);
-        }
-
-        // Validar el token (puedes tener una lógica específica aquí)
-        $isValidToken = $this->validateResetToken($user, $request->token);
-
-        if (!$isValidToken) {
-            return response()->json(['error' => 'Token no válido'], 400);
-        }
-
-        // Actualizar la contraseña
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        // Eliminar el token de restablecimiento de contraseña
-        // Esto puede depender de tu implementación específica
-
-        // Ejemplo:
-        $user = User::where('email', $request->email)->first();
-        //$user->update(['reset_token' => null]);
-
-        return response()->json(['message' => 'Contraseña restablecida exitosamente'], 200);
+    if (!$user) {
+        return response()->json(['error' => 'Correo electrónico no encontrado'], 404);
     }
 
-    private function validateResetToken(User $user, $token)
-    {
-        // Obtener todos los tokens de acceso del usuario
-        $userTokens = $user->tokens;
-    
-        // Validar si el token de restablecimiento es válido
-        $isValidToken = $userTokens->contains(function ($userToken) use ($token) {
-            // Puedes comparar el token almacenado con el token proporcionado
-            // Aquí necesitarás ajustar según cómo almacenes y compares tus tokens
-    
-            // Ejemplo: Comparar solo el valor del token
-            return hash_equals($userToken->id, $token);
-        });
-    
-        return $isValidToken;
+    // Validate the token
+    $passwordResetToken = $user->passwordResetTokens()->first();
+
+    if (!$passwordResetToken) {
+        return response()->json(['error' => 'Token no encontrado'], 404);
     }
+    
+    $isValidToken = $this->validateResetToken($passwordResetToken, $request->token);
+
+    if (!$isValidToken) {
+        return response()->json(['error' => 'Token no válido'], 400);
+    }
+
+    // Update the password
+
+    $user->update([
+        'password' => Hash::make($request->password),
+    ]);
+
+    // Delete the password reset token
+    PasswordResetToken::where('email', $user->email)->delete();
+
+    return response()->json(['message' => 'Contraseña restablecida exitosamente'], 200);
+}
+
+public function validateResetToken($passwordResetToken, $token)
+{
+    // Get all access tokens of the user
+    $userToken = $passwordResetToken->token;
+    // Validate if the reset token is valid
+    return hash_equals(strval($userToken), strval($token));
+}
     public function showRegisterForm()
     {
         return view('auth.register');
@@ -170,6 +162,6 @@ class ControllerAuth extends Controller
     public function showResetPasswordForm(Request $request, $token)
     {
         return view('auth.reset-password', ['token' => $token, 'email' => $request->email]);
-    }
+        }
 
 }

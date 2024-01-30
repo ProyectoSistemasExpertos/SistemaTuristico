@@ -46,16 +46,16 @@ Route::get('/profile/{id}',[ControllerPersons::class,'profile'])->name('profile'
 
 /* -------------------------------------------Login-----------------------------------------  */
 
-Route::post('/register',[ControllerAuth::class,'register'])->name('register');;
+Route::post('/register',[ControllerAuth::class,'register'])->name('register');
 Route::post('/login',[ControllerAuth::class,'login'])->name('login');
-Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('forgot.password');;
-Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reset.password');;
-Route::get('/logout',[ControllerAuth::class,'logout'])->name('logout');
+Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('send-password-reset-link');
+Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reseting-password');
+Route::get('/logout',[ControllerAuth::class,'logout']);
 /* -------------------------------------------ViewsLogin-----------------------------------------  */
-Route::get('/register',[ControllerAuth::class,'showRegisterForm'])->name('register.show');
-Route::get('/login',[ControllerAuth::class,'showLoginForm'])->name('login.show');
-Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('forgotpass.show');
-Route::get('/reset-password',[ControllerAuth::class,'showResetPasswordForm'])->name('resetpass.show');
+Route::get('/register',[ControllerAuth::class,'showRegisterForm']);
+Route::get('/login',[ControllerAuth::class,'showLoginForm']);
+Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('forgot-password');
+Route::get('/reset-password/{token}',[ControllerAuth::class,'showResetPasswordForm'])->name('confirm-reset-password');
 
 /* -------------------------------------------Person-----------------------------------------  */
 Route::get('/person/{id?}',[ControllerPersons::class,'index'])->name('person.index');
