@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
-use App\Models\Booking_gallery;
+use App\Models\Booking_gallerys;
+use App\Models\Bookings;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class ControllerBooking_gallerys extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking_gallery = Booking_gallery::join('bookings','bookings.idBooking','=','booking_gallerys.idBooking')
+            $booking_gallery = Booking_gallerys::join('bookings','bookings.idBooking','=','booking_gallerys.idBooking')
             ->select(
                 'bookings.*',
                 'booking_gallerys.idBooking_gallery',
@@ -22,12 +22,12 @@ class ControllerBooking_gallerys extends Controller
             return response()->json($booking_gallery);
         } else {
 
-            $booking_gallery =Booking_gallery::findorfail($id);
+            $booking_gallery =Booking_gallerys::findorfail($id);
             
             if(!$booking_gallery){
                 return response()->json(['error' => 'No existe imagen con este código'], 400);
             }
-            $booking_gallery = Booking_gallery::join('bookings','booking.idBooking','=','booking_gallerys.idBooking')
+            $booking_gallery = Booking_gallerys::join('bookings','bookings.idBooking','=','booking_gallerys.idBooking')
             ->where('booking_gallerys.idBooking','=',$id)
             ->select(
                 'bookings.*',
@@ -49,7 +49,7 @@ class ControllerBooking_gallerys extends Controller
         ]);
 
         $input = $request->all();
-        $booking_gallery = new Booking_gallery();
+        $booking_gallery = new Booking_gallerys();
         $booking_gallery->image = $input['image'];
         $booking_gallery->idBooking = $input['idBooking'];
         $booking_gallery->save();
@@ -74,8 +74,8 @@ class ControllerBooking_gallerys extends Controller
                 'idBooking' => 'required',
             ]);
 
-            $booking_gallery = Booking_gallery::find($id);
-            $isBooking_galleryExists =  Booking_gallery::where('idPerson', [$request->input('idPerson')])
+            $booking_gallery = Booking_gallerys::find($id);
+            $isBooking_galleryExists =  Booking_gallerys::where('idPerson', [$request->input('idPerson')])
             ->first();
             if ($isBooking_galleryExists) {
                 if ($booking_gallery->idPerson != $request->input('idPerson')) {
@@ -105,8 +105,8 @@ class ControllerBooking_gallerys extends Controller
     } //End of update
 
     public function destroy($id){
-        $booking_gallery = Booking_gallery::where('idBooking_gallery',$id)->first();
-        $booking = Booking::where('bookings','bookings.idBooking','=','booking_gallerys.idBooking');
+        $booking_gallery = Booking_gallerys::where('idBooking_gallery',$id)->first();
+        $booking = Bookings::where('bookings','bookings.idBooking','=','booking_gallerys.idBooking');
         if($booking){
             return response()->json(['error' => 'No es posible eliminar ya que hay una publicación vigente.'], 400);
         }

@@ -15,28 +15,28 @@ class ControllerHousings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $housing = Housing::join('users', 'users.id', '=', 'housing.idPerson')
-                ->join('booking', 'booking.idBooking', '=', 'housing.idBooking')
+            $housing = Housings::join('users', 'users.id', '=', 'housings.idPerson')
+                ->join('bookings', 'bookings.idBooking', '=', 'housings.idBooking')
                 ->select(
-                    'housing.*',
+                    'housings.*',
                     'users.idCard',
                     'users.name',
                     'users.firstLastName',
                     'users.secondLastName',
                     'users.phone',
                     'users.email',
-                    'booking.*'
+                    'bookings.*'
                 )
                 ->get();
             return response()->json($housing);
         } else {
 
-            $housing = Housing::findorfail($id);
+            $housing = Housings::findorfail($id);
 
             if (!$housing) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $housing = Housing::join('users', 'users.id', '=', 'housings.idPerson')
+            $housing = Housings::join('users', 'users.id', '=', 'housings.idPerson')
                 ->join('bookings', 'bookings.idBooking', '=', 'housings.idBooking')
                 ->where('housings.idHousing', '=', $id)
                 ->select(
@@ -67,7 +67,7 @@ class ControllerHousings extends Controller
             $idBooking = $input['idBooking'];
     
             // Verificar si la reserva ya existe en Housing
-            $isHousingExists = Housing::where('idBooking', $idBooking)
+            $isHousingExists = Housings::where('idBooking', $idBooking)
                 ->where('initial_date', $input['initial_date'])
                 ->where('idPerson', $input['idPerson'])
                 ->first();
@@ -80,8 +80,8 @@ class ControllerHousings extends Controller
                 return redirect()->back()->with($notification);
             }
     
-            $booking = Booking::where('idBooking', $idBooking)->first();
-            $housing = new Housing();
+            $booking = Bookings::where('idBooking', $idBooking)->first();
+            $housing = new Housings();
     
             if ($booking && $booking->totalPossibleReservation >= $input['total_person']) {
                 $housing->initial_date = $input['initial_date'];
@@ -133,8 +133,8 @@ class ControllerHousings extends Controller
                 'idPerson' => 'required',
                 'idBooking' => 'required'
             ]);
-            $housing = Housing::find($id);
-            $isHousingExists = Housing::where('idPerson', [$request->input('idPerson')])->first();
+            $housing = Housings::find($id);
+            $isHousingExists = Housings::where('idPerson', [$request->input('idPerson')])->first();
 
             if ($isHousingExists) {
                 if ($housing->idPerson != $request->input('idPerson')) {
@@ -170,7 +170,7 @@ class ControllerHousings extends Controller
 
     public function destroy($id)
     {
-        $housing = Housing::where('idHousing', $id)->first();
+        $housing = Housings::where('idHousing', $id)->first();
         $housing->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
     } //End of destroy
@@ -183,7 +183,7 @@ class ControllerHousings extends Controller
                 return response()->json(['error' => 'No se proporcionó ningún ID de reserva'], 404);
             } else {
                 // Obtener el idBooking más común en la tabla Housing
-                $mostCommonBooking = DB::table('housing')
+                $mostCommonBooking = DB::table('housings')
                     ->select('idBooking', DB::raw('COUNT(*) as count'))
                     ->groupBy('idBooking')
                     ->orderByDesc('count')
@@ -196,7 +196,7 @@ class ControllerHousings extends Controller
                 $mostCommonIdBooking = $mostCommonBooking->idBooking;
 
                 // Recuperar los datos de booking correspondientes al idBooking más común
-                $bookings = Housing::join('bookings', 'housings.idBooking', '=', 'bookings.idBooking')
+                $bookings = Housings::join('bookings', 'housings.idBooking', '=', 'bookings.idBooking')
                     ->join('users', 'users.id', '=', 'bookings.idPerson')
                     ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
                     ->where('housings.idBooking', $mostCommonIdBooking)
@@ -230,7 +230,7 @@ class ControllerHousings extends Controller
     public function history_by_user($idUser)
     {
         try {
-            $users = Booking::join('housings', 'housings.idBooking', '=', 'bookings.idBooking')
+            $users = Bookings::join('housings', 'housings.idBooking', '=', 'bookings.idBooking')
                 ->join('users', 'users.id', '=', 'bookings.idPerson')
                 ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
                 ->where('housings.idPerson', '=', $idUser)
