@@ -21,7 +21,6 @@
 <body>
     <div class="bg-purple-900 absolute top-0 left-0 bottom-0 right-0 leading-5 overflow-hidden">
         <div class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
-            <!-- Aquí se agrega el carrusel -->
             <div class="w-full">
                 <div class="slick-carousel">
                     
@@ -39,13 +38,11 @@
                 </div>
             </div>
         </div>
-        <footer class="bg-transparent absolute w-full bottom-0 left-0 z-30">
-            <div class="container p-5 mx-auto flex items-center justify-between">
-                <div class="flex mr-auto">
+        <footer class="bg-transparent absolute bottom-0 z-20">
+                <div class="flex mr-auto h-8">
                     <a style="color: #ffffff; font-size: 24px;">
                         <strong>TU</strong>plas
                     </a>
-                </div>
             </div>
         </footer>
         <svg class="absolute bottom-0 left-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">

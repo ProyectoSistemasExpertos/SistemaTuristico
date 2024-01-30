@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\PasswordResetToken;
 use App\Http\Controllers\ControllerMail;
+use App\Models\Person;
+use App\Models\Preference;
 
 class ControllerAuth extends Controller
 {
     public function register(Request $request)
     {
         // Validación de datos
+        dd($request);
         $request->validate([
             'name' => 'required|string',
             'idCard' => 'required|integer',
@@ -24,7 +27,7 @@ class ControllerAuth extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
         ]);
-
+        $idRol = $request->idRol === "on" ? 1 : 2;
         $user = User::create([
             'name' => $request->name,
             'idCard' => $request->idCard,
@@ -32,11 +35,17 @@ class ControllerAuth extends Controller
             'secondLastName' => $request->secondLastName,
             'phone' => $request->phone,
             'address' => $request->address,
-            'idRol' => 2,
+            'idRol' => $idRol,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $user = Person::where('idCard', $request->idCard)->firstOrFail();
+        $idCategory = $request->input('idCategory');
 
+        $preference = Preference::create([
+            'idPerson' => $user->idPerson,
+            'idCategory' => $idCategory,
+        ]);
         Auth::login($user);
 
         return response()->json(['message' => 'Registro exitoso', 'user' => $user], 200);
