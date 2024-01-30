@@ -60,53 +60,52 @@ class ControllerHousings extends Controller
                 'total_person' => 'required',
                 'idPerson' => 'required',
             ]);
-            $idBooking = $request->input('idBooking');
-
-            /* // Verificar si la reserva ya existe en Housing
-             $isHousingExists = Housing::where('idBooking', $idBooking)->first();
-     
-             if ($isHousingExists) {
-                 return response()->json(['error' => 'La reservación ya ha sido registrada'], 400);
-             } */
-             /*
-            $isBookingExists = Booking::where('idBooking', $idBooking)->first();
-
-            if ($isBookingExists) {
-                return response()->json(['error' => 'La reservación ya ha sido registrada en Booking'], 400);
-            }*/
-
+    
             $input = $request->all();
-
+            $idBooking = $input['idBooking'];
+    
+            // Verificar si la reserva ya existe en Housing
+            $isHousingExists = Housing::where('idBooking', $idBooking)
+                ->where('initial_date', $input['initial_date'])
+                ->where('idPerson', $input['idPerson'])
+                ->first();
+    
+            if ($isHousingExists) {
+                $notification = [
+                    'message' => 'La reserva ya ha sido registrada para esta fecha y persona',
+                    'alert-type' => 'error'
+                ];
+                return redirect()->back()->with($notification);
+            }
+    
             $booking = Booking::where('idBooking', $idBooking)->first();
             $housing = new Housing();
+    
             if ($booking && $booking->totalPossibleReservation >= $input['total_person']) {
-
                 $housing->initial_date = $input['initial_date'];
                 $housing->final_date = $input['final_date'];
                 $housing->arrival_date = $input['arrival_date'];
                 $housing->total_person = $input['total_person'];
-                //$housing->idPerson = 3;
                 $housing->idPerson = $input['idPerson'];
-                $housing->idBooking = $input['idBooking']; // Usar el idBooking obtenido
-                //$housing->idBooking = 2; 
-
+                $housing->idBooking = $input['idBooking'];
+    
                 $housing->save();
-
+    
                 $booking->state = '0';
                 $booking->save();
-
+    
                 $notification = [
                     'message' => 'Registro Completo',
                     'alert-type' => 'success'
                 ];
-
+    
                 return redirect()->route('booking.index', $idBooking)->with($notification);
             } else {
                 $notification = [
                     'message' => 'La cantidad de personas supera a la capacidad del hospedaje',
                     'alert-type' => 'error'
                 ];
-
+    
                 return redirect()->back()->with($notification);
             }
         } catch (QueryException $e) {
@@ -118,6 +117,7 @@ class ControllerHousings extends Controller
             }
         }
     }
+    
 
 
     public function update(Request $request, $id)
