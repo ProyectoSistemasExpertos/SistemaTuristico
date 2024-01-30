@@ -30,6 +30,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Perfil de Usuario</a>
                 </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ route('logout')}}">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

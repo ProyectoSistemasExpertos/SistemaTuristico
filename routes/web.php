@@ -50,7 +50,7 @@ Route::post('/register',[ControllerAuth::class,'register'])->name('register');
 Route::post('/login',[ControllerAuth::class,'login'])->name('login');
 Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('send-password-reset-link');
 Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reseting-password');
-Route::get('/logout',[ControllerAuth::class,'logout']);
+Route::get('/logout',[ControllerAuth::class,'logout'])->name('logout');
 /* -------------------------------------------ViewsLogin-----------------------------------------  */
 Route::get('/home',function(){
     return view('auth.login');

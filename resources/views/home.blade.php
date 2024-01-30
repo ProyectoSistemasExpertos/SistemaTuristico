@@ -23,7 +23,7 @@
         <div class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
             <div class="w-full">
                 <div class="slick-carousel">
-                    
+
                     @foreach ($imageUrls as $index => $imageUrl)
                         <div>
                             <img src="{{ $imageUrl }}" alt="Imagen {{ $index + 1 }}" class="w-full h-full object-cover">
@@ -37,7 +37,7 @@
                     <div class="alert alert-success" role="alert">
                         {{ session('success') }}
                     </div>
-                @endif    
+                @endif
             <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
                     @yield('content') <!-- Aquí es donde se renderizará tu vista específica (login o register) -->
                 </div>
@@ -71,7 +71,7 @@
             setTimeout(function() {
             // Ajusta el selector del enlace según tu estructura actual
             $('a[href="login"]').click();
-        }, 100); 
+        }, 100);
         });
 
     </script>
