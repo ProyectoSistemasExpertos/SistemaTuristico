@@ -85,7 +85,7 @@ Route::get('/preference/history_by_preferences/{idPerson}',[ControllerPreference
 
 /* -------------------------------------------Housing-----------------------------------------  */
 Route::get('/housing/{id?}',[ControllerHousings::class,'index']);
-Route::post('/housing/create',[ControllerHousings::class, 'store']);
+Route::post('/housing/create', [ControllerHousings::class, 'store'])->name('housing.store');
 Route::put('/housing/update/{id}', [ControllerHousings::class, 'update']);
 Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);
 Route::get('/housing/history_by_user/{idUser}',[ControllerHousings::class,'history_by_user']);

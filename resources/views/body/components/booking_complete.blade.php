@@ -11,7 +11,7 @@
             <div class="row mb-2">
                 <div class="col-md-6 mb-4">
                     <h1 class="m-0">BODY -> QUITARLO</h1>
-                   
+
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
@@ -38,9 +38,10 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                        <a href="{{ route('booking.index') }}" class="btn btn-primary mb-2">Volver</a>
+                            <a href="{{ route('booking.index') }}" class="btn btn-primary mb-2">Volver</a>
                             @if (!empty($item->image))
-                            <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva">
+                            <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}"
+                                alt="Imagen de la reserva">
                             @else
                             <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen">
                             @endif
@@ -61,14 +62,19 @@
                             <p class="card-text">{{ $item->description }}</p>
                             <p class="card-text"><strong>Ubicación:</strong> {{ $item->location }}</p>
                             <p class="card-text"><strong>Precio por noche:</strong> ₡{{ $item->price }}</p>
-                            <p class="card-text"><strong>Total de habitaciones disponibles:</strong> {{ $item->totalPossibleReservation }}</p>
+                            <p class="card-text"><strong>Total de habitaciones disponibles:</strong> {{
+                                $item->totalPossibleReservation }}</p>
                             <p class="card-text"><strong>Tipo de propiedad:</strong> {{ $item->typeCategory }}</p>
-                            <p class="card-text"><strong>Subido por:</strong> {{ $item->name }} {{ $item->firstLastName }} {{ $item->secondLastName }}</p>
+                            <p class="card-text"><strong>Subido por:</strong> {{ $item->name }} {{ $item->firstLastName
+                                }} {{ $item->secondLastName }}</p>
                             <p class="card-text"><strong>Telefono:</strong> {{ $item->phone }}</p>
                             <p class="card-text"><strong>Correo:</strong> {{ $item->email }}</p>
 
                         </div>
-                        <a href="" class="btn btn-primary">Reservar</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#reservarModal">
+                            Reservar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -76,97 +82,55 @@
         @endforeach
 
 
-        <!--=====================================
-    MODAL NUEVA CATEGORIA
-======================================-->
-
-        <div id="modalCreateBooking" class="modal fade" role="dialog">
+        <!-- Modal -->
+        <!-- Ventana modal para la reserva -->
+        <div class="modal fade" id="reservarModal" tabindex="-1" aria-labelledby="reservarModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="post" action="{{ route('booking.create') }}">
-                        @csrf
-                        <!--=====================================
-                    CABEZA DEL MODAL
-                ======================================-->
-                        <div class="modal-header" style="background:blue; color:white;">
-                            <h4 class="modal-title">
-                                <span class="fas fa-layer-group"></span> Agregar Categoría
-                            </h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" style="color:white;">&times;</span>
-                            </button>
-                        </div>
-                        <!--=====================================
-                    CUERPO DEL MODAL
-                ======================================-->
-                        <div class="modal-body">
-                            <div class="box-body">
-                                <!-- ENTRADA PARA EL NOMBRE -->
-                                <div class="form-group">
-
-                                    <input type="hidden" id="idPerson" name="idPerson" value="1">
-                                    <input type="hidden" id="state" name="state" value="1">
-                                    <label for="inputName" class="control-label">Título de la publicación</label>
-                                    <input name="title" id="title" class="form-control" type="text" value="Teste" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblDescription" class="control-label">Descripción</label>
-                                    <input name="description" id="description" class="form-control" type="text" value="testttt" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblPrice" class="control-label">Precio</label>
-                                    <input name="price" id="price" class="form-control" type="number" value="2" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblLocation" class="control-label">Ubicación</label>
-                                    <select class="form-select input-lg" name="location" id="location" required>
-
-                                        <option value="San José">San José</option>
-                                        <option value="Alajuela">Alajuela</option>
-                                        <option value="Heredia">Heredia</option>
-                                        <option value="Cartago">Cartago</option>
-                                        <option value="Guanacaste">Guanacaste</option>
-                                        <option value="Puntarenas">Puntarenas</option>
-                                        <option value="Limón">Limón</option>
-
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblTotalPossibleReservation" class="control-label">Reserva Total Posible</label>
-                                    <input name="totalPossibleReservation" id="totalPossibleReservation" class="form-control" type="number" value="4" required>
-                                </div>
-                                <!-- ENTRADA PARA SELECCIONAR UNA IMAGEN -->
-                                <div class="form-group">
-                                    <label for="image" class="control-label">Subir Imagen</label>
-                                    <input type="file" id="image" name="image" class="form-control-file" accept="image/*">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEstado" class="control-label">Categoría</label>
-                                    <div>
-                                        <select class="form-select input-lg" name="idCategory" id="idCategory" required>
-                                            @foreach($category as $c)
-                                            <option value="{{$c->idCategory}}">{{$c->typeCategory}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reservarModalLabel">¿Deseas reservar?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Contenido del formulario de reserva -->
+                        <form id="reservarForm" method="post" action="{{ route('housing.store') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="initial_date" class="form-label">Fecha de Inicio</label>
+                                <input type="date" class="form-control" id="initial_date" name="initial_date">
                             </div>
-                        </div>
-                        <!--=====================================
-                    PIE DEL MODAL
-                ======================================-->
-                        <!-- Modal footer -->
-                        <div class="modal-footer d-flex justify-content-between">
-                            <div>
-                                <!--<button type="submit" class="btn btn-primary">Guardar Datos</button> -->
-                                <input type="submit" class="btn btn-primary waves-effect waves-light" value="Guardar Datos">
-                                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+                            <div class="mb-3">
+                                <label for="final_date" class="form-label">Fecha de Fin</label>
+                                <input type="date" class="form-control" id="final_date" name="final_date">
                             </div>
-                        </div>
-                    </form>
+                            <div class="mb-3">
+                                <label for="arrival_date" class="form-label">Fecha de Llegada</label>
+                                <input type="date" class="form-control" id="arrival_date" name="arrival_date">
+                            </div>
+                            <div class="mb-3">
+                                <label for="total_person" class="form-label">Total de Personas</label>
+                                <input type="number" class="form-control" id="total_person" name="total_person">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="idPerson" name="idPerson" value="">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="idBooking" name="idBooking" value="">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="confirmarReserva()">Confirmar
+                            Reserva</button>
+
+                    </div>
                 </div>
             </div>
-        </div> <!-- FIN VENTANA MODAL CREAR CATEGORIA -->
+            <!-- Fin de la ventana modal para la reserva -->
+
+
 
     </section>
 </div>
@@ -177,5 +141,27 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    function confirmarReserva() {
+        // Capturar datos del formulario
+        var formData = new FormData(document.getElementById('reservarForm'));
 
+        // Realizar petición AJAX
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("housing.store") }}',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Manejar la respuesta aquí (puede redirigir o mostrar un mensaje)
+                console.log(response);
+            },
+            error: function (error) {
+                // Manejar el error aquí (puede mostrar un mensaje de error)
+                console.log(error.responseJSON);
+            }
+        });
+    }
+</script>
 @endsection
