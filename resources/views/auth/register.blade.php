@@ -44,7 +44,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                         </svg>
-                        <input class="pl-2 text-xs w-full focus:outline-none" type="text" value="" id="idCard" name="idCard" placeholder="Cédula" required>
+                        <input class="pl-2 text-xs w-full focus:outline-none" type="text" id="idCard" name="idCard" placeholder="Cédula" required>
                         @error('idCard')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -99,7 +99,7 @@
                         <option value="3">Ciudades</option>
                     </select>
                 </div>
-                <input type="checkbox" id="idRol" name="idRol" class="text-s">
+                <input type="checkbox" id="idRol" name="idRol" value="on" class="text-s">
                 <strong>Soy vendedor</strong>
                 <div>
                     <button type="submit" class="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-2 mt-2 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500">

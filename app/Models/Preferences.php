@@ -11,7 +11,7 @@ class Preferences extends Model
     protected $primaryKey = 'idPreference';
     public $timestamps = false;
 
-
+    protected $fillable = ['idPerson', 'idCategory'];
     public function person(){
         return $this->belongsTo(Person::class);
     }

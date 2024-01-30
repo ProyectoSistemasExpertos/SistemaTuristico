@@ -33,7 +33,12 @@
             </div>
 
             <div class="flex justify-center self-center z-10 absolute top-10 right-11 h-center">
-                <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif    
+            <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
                     @yield('content') <!-- Aquí es donde se renderizará tu vista específica (login o register) -->
                 </div>
             </div>

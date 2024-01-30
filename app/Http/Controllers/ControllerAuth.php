@@ -16,7 +16,6 @@ class ControllerAuth extends Controller
     public function register(Request $request)
     {
         // Validación de datos
-        dd($request);
         $request->validate([
             'name' => 'required|string',
             'idCard' => 'required|integer',
@@ -27,28 +26,30 @@ class ControllerAuth extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
         ]);
-        $idRol = $request->idRol === "on" ? 1 : 2;
-        $user = User::create([
-            'name' => $request->name,
-            'idCard' => $request->idCard,
-            'firstLastName' => $request->firstLastName,
-            'secondLastName' => $request->secondLastName,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'idRol' => $idRol,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user = $request->all();
+        $person = new Person();
+        $idRol = $request->has('idRol') ? 1 : 2;
+        $person = new Person();
+        $person->idCard = $user['idCard'];
+        $person->name = $user['name'];
+        $person->firstLastName = $user['firstLastName'];
+        $person->secondLastName = $user['secondLastName'];
+        $person->phone = $user['phone'];
+        $person->address = $user['address'];
+        $person->email = $user['email'];
+        $person->password = Hash::make($user['password']);
+        $person->idRol = $idRol;
+
+        $person->save();
         $user = Person::where('idCard', $request->idCard)->firstOrFail();
         $idCategory = $request->input('idCategory');
 
         $preference = Preference::create([
-            'idPerson' => $user->idPerson,
+            'idPerson' => $user->id,
             'idCategory' => $idCategory,
         ]);
-        Auth::login($user);
 
-        return response()->json(['message' => 'Registro exitoso', 'user' => $user], 200);
+        return redirect()->route('home')->with('success', '¡Registro exitoso! Bienvenido a nuestro sitio.');
     }
 
     public function login(Request $request)
@@ -153,6 +154,10 @@ public function validateResetToken($passwordResetToken, $token)
     // Validate if the reset token is valid
     return hash_equals(strval($userToken), strval($token));
 }
+    public function showHome()
+    {
+        return view('auth.login');
+    }
     public function showRegisterForm()
     {
         return view('auth.register');
