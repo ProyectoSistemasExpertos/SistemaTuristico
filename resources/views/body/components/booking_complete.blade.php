@@ -31,20 +31,23 @@
         ];
         @endphp
 
+
         @foreach($bookings as $item)
 
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
+
                         <div class="card-body">
                             <a href="{{ route('booking.index') }}" class="btn btn-primary mb-2">Volver</a>
                             @if (!empty($item->image))
-                            <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}"
-                                alt="Imagen de la reserva">
+                            <img class="img-thumbnail" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva" style="width: 350px; height: 250px;">
                             @else
-                            <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen">
+                            <img class="img-thumbnail" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen" style="width: 350px; height: 250px;">
                             @endif
+
+
 
                             <div class="row">
                                 <div class="col-md-7"> <!-- Aquí colocamos el resto de los datos a la izquierda -->
@@ -71,8 +74,7 @@
                             <p class="card-text"><strong>Correo:</strong> {{ $item->email }}</p>
 
                         </div>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#reservarModal">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reservarModal">
                             Reservar
                         </button>
                     </div>
@@ -84,8 +86,7 @@
 
         <!-- Modal -->
         <!-- Ventana modal para la reserva -->
-        <div class="modal fade" id="reservarModal" tabindex="-1" aria-labelledby="reservarModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="reservarModal" tabindex="-1" aria-labelledby="reservarModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -153,11 +154,11 @@
             data: formData,
             processData: false,
             contentType: false,
-            success: function (response) {
+            success: function(response) {
                 // Manejar la respuesta aquí (puede redirigir o mostrar un mensaje)
                 console.log(response);
             },
-            error: function (error) {
+            error: function(error) {
                 // Manejar el error aquí (puede mostrar un mensaje de error)
                 console.log(error.responseJSON);
             }

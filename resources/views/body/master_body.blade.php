@@ -43,7 +43,7 @@
 
 
     <!-- Content Wrapper. Contains page content -->
-    @yield('body')
+    @yield('body.bookings')
     <!-- /.content-wrapper -->
 
 
