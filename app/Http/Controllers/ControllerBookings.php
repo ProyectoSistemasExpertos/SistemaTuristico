@@ -8,6 +8,7 @@ use App\Models\Categories;
 use App\Models\Valorations;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Toastr;
 
 use Carbon\Carbon;
 
@@ -81,7 +82,6 @@ class ControllerBookings extends Controller
             }
 
             return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
-
         }
     } //End of index
 
@@ -220,17 +220,20 @@ class ControllerBookings extends Controller
                 )
                 ->get();
 
-                $valoration = [];
+            $valoration = [];
 
-                foreach ($bookings as $booking) {
-                    $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
-                    $valoration[$booking->idBooking] = $averageScore;
-                }
-    
+            foreach ($bookings as $booking) {
+                $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
+                $valoration[$booking->idBooking] = $averageScore;
+            }
+
 
             if ($bookings->isEmpty()) {
-                return view('body.index')->with('error', 'No se encontraron resultados');
+                // Mensaje de éxito en la sesión flash
+                session()->flash('success', 'El registro se ha guardado correctamente.');
+                return redirect()->route('booking.index');
             }
+            
 
             return view('body.index', compact('bookings', 'valoration'));
         } catch (QueryException $e) {

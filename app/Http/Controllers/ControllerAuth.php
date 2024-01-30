@@ -67,7 +67,8 @@ class ControllerAuth extends Controller
 
             $token = $user->createToken('access_token')->plainTextToken;
 
-            return response()->json(['message' => 'Inicio de sesión exitoso', 'user' => $user, 'access_token' => $token], 200);
+            //return response()->json(['message' => 'Inicio de sesión exitoso', 'user' => $user, 'access_token' => $token], 200);
+            return redirect()->route('booking.index')->with(201);
         } else {
             return response()->json(['error' => 'Credenciales inválidas'], 401);
         }

@@ -92,7 +92,7 @@ Route::delete('/preference/delete/{id}',[ControllerPreferences::class,'destroy']
 Route::get('/preference/history_by_preferences/{idPerson}',[ControllerPreferences::class,'history_by_preferences']);
 
 /* -------------------------------------------Housing-----------------------------------------  */
-Route::get('/housing/{id?}',[ControllerHousings::class,'index']);
+Route::get('/housing/{id?}',[ControllerHousings::class,'index'])->name('housing.index');
 Route::post('/housing/create', [ControllerHousings::class, 'store'])->name('housing.store');
 Route::put('/housing/update/{id}', [ControllerHousings::class, 'update']);
 Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);

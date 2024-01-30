@@ -36,6 +36,12 @@
         ];
         @endphp
 
+        @if(session('success'))
+    <script>
+        toastr.success("{{ session('success') }}");
+    </script>
+@endif
+
         @foreach($bookings as $item)
 
         <div class="container mt-5">
