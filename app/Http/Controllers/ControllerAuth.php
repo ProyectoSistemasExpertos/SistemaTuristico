@@ -152,6 +152,24 @@ class ControllerAuth extends Controller
     
         return $isValidToken;
     }
-    
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function showForgotPasswordForm()
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function showResetPasswordForm(Request $request, $token)
+    {
+        return view('auth.reset-password', ['token' => $token, 'email' => $request->email]);
+    }
 
 }

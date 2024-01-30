@@ -9,11 +9,11 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-md-6 mb-4">
                     <h1 class="m-0">BODY -> QUITARLO</h1>
                     <div class="box-header with-border">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateBooking">
-                            Crear Categoria
+                            Crear Hospedake-IT DOES NOT WORK
                         </button>
 
                     </div>
@@ -21,14 +21,12 @@
 
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
+
     </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-        <!-- Bootstrap JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
 
         @php
         $categoryIcons = [
@@ -38,121 +36,81 @@
         ];
         @endphp
 
-        @foreach($booking as $item)
-
+        @foreach($bookings as $item)
 
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
+
                             @if (!empty($item->image))
                             <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva">
                             @else
                             <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen">
                             @endif
 
-                            <h5 class="card-title"><i class="fa-solid {{ $categoryIcons[$item->idCategory]['icon'] }}"></i>{{ $item->title }}</h5>
-                            <p class="card-text">{{ $item->description }}</p>
+                            
+                                
+                                    <!-- Aquí colocamos el resto de los datos a la izquierda -->
+                                    <h5 class="card-title">
+                                        <i class="fa-solid {{ $categoryIcons[$item->idCategory]['icon'] }}"></i>
+                                        {{ $item->title }}
+                                    </h5>
+                                
+                              
+                            <p class="card-text"><strong>Puntuación:</strong> {{ $valoration[$item->idBooking] }}<i class="fa-regular fa-star"></i></p>
                             <p class="card-text"><strong>Ubicación:</strong> {{ $item->location }}</p>
                             <p class="card-text"><strong>Precio por noche:</strong> ₡{{ $item->price }}</p>
-                            <p class="card-text"><strong>Total de habitaciones disponibles:</strong> {{ $item->totalPossibleReservation }}</p>
-                            <p class="card-text"><strong>Tipo de propiedad:</strong> {{ $item->typeCategory }}</p>
-                            <p class="card-text"><strong>Subido por:</strong> {{ $item->name }} {{ $item->firstLastName }} {{ $item->secondLastName }}</p>
-                            <p class="card-text"><strong>Telefono:</strong> {{ $item->phone }}</p>
-                            <p class="card-text"><strong>Correo:</strong> {{ $item->email }}</p>
+                            <p class="card-text"><strong>Máximo de personas:</strong> {{ $item->totalPossibleReservation }}</p>
+                            <p class="card-text"><strong>Tipo de sector:</strong> {{ $item->typeCategory }}</p>
+                            <div class="action-container d-flex justify-content-between">
+                                <a href="{{ route('booking.index', $item->idBooking) }}" class="btn btn-primary ver-mas ml-auto" data-id="{{ $item->idBooking }}" id="ver-mas-link-{{ $item->idBooking }}">Ver más</a>
+                            </div>
+
                         </div>
-                        <a href="" class="btn btn-primary">Reservar</a>
+                        <!-- Agregar un contenedor div con la clase .action-container para el enlace Ver más -->
+
                     </div>
                 </div>
             </div>
+
         </div>
+
         @endforeach
 
-
-        <!--=====================================
-    MODAL NUEVA CATEGORIA
-======================================-->
-
-        <div id="modalCreateBooking" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form method="post" action="">
-                        @csrf
-                        <!--=====================================
-                    CABEZA DEL MODAL
-                ======================================-->
-                        <div class="modal-header" style="background:blue; color:white;">
-                            <h4 class="modal-title">
-                                <span class="fas fa-layer-group"></span> Agregar Categoría
-                            </h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" style="color:white;">&times;</span>
-                            </button>
-                        </div>
-                        <!--=====================================
-                    CUERPO DEL MODAL
-                ======================================-->
-                        <div class="modal-body">
-                            <div class="box-body">
-                                <!-- ENTRADA PARA EL NOMBRE -->
-                                <div class="form-group">
-                                    <label for="inputName" class="control-label">Nombre Categoría</label>
-                                    <input type="hidden" id="idPerson" name="idPerson" value="idPerson var">
-                                    <input type="hidden" id="state" name="state" value="1">
-                                    <input name="title" id="title" class="form-control" type="text" value="" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblDescription" class="control-label">Descripción</label>
-                                    <input name="description" id="description" class="form-control" type="text" value="" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblPrice" class="control-label">Precio</label>
-                                    <input name="price" id="price" class="form-control" type="number" value="" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblLocation" class="control-label">Ubicación</label>
-                                    <input name="location" id="location" class="form-control" type="number" value="" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lblTotalPossibleReservation" class="control-label">Reserva Total Posible</label>
-                                    <input name="totalPossibleReservation" id="totalPossibleReservation" class="form-control" type="number" value="" required>
-                                </div>
-                                <!-- ENTRADA PARA SELECCIONAR UNA IMAGEN -->
-                                <div class="form-group">
-                                    <label for="image" class="control-label">Subir Imagen</label>
-                                    <input type="file" id="image" name="image" class="form-control-file" accept="image/*">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEstado" class="control-label">Categoría</label>
-                                    <div>
-                                        <select class="form-select input-lg" name="idCategory" id="idCategory" required>
-                                            <option value="">Seleccionar categoría</option>
-                                            @foreach($category as $c)
-                                            <option value="{{$c->idCategory}}">{{$c->typeCategory}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--=====================================
-                    PIE DEL MODAL
-                ======================================-->
-                        <!-- Modal footer -->
-                        <div class="modal-footer d-flex justify-content-between">
-                            <div>
-                                <!--<button type="submit" class="btn btn-primary">Guardar Datos</button> -->
-                                <input type="submit" class="btn btn-primary waves-effect waves-light" value="Guardar Datos">
-                                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> <!-- FIN VENTANA MODAL CREAR CATEGORIA -->
-
     </section>
+    <script>
+        $(document).ready(function() {
+            $('#ver-mas-link-{{ $item->idBooking }}').click(function(event) {
+                event.preventDefault(); // Evita la acción predeterminada del enlace (navegación)
+
+                // Obtiene la URL del enlace
+                var url = $(this).attr('href');
+
+                // Realiza la solicitud POST a la otra ruta
+                $.ajax({
+                    url: '/recommendation/create',
+                    type: 'POST',
+                    data: {
+                        idPerson: '{{ $item->idPerson }}',
+                        idCategory: '{{ $item->idCategory }}'
+                    },
+                    success: function(response) {
+                        // Maneja la respuesta de la solicitud POST según sea necesario
+                        console.log('Solicitud POST exitosa:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        // Maneja los errores de la solicitud POST según sea necesario
+                        console.error('Error en la solicitud POST:', status, error);
+                    }
+                });
+
+                // Redirige a la URL original del enlace
+                window.location.href = url;
+            });
+        });
+    </script>
 </div>
 
 <!-- Bootstrap CSS -->
@@ -161,5 +119,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+
 
 @endsection

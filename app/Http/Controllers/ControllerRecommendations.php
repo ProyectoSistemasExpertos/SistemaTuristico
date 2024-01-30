@@ -51,6 +51,7 @@ class ControllerRecommendations extends Controller
     public function store(Request $request)
     {
         try {
+            var_dump($request);die();
             $request->validate([
                 'idPerson' => 'required',
                 'idCategory'=> 'required'
@@ -67,7 +68,7 @@ class ControllerRecommendations extends Controller
                 $recommendation->idCategory = $input['idCategory'];
                 $recommendation->counter = 0;
                 $recommendation->save();
-                return response()->json($recommendation);
+                return response()->with(201);
 //$isRecommendationExists->idCategory == $request->input('idCategory')
             }else{
                 $updateRecommendation = Recommendation::findOrFail($isRecommendationExists->idRecommendation);
@@ -75,7 +76,7 @@ class ControllerRecommendations extends Controller
                 $updateRecommendation->idCategory = $request->idCategory;
                 $updateRecommendation->counter = $updateRecommendation->counter+1;
                 $updateRecommendation->save();
-                return response()->json($updateRecommendation);
+                return response()->with(202);
                 
             }
         } catch (QueryException $e) {

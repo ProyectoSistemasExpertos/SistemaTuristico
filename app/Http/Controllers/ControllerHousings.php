@@ -59,42 +59,55 @@ class ControllerHousings extends Controller
                 'arrival_date' => 'required',
                 'total_person' => 'required',
                 'idPerson' => 'required',
-                'idBooking' => 'required'
             ]);
+            $idBooking = $request->input('idBooking');
 
-            $isHousingExists =  Housing::whereIn('idBooking', [$request->input('idBooking')])->first();
+            /* // Verificar si la reserva ya existe en Housing
+             $isHousingExists = Housing::where('idBooking', $idBooking)->first();
+     
+             if ($isHousingExists) {
+                 return response()->json(['error' => 'La reservación ya ha sido registrada'], 400);
+             } */
+             /*
+            $isBookingExists = Booking::where('idBooking', $idBooking)->first();
 
-            if ($isHousingExists) {
-                if ($isHousingExists->idBooking == $request->input('idBooking')) {
-                    return response()->json(['error' => 'La reservación ya ha sido registrado'], 400);
-                }
-            }
-
+            if ($isBookingExists) {
+                return response()->json(['error' => 'La reservación ya ha sido registrada en Booking'], 400);
+            }*/
 
             $input = $request->all();
-            $idBooking = $input['idBooking'];
-            //var_dump($idBooking);die();//si setea el id
+
             $booking = Booking::where('idBooking', $idBooking)->first();
             $housing = new Housing();
+            if ($booking && $booking->totalPossibleReservation >= $input['total_person']) {
 
-            if ($booking->totalPossibleReservation >=  $input['total_person']) {
                 $housing->initial_date = $input['initial_date'];
                 $housing->final_date = $input['final_date'];
                 $housing->arrival_date = $input['arrival_date'];
                 $housing->total_person = $input['total_person'];
+                //$housing->idPerson = 3;
                 $housing->idPerson = $input['idPerson'];
-                $housing->idBooking = $input['idBooking'];
+                $housing->idBooking = $input['idBooking']; // Usar el idBooking obtenido
+                //$housing->idBooking = 2; 
 
                 $housing->save();
 
-                $booking = Booking::find($input['idBooking']);
-                if ($booking) {
-                    $booking->state = '0';
-                    $booking->save();
-                }
-                return response()->json($housing);
-            }else{
-                return response()->json(['error' => 'La cantidad de personas supera a la capacidad del hospedaje'], 400);
+                $booking->state = '0';
+                $booking->save();
+
+                $notification = [
+                    'message' => 'Registro Completo',
+                    'alert-type' => 'success'
+                ];
+
+                return redirect()->route('booking.index', $idBooking)->with($notification);
+            } else {
+                $notification = [
+                    'message' => 'La cantidad de personas supera a la capacidad del hospedaje',
+                    'alert-type' => 'error'
+                ];
+
+                return redirect()->back()->with($notification);
             }
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
@@ -103,8 +116,8 @@ class ControllerHousings extends Controller
             } else {
                 return response()->json(['error' => 'Error de base de datos.'], 500);
             }
-        } //End try-catch
-    } //End of store
+        }
+    }
 
 
     public function update(Request $request, $id)
@@ -119,7 +132,7 @@ class ControllerHousings extends Controller
                 'idBooking' => 'required'
             ]);
             $housing = Housing::find($id);
-            $isHousingExists =  Housing::where('idPerson', [$request->input('idPerson')])->first();
+            $isHousingExists = Housing::where('idPerson', [$request->input('idPerson')])->first();
 
             if ($isHousingExists) {
                 if ($housing->idPerson != $request->input('idPerson')) {
@@ -234,13 +247,20 @@ class ControllerHousings extends Controller
                     'housing.total_person'
                 )
                 ->get();
+
             if ($users->isEmpty()) {
-                return response()->json(['error' => 'No hay registros'], 404);
+                return view('history_by_user', ['users' => []]);
             }
-            return response()->json($users);
+
+            return view('body/modules/history_by_user', compact('users'));
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        } //End of try-catch
-    } //end of History_by_user
+        }
+    } //End history_by_user
 
-}//End of controllerHousing
+    //Prueba, se debe eliminar
+    public function showNavbarView()
+    {
+        return view('body.navbar');
+    }
+} //End of controllerHousing
