@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\PasswordResetToken;
 use App\Http\Controllers\ControllerMail;
 use App\Models\Person;
-use App\Models\Preference;
+use App\Models\Preferences;
 
 class ControllerAuth extends Controller
 {
@@ -44,7 +44,7 @@ class ControllerAuth extends Controller
         $user = Person::where('idCard', $request->idCard)->firstOrFail();
         $idCategory = $request->input('idCategory');
 
-        $preference = Preference::create([
+        $preference = Preferences::create([
             'idPerson' => $user->id,
             'idCategory' => $idCategory,
         ]);
