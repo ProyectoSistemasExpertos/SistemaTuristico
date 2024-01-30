@@ -52,7 +52,9 @@ Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('
 Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reseting-password');
 Route::get('/logout',[ControllerAuth::class,'logout']);
 /* -------------------------------------------ViewsLogin-----------------------------------------  */
-Route::get('/home',[ControllerAuth::class,'showHome'])->name('home');
+Route::get('/home',function(){
+    return view('auth.login');
+});
 Route::get('/register',[ControllerAuth::class,'showRegisterForm']);
 Route::get('/login',[ControllerAuth::class,'showLoginForm']);
 Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('forgot-password');
