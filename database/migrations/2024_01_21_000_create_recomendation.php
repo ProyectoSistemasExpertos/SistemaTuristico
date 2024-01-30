@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recommendation', function (Blueprint $table) {
+        Schema::create('recommendations', function (Blueprint $table) {
             $table->id('idRecommendation');
-            $table->integer('idPerson')->references('id')->on('users');
-            $table->integer('idCategory')->references('idCategory')->on('category');
-            
+            $table->unsignedBigInteger('idPerson');
+            $table->foreign('idPerson')->references('id')->on('users'); // Ajusta según el nombre real de tu tabla de categorías            
+            $table->unsignedBigInteger('idCategory');
+            $table->foreign('idCategory')->references('idCategory')->on('categories'); // Ajusta según el nombre real de tu tabla de categorías
+
+
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
             $table->engine = 'InnoDB';
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recommendation');
+        Schema::dropIfExists('recommendations');
     }
 };

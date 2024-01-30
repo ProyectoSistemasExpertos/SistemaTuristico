@@ -25,7 +25,8 @@ return new class extends Migration
             $table->string('secondLastName');
             $table->integer('phone'); 
             $table->string('address');
-            $table->integer('idRol')->references('idRol')->on('rol');
+            $table->unsignedBigInteger('idRol');
+            $table->foreign('idRol')->references('idRol')->on('rol'); // Ajusta según el nombre real de tu tabla de categorías
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';

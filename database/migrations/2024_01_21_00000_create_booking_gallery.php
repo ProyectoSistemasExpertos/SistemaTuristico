@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('valorations', function (Blueprint $table) {
-            $table->id('idValoration');
-            $table->float('score', 2, 1);
-            $table->string('commentary');
-            $table->unsignedBigInteger('idPerson');
-            $table->foreign('idPerson')->references('id')->on('users'); // Ajusta según el nombre real de tu tabla de categorías
+        Schema::create('booking_gallerys', function (Blueprint $table) {
+            $table->id('idBooking_gallery');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('idBooking');
             $table->foreign('idBooking')->references('idBooking')->on('bookings'); // Ajusta según el nombre real de tu tabla de categorías
 
+            
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
             $table->engine = 'InnoDB';
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('valorations');
+        Schema::dropIfExists('booking_gallerys');
     }
 };

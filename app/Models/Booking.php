@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $table = 'booking';
+    protected $table = 'bookings';
     protected $primaryKey = 'idBooking';
     public $timestamps = false;
 

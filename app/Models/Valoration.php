@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Valoration extends Model
 {
-    protected $table = 'valoration';
+    protected $table = 'valorations';
     protected $primaryKey = 'idValoration';
     public $timestamps = false;
 }

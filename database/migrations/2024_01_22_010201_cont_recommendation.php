@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->id('idCategory');
-            $table->string('typeCategory');
-
-            $table->collation = 'utf8_unicode_ci';
-            $table->charset = 'utf8';
-            $table->engine = 'InnoDB';
+        Schema::table('recommendations', function (Blueprint $table) {
+            $table->string('counter')->nullable()->after('idPerson');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::table('recommendations', function (Blueprint $table) {
+           
+        });
     }
 };

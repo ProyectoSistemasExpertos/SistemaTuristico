@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking', function (Blueprint $table) {
+        Schema::create('bookings', function (Blueprint $table) {
             $table->id('idBooking');
             $table->string('title');
             $table->string('description');
@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('location');
             $table->integer('totalPossibleReservation');
             $table->timestamp('uploadDate');
-            $table->integer('idPerson')->references('id')->on('users');
-            $table->integer('idCategory')->references('idCategory')->on('category');
-            
+            $table->unsignedBigInteger('idPerson');
+            $table->foreign('idPerson')->references('id')->on('users');
+            $table->unsignedBigInteger('idCategory');
+            $table->foreign('idCategory')->references('idCategory')->on('categories'); // Ajusta según el nombre real de tu tabla de categorías
+
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
@@ -35,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booking');
+        Schema::dropIfExists('bookings');
     }
 };

@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('preference', function (Blueprint $table) {
+        Schema::create('preferences', function (Blueprint $table) {
             $table->id('idPreference');
-            $table->integer('idPerson')->reference('id')->on('users');
-            $table->integer('idCategory')->reference('idCategory')->on('category');
+            $table->unsignedBigInteger('idPerson');
+            $table->foreign('idPerson')->references('id')->on('users');
+            $table->unsignedBigInteger('idCategory');
+            $table->foreign('idCategory')->references('idCategory')->on('categories'); // Ajusta según el nombre real de tu tabla de categorías
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('preference');
+        Schema::dropIfExists('preferences');
     }
 };

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Preference extends Model
 {
-    protected $table = 'preference';
+    protected $table = 'preferences';
     protected $primaryKey = 'idPreference';
     public $timestamps = false;
 

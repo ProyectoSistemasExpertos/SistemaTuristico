@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_gallery', function (Blueprint $table) {
-            $table->id('idBooking_gallery');
-            $table->string('image')->nullable();
-            $table->integer('idBooking')->references('idBooking')->on('booking');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id('idCategory');
+            $table->string('typeCategory');
 
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booking_gallery');
+        Schema::dropIfExists('categories');
     }
 };
