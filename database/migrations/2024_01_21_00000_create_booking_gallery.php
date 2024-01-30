@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->unsignedBigInteger('idBooking');
             $table->foreign('idBooking')->references('idBooking')->on('bookings'); // Ajusta según el nombre real de tu tabla de categorías
-
-            
             $table->collation = 'utf8_unicode_ci';
             $table->charset = 'utf8';
             $table->engine = 'InnoDB';

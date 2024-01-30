@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Recommendation;
+use App\Models\Recommendations;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -11,37 +11,37 @@ class ControllerRecommendations extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
-            ->join('category','category.idCategory','=','recommendation.idCategory')
+            $recommendation = Recommendations::join('users','users.id','=','recommendations.idPerson')
+            ->join('categories','categories.idCategory','=','recommendations.idCategory')
             ->select(
-                'recommendation.*',
+                'recommendations.*',
                 //'users.idCard',
                 //'users.name',
                 //'users.firstLastName',
                 //'users.secondLastName',
-                'category.idCategory',
-                'category.typeCategory'
+                'categories.idCategory',
+                'categories.typeCategory'
             )
             ->get();
             return response()->json($recommendation);
         } else {
 
-            $recommendation = Recommendation::findorfail($id);
+            $recommendation = Recommendations::findorfail($id);
             
             if(!$recommendation){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
-            ->join('category','category.idCategory','=','recommendation.idCategory')
-            ->where('recommendation.idRecommendation','=',$id)
+            $recommendation = Recommendations::join('users','users.id','=','recommendations.idPerson')
+            ->join('categories','categories.idCategory','=','recommendations.idCategory')
+            ->where('recommendations.idRecommendation','=',$id)
             ->select(
-                'recommendation.*',
+                'recommendations.*',
                 //'users.idCard',
               //  'users.name',
               //  'users.firstLastName',
               //  'users.secondLastName',
               //  'category.idCategory',
-                'category.typeCategory'
+                'categories.typeCategory'
             )
             ->get();
             return response()->json($recommendation);
@@ -57,13 +57,13 @@ class ControllerRecommendations extends Controller
                 'idCategory'=> 'required'
             ]);
 
-            $isRecommendationExists =  Recommendation::where('idPerson', [$request->input('idPerson')])
+            $isRecommendationExists =  Recommendations::where('idPerson', [$request->input('idPerson')])
             ->where('idCategory', [$request->input('idCategory')])
             ->first();
 
             if (!$isRecommendationExists) {
                 $input = $request->all();
-                $recommendation = new Recommendation();
+                $recommendation = new Recommendations();
                 $recommendation->idPerson = $input['idPerson'];
                 $recommendation->idCategory = $input['idCategory'];
                 $recommendation->counter = 0;
@@ -99,8 +99,8 @@ class ControllerRecommendations extends Controller
                 'idPerson' => 'required',
                 'idCategory' => 'required'
             ]);
-            $recommendation = Recommendation::find($id);
-            $isRecommendationExists =  Recommendation::where('idPerson', [$request->input('idPerson')])
+            $recommendation = Recommendations::find($id);
+            $isRecommendationExists =  Recommendations::where('idPerson', [$request->input('idPerson')])
             ->first();
 
             if ($isRecommendationExists) {
@@ -127,13 +127,13 @@ class ControllerRecommendations extends Controller
     } //End of update
 
     public function destroy($id){
-        $recommendation = Recommendation::where('idRecommendation',$id)->first();
+        $recommendation = Recommendations::where('idRecommendation',$id)->first();
         $recommendation->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
     }//End of destroy
 
     public function showRecommendation($id){
-        $recommendations = Recommendation::where('idPerson', $id)->get();
+        $recommendations = Recommendations::where('idPerson', $id)->get();
 
 
         if($recommendations->isEmpty()){
