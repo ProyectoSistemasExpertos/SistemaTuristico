@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
     @php
-        $imageUrls = [
-            "https://www.govisitcostarica.co.cr/images/photos/desk-la-paz-waterfall-costa-rica(1).jpg",
-            "https://www.govisitcostarica.co.cr/images/photos/desk-montezuma-waterfall-on-the-nicoya-peninsula-near-santa-teresa.jpg",
-            "https://www.govisitcostarica.co.cr/images/photos/desk-hills-in-monteverde.jpg",
-            "https://www.govisitcostarica.co.cr/images/photos/desk-cloudforest-monteverde.jpg",
-            "https://www.govisitcostarica.co.cr/images/photos/desk-corcovado-national-park-beach-sunset.jpg"
-        ];
+    $imageUrls = [
+    "https://www.govisitcostarica.co.cr/images/photos/desk-la-paz-waterfall-costa-rica(1).jpg",
+    "https://www.govisitcostarica.co.cr/images/photos/desk-montezuma-waterfall-on-the-nicoya-peninsula-near-santa-teresa.jpg",
+    "https://www.govisitcostarica.co.cr/images/photos/desk-hills-in-monteverde.jpg",
+    "https://www.govisitcostarica.co.cr/images/photos/desk-cloudforest-monteverde.jpg",
+    "https://www.govisitcostarica.co.cr/images/photos/desk-corcovado-national-park-beach-sunset.jpg"
+    ];
     @endphp
 </head>
+
 <body>
     <div class="bg-purple-900 absolute top-0 left-0 bottom-0 right-0 leading-5 overflow-hidden">
         <div class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
@@ -25,29 +27,37 @@
                 <div class="slick-carousel">
 
                     @foreach ($imageUrls as $index => $imageUrl)
-                        <div>
-                            <img src="{{ $imageUrl }}" alt="Imagen {{ $index + 1 }}" class="w-full h-full object-cover">
-                        </div>
+                    <div>
+                        <img src="{{ $imageUrl }}" alt="Imagen {{ $index + 1 }}" class="w-full h-full object-cover">
+                    </div>
                     @endforeach
                 </div>
             </div>
-
             <div class="flex justify-center self-center z-10 absolute top-10 right-11 h-center">
-                @if (session('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('success') }}
-                    </div>
+                @if(Session::has('success'))
+                <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
+                    {{ Session::get('success')['message'] }}
+                </div>
+                @elseif(Session::has('error'))
+                <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
+                    {{ Session::get('error')['message'] }}
+                </div>
+                @else
+                <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
+                    No hay mensajes en la sesión.
+                </div>
                 @endif
-            <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
+                <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
+
                     @yield('content') <!-- Aquí es donde se renderizará tu vista específica (login o register) -->
                 </div>
             </div>
         </div>
         <footer class="bg-transparent absolute bottom-0 z-20">
-                <div class="flex mr-auto h-8">
-                    <a style="color: #ffffff; font-size: 24px;">
-                        <strong>TU</strong>plas
-                    </a>
+            <div class="flex mr-auto h-8">
+                <a style="color: #ffffff; font-size: 24px;">
+                    <strong>TU</strong>plas
+                </a>
             </div>
         </footer>
         <svg class="absolute bottom-0 left-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -58,7 +68,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('.slick-carousel').slick({
                 dots: true,
                 infinite: true,
@@ -69,11 +79,34 @@
                 autoplaySpeed: 3000,
             });
             setTimeout(function() {
-            // Ajusta el selector del enlace según tu estructura actual
-            $('a[href="login"]').click();
-        }, 100);
+                // Ajusta el selector del enlace según tu estructura actual
+                $('a[href="login"]').click();
+            }, 100);
         });
-
     </script>
+    <script>
+        // Agregar este script al final de tu archivo Blade o al final de tu página HTML
+
+        // Esperar a que el DOM esté completamente cargado
+        $(document).ready(function() {
+            // Verificar si hay un mensaje flash
+            var flashMessage = $('#flash-message');
+            if (flashMessage.length > 0) {
+                // Obtener la duración del mensaje flash
+                var duration = {
+                    {
+                        Session::get('success')['duration'] ?? 2000
+                    }
+                };
+
+                // Ocultar el mensaje flash después de la duración especificada
+                setTimeout(function() {
+                    flashMessage.fadeOut('slow');
+                }, duration);
+            }
+        });
+    </script>
+
 </body>
+
 </html>

@@ -1,7 +1,7 @@
 @extends('home')
 
 @section('content')
-
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <div class="row justify-content-center">
     <div class="col-md-25">
 
@@ -13,24 +13,24 @@
 
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-1">
 
-                <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                    </svg>
-                    <input id="name" name="name" placeholder="Nombre" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
-                    @error('name')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                    </svg>
-                    <input id="firstLastName" name="firstLastName" placeholder="Primer Apellido" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
-                    @error('firstLastName')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                        <input id="name" name="name" placeholder="Nombre" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
+                        @error('name')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                        <input id="firstLastName" name="firstLastName" placeholder="Primer Apellido" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
+                        @error('firstLastName')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />

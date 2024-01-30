@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\PasswordResetToken;
 use App\Http\Controllers\ControllerMail;
-use App\Http\Livewire\Notification;
 use App\Models\Person;
 use App\Models\Preferences;
+use Illuminate\Support\Facades\Session;
 
 class ControllerAuth extends Controller
 {
@@ -49,10 +49,10 @@ class ControllerAuth extends Controller
                 'idPerson' => $user->id,
                 'idCategory' => $idCategory,
             ]);
-           event(new Notification('success', '¡Registro exitoso! Bienvenido a nuestro sitio!'));
+           Session::flash('success',['message' =>  '¡Registro exitoso! Bienvenido a nuestro sitio!', 'duration' => 2000]);
             return redirect()->route('home')->with('success', '¡Registro exitoso! Bienvenido a nuestro sitio.');
         } catch (\Exception $e) {
-           event(new Notification('success', '¡Registro fallido! El correo electrónico ya está registrado.'));
+           Session::flash('success',['message' =>  '¡Registro fallido! El correo electrónico ya está registrado.', 'duration' => 2000]);
             return redirect()->route('home')->with('success', '¡Registro fallido! El correo electrónico ya está registrado.');
         }
     }
@@ -70,12 +70,12 @@ class ControllerAuth extends Controller
             $user = User::where('email', $request->email)->firstOrFail();
 
             $token = $user->createToken('access_token')->plainTextToken;
-           event(new Notification('success', '¡Inicio de sesión exitoso!'));
+           Session::flash('success',['message' =>  '¡Inicio de sesión exitoso!', 'duration' => 2000]);
             //return response()->json(['message' => 'Inicio de sesión exitoso', 'user' => $user, 'access_token' => $token], 200);
             return redirect()->route('booking.index')->with(201);
         } else {
-           event(new Notification('success', 'Credenciales inválidas!'));
-            return response()->json(['error' => 'Credenciales inválidas'], 401);
+           Session::flash('success',['message' =>  'Credenciales inválidas!', 'duration' => 2000]);
+            return redirect()->route('login')->with('success', 'Credenciales inválidas!');
         }
     }
 
@@ -85,11 +85,11 @@ class ControllerAuth extends Controller
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-           event(new Notification('success', '¡Cierre de Sesión Exitoso!'));
-            return redirect()->route('home')->with('success', 'Bienvenido de nuevo.');
+           Session::flash('success',['message' =>  '¡Cierre de Sesión Exitoso!', 'duration' => 2000]);
+            return redirect()->route('login')->with('success', 'Bienvenido de nuevo.');
         } catch (\Exception $e) {
-           event(new Notification('success', '¡Cierre de Sesión Fallido!'));
-            return redirect()->route('home')->with('success', 'Bienvenido de nuevo.');
+           Session::flash('success',['message' =>  '¡Cierre de Sesión Fallido!', 'duration' => 2000]);
+            return redirect()->route('login')->with('success', 'Bienvenido de nuevo.');
         }
     }
 
@@ -102,7 +102,7 @@ class ControllerAuth extends Controller
 
             $user = User::where('email', $request->email)->first();
             if (!$user) {
-               event(new Notification('success', '¡Correo electrónico no encontrado!'));
+               Session::flash('success',['message' =>  '¡Correo electrósdnico no encontrado!', 'duration' => 2000]);
                 return view('home');
             }
             PasswordResetToken::where('email', $user->email)->delete();
@@ -112,11 +112,11 @@ class ControllerAuth extends Controller
             ]);
             $mailController = new ControllerMail();
             $mailController->sendResetPasswordEmail($user->email, $resetToken->token);
-           event(new Notification('success', '¡Correo electrónico enviado con éxito!'));
-            return view('auth.login');
+           Session::flash('success',['message' =>  '¡Correo electrónico enviado con éxito!', 'duration' => 2000]);
+            return view('login');
         } catch (\Exception $e) {
-           event(new Notification('success', '¡Correo electrónico no encontrado!'));
-            return view('auth.login');
+           Session::flash('success',['message' =>  '¡Correo electrónico no encontrado!', 'duration' => 2000]);
+            return view('login');
         }
     }
 
@@ -133,21 +133,21 @@ class ControllerAuth extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {
-               event(new Notification('success', '¡Correo electrónico no encontrado!'));
+               Session::flash('success',['message' =>  '¡Correo electrónico no encontrado!', 'duration' => 2000]);
                 return response()->json(['error' => 'Correo electrónico no encontrado'], 404);
             }
 
             $passwordResetToken = $user->passwordResetTokens()->first();
 
             if (!$passwordResetToken) {
-               event(new Notification('success', '¡Token no encontrado!'));
+               Session::flash('success',['message' =>  '¡Token no encontrado!', 'duration' => 2000]);
                 return response()->json(['error' => 'Token no encontrado'], 404);
             }
 
             $isValidToken = $this->validateResetToken($passwordResetToken, $request->token);
 
             if (!$isValidToken) {
-               event(new Notification('success', '¡Token no válido!'));
+               Session::flash('success',['message' =>  '¡Token no válido!', 'duration' => 2000]);
                 return response()->json(['error' => 'Token no válido'], 400);
             }
 
@@ -157,10 +157,10 @@ class ControllerAuth extends Controller
 
             // Delete the password reset token
             PasswordResetToken::where('email', $user->email)->delete();
-           event(new Notification('success', '¡Contraseña restablecida exitosamente!'));
+           Session::flash('success',['message' =>  '¡Contraseña restablecida exitosamente!', 'duration' => 2000]);
             return response()->json(['message' => 'Contraseña restablecida exitosamente'], 200);
         } catch (\Exception $e) {
-           event(new Notification('success', '¡No se pudo reestablecer la contraseña!'));
+           Session::flash('success',['message' =>  '¡No se pudo reestablecer la contraseña!', 'duration' => 2000]);
             return view('auth.login');
         }
     }
