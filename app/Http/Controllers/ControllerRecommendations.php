@@ -11,16 +11,16 @@ class ControllerRecommendations extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
-            ->join('category','category.idCategory','=','recommendation.idCategory')
+            $recommendation = Recommendation::join('users','users.id','=','recommendations.idPerson')
+            ->join('categories','categories.idCategory','=','recommendations.idCategory')
             ->select(
-                'recommendation.*',
+                'recommendations.*',
                 //'users.idCard',
                 //'users.name',
                 //'users.firstLastName',
                 //'users.secondLastName',
-                'category.idCategory',
-                'category.typeCategory'
+                'categories.idCategory',
+                'categories.typeCategory'
             )
             ->get();
             return response()->json($recommendation);
@@ -31,17 +31,17 @@ class ControllerRecommendations extends Controller
             if(!$recommendation){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $recommendation = Recommendation::join('users','users.id','=','recommendation.idPerson')
-            ->join('category','category.idCategory','=','recommendation.idCategory')
-            ->where('recommendation.idRecommendation','=',$id)
+            $recommendation = Recommendation::join('users','users.id','=','recommendations.idPerson')
+            ->join('categories','category.idCategory','=','recommendations.idCategory')
+            ->where('recommendations.idRecommendation','=',$id)
             ->select(
-                'recommendation.*',
+                'recommendations.*',
                 //'users.idCard',
               //  'users.name',
               //  'users.firstLastName',
               //  'users.secondLastName',
               //  'category.idCategory',
-                'category.typeCategory'
+                'categories.typeCategory'
             )
             ->get();
             return response()->json($recommendation);

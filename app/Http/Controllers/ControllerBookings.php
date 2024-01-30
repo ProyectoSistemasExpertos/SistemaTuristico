@@ -16,13 +16,13 @@ class ControllerBookings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
+            $bookings = Booking::leftJoin('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+                ->join('users', 'users.id', '=', 'bookings.idPerson')
+                ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
                 ->select(
-                    'booking.*',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image',
+                    'bookings.*',
+                    'booking_gallerys.idBooking_gallery',
+                    'booking_gallerys.image',
                     'users.id as idUser',
                     'users.name',
                     'users.email',
@@ -32,7 +32,7 @@ class ControllerBookings extends Controller
                     'users.phone',
                     'users.address',
                     'users.idRol',
-                    'category.typeCategory'
+                    'categories.typeCategory'
                 )
                 ->get();
 
@@ -51,14 +51,14 @@ class ControllerBookings extends Controller
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-            ->join('users', 'users.id', '=', 'booking.idPerson')
-            ->join('category', 'category.idCategory', '=', 'booking.idCategory')
-            ->where('booking.idBooking', '=', $id)
+            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'bookings.idBooking')
+            ->join('users', 'users.id', '=', 'bookings.idPerson')
+            ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
+            ->where('bookings.idBooking', '=', $id)
             ->select(
-                'booking.*',
-                'booking_gallery.idBooking_gallery',
-                'booking_gallery.image',
+                'bookings.*',
+                'booking_gallerys.idBooking_gallery',
+                'booking_gallerys.image',
                 'users.id as idUser',
                 'users.name',
                 'users.email',
@@ -68,7 +68,7 @@ class ControllerBookings extends Controller
                 'users.phone',
                 'users.address',
                 'users.idRol',
-                'category.typeCategory'
+                'categories.typeCategory'
             )
             ->get();
 
@@ -202,21 +202,21 @@ class ControllerBookings extends Controller
     public function filter_by_category($id)
     {
         try {
-            $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
-                ->where('booking.idCategory', '=', $id)
+            $booking = Booking::join('users', 'users.id', '=', 'bookings.idPerson')
+                ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+                ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
+                ->where('bookings.idCategory', '=', $id)
                 ->select(
-                    'booking.*',
+                    'bookings.*',
                     'users.idCard',
                     'users.name',
                     'users.firstLastName',
                     'users.secondLastName',
                     'users.phone',
                     'users.email',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image',
-                    'category.typeCategory'
+                    'booking_gallerys.idBooking_gallery',
+                    'booking_gallerys.image',
+                    'categories.typeCategory'
                 )
                 ->get();
 

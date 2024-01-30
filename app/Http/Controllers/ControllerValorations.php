@@ -11,18 +11,18 @@ class ControllerValorations extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking = Valoration::join('users','users.id','=','valoration.idPerson')
-            ->join('booking','booking.idBooking','=','valoration.idBooking')
-            ->join('booking_gallery','booking_gallery.idBooking','=','booking.idBooking')
+            $booking = Valoration::join('users','users.id','=','valorations.idPerson')
+            ->join('bookings','bookings.idBooking','=','valorations.idBooking')
+            ->join('booking_gallerys','booking_gallerys.idBooking','=','bookings.idBooking')
             ->select(
-                'valoration.*',
+                'valorations.*',
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
-                'booking.idBooking', 
-                'booking.description',
-                'booking_gallery.idBooking_gallery',
-                'booking_gallery.image'
+                'bookings.idBooking', 
+                'bookings.description',
+                'booking_gallerys.idBooking_gallery',
+                'booking_gallerys.image'
             )
             ->get();
             return response()->json($booking);
@@ -33,19 +33,19 @@ class ControllerValorations extends Controller
             if(!$booking){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $booking = Valoration::join('users','users.id','=','valoration.idPerson')
-            ->join('booking','booking.idBooking','=','valoration.idBooking')
-            ->join('booking_gallery','booking_gallery.idBooking','=','booking.idBooking')
-            ->where('booking.idBooking','=',$id)
+            $booking = Valoration::join('users','users.id','=','valorations.idPerson')
+            ->join('bookings','booking.idBooking','=','valorations.idBooking')
+            ->join('booking_gallerys','booking_gallerys.idBooking','=','bookings.idBooking')
+            ->where('bookings.idBooking','=',$id)
             ->select(
-                'valoration.*',
+                'valorations.*',
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
-                'booking.idBooking',
-                'booking.description',
-                'booking_gallery.idBooking_gallery',
-                'booking_gallery.image'
+                'bookings.idBooking',
+                'bookings.description',
+                'booking_gallerys.idBooking_gallery',
+                'booking_gallerys.image'
             )
             ->get();
             return response()->json($booking);

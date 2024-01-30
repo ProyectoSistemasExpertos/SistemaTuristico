@@ -11,16 +11,16 @@ class ControllerPreferences extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $recommendation = Preference::join('users','users.id','=','preference.idPerson')
-            ->join('category','category.idCategory','=','preference.idCategory')
+            $recommendation = Preference::join('users','users.id','=','preferences.idPerson')
+            ->join('categories','categories.idCategory','=','preferences.idCategory')
             ->select(
-                'preference.idPreference',
+                'preferences.idPreference',
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
                 'users.secondLastName',
-                'category.idCategory',
-                'category.typeCategory'
+                'categories.idCategory',
+                'categories.typeCategory'
             )
             ->get();
             return response()->json($recommendation);
@@ -31,17 +31,17 @@ class ControllerPreferences extends Controller
             if(!$recommendation){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $recommendation = Preference::join('users','users.id','=','preference.idPerson')
-            ->join('category','category.idCategory','=','preference.idCategory')
-            ->where('preference.idPreference','=',$id)
+            $recommendation = Preference::join('users','users.id','=','preferences.idPerson')
+            ->join('categories','categories.idCategory','=','preferences.idCategory')
+            ->where('preferences.idPreference','=',$id)
             ->select(
-                'preference.idPreference',
+                'preferences.idPreference',
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
                 'users.secondLastName',
-                'category.idCategory',
-                'category.typeCategory'
+                'categories.idCategory',
+                'categories.typeCategory'
             )
             ->get();
             return response()->json($recommendation);
@@ -119,25 +119,25 @@ class ControllerPreferences extends Controller
 
     public function history_by_preferences($idPerson){
 
-        $preference = Preference::join('users','users.id','preference.idPerson')
-        ->join('booking','booking.idPerson','users.id')
-        ->join('booking_gallery','booking_gallery.idBooking','booking.idBooking')
-        ->join('housing','housing.idBooking','booking.idBooking')
-        ->join('category','category.idCategory','preference.idCategory')
-        ->where('booking.idPerson',$idPerson)
+        $preference = Preference::join('users','users.id','preferences.idPerson')
+        ->join('bookings','bookings.idPerson','users.id')
+        ->join('booking_gallerys','booking_gallerys.idBooking','bookings.idBooking')
+        ->join('housings','housings.idBooking','bookings.idBooking')
+        ->join('categories','categories.idCategory','preferences.idCategory')
+        ->where('bookings.idPerson',$idPerson)
         ->select(
-            'preference.*',
-            'category.typeCategory',
+            'preferences.*',
+            'categories.typeCategory',
             'users.name',
             'users.firstLastName',
             'users.secondLastName',
-            'booking.idBooking',
-            'booking.title',
-            'booking_gallery.idBooking_gallery',
-            'booking_gallery.image',
-            'housing.idHousing',
-            'housing.initial_date',
-            'housing.final_date'
+            'bookings.idBooking',
+            'bookings.title',
+            'booking_gallerys.idBooking_gallery',
+            'booking_gallerys.image',
+            'housings.idHousing',
+            'housings.initial_date',
+            'housings.final_date'
         )
         ->get();
 

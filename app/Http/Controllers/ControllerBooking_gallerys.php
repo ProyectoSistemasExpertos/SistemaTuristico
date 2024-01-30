@@ -12,11 +12,11 @@ class ControllerBooking_gallerys extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking_gallery = Booking_gallery::join('booking','booking.idBooking','=','booking_gallery.idBooking')
+            $booking_gallery = Booking_gallery::join('bookings','bookings.idBooking','=','booking_gallerys.idBooking')
             ->select(
-                'booking.*',
-                'booking_gallery.idBooking_gallery',
-                'booking_gallery.image'
+                'bookings.*',
+                'booking_gallerys.idBooking_gallery',
+                'booking_gallerys.image'
             )
             ->get();
             return response()->json($booking_gallery);
@@ -27,12 +27,12 @@ class ControllerBooking_gallerys extends Controller
             if(!$booking_gallery){
                 return response()->json(['error' => 'No existe imagen con este código'], 400);
             }
-            $booking_gallery = Booking_gallery::join('booking','booking.idBooking','=','booking_gallery.idBooking')
-            ->where('booking_gallery.idBooking','=',$id)
+            $booking_gallery = Booking_gallery::join('bookings','booking.idBooking','=','booking_gallerys.idBooking')
+            ->where('booking_gallerys.idBooking','=',$id)
             ->select(
-                'booking.*',
-                'booking_gallery.idBooking_gallery',
-                'booking_gallery.image'
+                'bookings.*',
+                'booking_gallerys.idBooking_gallery',
+                'booking_gallerys.image'
             )
             ->get();
             return response()->json($booking_gallery);
@@ -106,7 +106,7 @@ class ControllerBooking_gallerys extends Controller
 
     public function destroy($id){
         $booking_gallery = Booking_gallery::where('idBooking_gallery',$id)->first();
-        $booking = Booking::where('booking','booking.idBooking','=','booking_gallery.idBooking');
+        $booking = Booking::where('bookings','bookings.idBooking','=','booking_gallerys.idBooking');
         if($booking){
             return response()->json(['error' => 'No es posible eliminar ya que hay una publicación vigente.'], 400);
         }
