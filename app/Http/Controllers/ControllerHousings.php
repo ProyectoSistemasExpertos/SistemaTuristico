@@ -263,6 +263,6 @@ class ControllerHousings extends Controller
     //Prueba, se debe eliminar
     public function showNavbarView()
     {
-        return view('body.navbar');
+        return view('body.sidebar');
     }
 } //End of controllerHousing

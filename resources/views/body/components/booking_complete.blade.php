@@ -113,10 +113,10 @@
                                 <input type="number" class="form-control" id="total_person" name="total_person">
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="idPerson" name="idPerson" value="">
+                                <input type="hidden" class="form-control" id="idPerson" name="idPerson" value="{{ auth()->user()->id }}">
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="idBooking" name="idBooking" value="">
+                                <input type="hidden" class="form-control" id="idBooking" name="idBooking" value="{{$item->idBooking}}">
                             </div>
                         </form>
                     </div>

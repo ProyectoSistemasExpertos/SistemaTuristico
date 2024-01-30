@@ -52,36 +52,36 @@ class ControllerBookings extends Controller
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
             $bookings = Bookings::leftJoin('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
-            ->join('users', 'users.id', '=', 'bookings.idPerson')
-            ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
-            ->where('bookings.idBooking', '=', $id)
-            ->select(
-                'bookings.*',
-                'booking_gallerys.idBooking_gallery',
-                'booking_gallerys.image',
-                'users.id as idUser',
-                'users.name',
-                'users.email',
-                'users.idCard',
-                'users.firstLastName',
-                'users.secondLastName',
-                'users.phone',
-                'users.address',
-                'users.idRol',
-                'categories.typeCategory'
-            )
-            ->get();
+                ->join('users', 'users.id', '=', 'bookings.idPerson')
+                ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
+                ->where('bookings.idBooking', '=', $id)
+                ->select(
+                    'bookings.*',
+                    'booking_gallerys.idBooking_gallery',
+                    'booking_gallerys.image',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.email',
+                    'users.idCard',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'users.phone',
+                    'users.address',
+                    'users.idRol',
+                    'categories.typeCategory'
+                )
+                ->get();
 
-        $category = Categories::all();
-        $valoration = [];
+            $category = Categories::all();
+            $valoration = [];
 
-        foreach ($bookings as $booking) {
-            $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
-            $valoration[$booking->idBooking] = $averageScore;
-        }
+            foreach ($bookings as $booking) {
+                $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
+                $valoration[$booking->idBooking] = $averageScore;
+            }
 
-        return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
-          
+            return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
+
         }
     } //End of index
 
@@ -144,7 +144,7 @@ class ControllerBookings extends Controller
             ]);
 
             $booking = Bookings::find($id);
-            $isBookingExists =  Bookings::where('idPerson', [$request->input('idPerson')])
+            $isBookingExists = Bookings::where('idPerson', [$request->input('idPerson')])
                 ->first();
             if ($isBookingExists) {
                 if ($booking->idPerson != $request->input('idPerson')) {
@@ -202,7 +202,7 @@ class ControllerBookings extends Controller
     public function filter_by_category($id)
     {
         try {
-            $booking = Bookings::join('users', 'users.id', '=', 'bookings.idPerson')
+            $bookings = Bookings::join('users', 'users.id', '=', 'bookings.idPerson')
                 ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
                 ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
                 ->where('bookings.idCategory', '=', $id)
@@ -220,13 +220,21 @@ class ControllerBookings extends Controller
                 )
                 ->get();
 
-            if ($booking->isEmpty()) {
-                return response()->json(['error' => 'No hay registros con ese idCategory'], 404);
+                $valoration = [];
+
+                foreach ($bookings as $booking) {
+                    $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
+                    $valoration[$booking->idBooking] = $averageScore;
+                }
+    
+
+            if ($bookings->isEmpty()) {
+                return view('body.index')->with('error', 'No se encontraron resultados');
             }
 
-            return response()->json($booking);
+            return view('body.index', compact('bookings', 'valoration'));
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     } //End filter_by_category
-}//End controllerBooking
+} //End controllerBooking
