@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-35">
         <div class="card-body">
-            <form method="POST" action="{{ route('reset-link') }}">
+            <form method="POST" action="{{ route('forgot-link') }}">
                 @csrf
                 <div class="mb-7">
                     <h3 class="font-semibold text-2xl text-gray-800">¿Olvidaste tu Contraseña?</h3>

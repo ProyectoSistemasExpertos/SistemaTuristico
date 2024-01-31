@@ -39,7 +39,7 @@
                     {{ Session::get('success')['message'] }}
                 </div>
                 @elseif(Session::has('error') && !empty(Session::get('error')['message']))
-                <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
+                <div id="flash-message" class="fixed top-1 left-2 p-4 bg-red-500 text-white border border-white rounded">
                     {{ Session::get('error')['message'] }}
                 </div>
                 @else
@@ -89,7 +89,7 @@
 
         if (flashMessage.length > 0 && flashMessage.text().trim() !== '') {
             // Obtener la duración del mensaje flash
-            var duration = {{ Session::get('success')['duration'] ?? Session::get('error')['duration'] ?? 2000 }};
+            var duration = {{ Session::get('success')['duration'] ?? Session::get('error')['duration'] ?? 2500 }};
             // Ocultar el mensaje flash después de la duración especificada
             setTimeout(function() {
                 flashMessage.fadeOut('slow');

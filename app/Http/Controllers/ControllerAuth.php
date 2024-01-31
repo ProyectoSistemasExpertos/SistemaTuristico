@@ -72,10 +72,10 @@ class ControllerAuth extends Controller
                 'idPerson' => $user->id,
                 'idCategory' => $idCategory,
             ]);
-           Session::flash('success',['message' =>  '¡Registro exitoso! Bienvenido a nuestro sitio!', 'duration' => 2000]);
+           Session::flash('success',['message' =>  '¡Registro exitoso! Ya puedes iniciar sesión!', 'duration' => 2500]);
             return view('auth.login');
         } catch (\Exception $e) {
-           Session::flash('success',['message' =>  '¡Registro fallido! El correo electrónico ya está registrado.', 'duration' => 2000]);
+           Session::flash('error',['message' =>  '¡Registro fallido! El correo electrónico ya está registrado.', 'duration' => 2500]);
             return view('auth.register');
         }
     }
@@ -93,11 +93,11 @@ class ControllerAuth extends Controller
             $user = User::where('email', $request->email)->firstOrFail();
 
             $token = $user->createToken('access_token')->plainTextToken;
-           Session::flash('success',['message' =>  '¡Inicio de sesión exitoso!', 'duration' => 2000]);
+           Session::flash('success',['message' =>  '¡Inicio de sesión exitoso!', 'duration' => 2500]);
             //return response()->json(['message' => 'Inicio de sesión exitoso', 'user' => $user, 'access_token' => $token], 200);
             return redirect()->route('booking.index')->with(201);
         } else {
-           Session::flash('success',['message' =>  '¡Credenciales inválidas!', 'duration' => 2000]);
+           Session::flash('error',['message' =>  '¡Credenciales inválidas!', 'duration' => 2500]);
             return view('auth.login');
         }
     }
@@ -108,10 +108,10 @@ class ControllerAuth extends Controller
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-           Session::flash('success',['message' =>  '¡Cierre de Sesión Exitoso!', 'duration' => 2000]);
+           Session::flash('error',['message' =>  '¡Cierre de Sesión Exitoso!', 'duration' => 2500]);
             return view('auth.login');
         } catch (\Exception $e) {
-           Session::flash('success',['message' =>  '¡Cierre de Sesión Fallido!', 'duration' => 2000]);
+           Session::flash('error',['message' =>  '¡Cierre de Sesión Fallido!', 'duration' => 2500]);
             return view('auth.login');
         }
     }
@@ -130,10 +130,10 @@ class ControllerAuth extends Controller
             ]);
             $mailController = new ControllerMail();
             $mailController->sendResetPasswordEmail($user->email, $resetToken->token);
-           Session::flash('success',['message' =>  '¡Correo electrónico enviado con éxito!', 'duration' => 2000]);
+           Session::flash('success',['message' =>  '¡Correo electrónico enviado con éxito!', 'duration' => 2500]);
             return view('auth.login');
         } catch (\Exception $e) {
-           Session::flash('success',['message' =>  '¡Correo electrónico no encontrado!', 'duration' => 2000]);
+           Session::flash('error',['message' =>  '¡Correo electrónico no encontrado!', 'duration' => 2500]);
            return view('auth.forgot-password');
         }
     }
@@ -151,21 +151,21 @@ class ControllerAuth extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {
-               Session::flash('success',['message' =>  '¡Correo electrónico no encontrado!', 'duration' => 2000]);
+               Session::flash('error',['message' =>  '¡Correo electrónico no encontrado!', 'duration' => 2500]);
                return view('auth.login');
             }
 
             $passwordResetToken = $user->passwordResetTokens()->first();
 
             if (!$passwordResetToken) {
-               Session::flash('success',['message' =>  '¡Token no encontrado!', 'duration' => 2000]);
+               Session::flash('error',['message' =>  '¡Token no encontrado!', 'duration' => 2500]);
                return view('auth.login');
             }
 
             $isValidToken = $this->validateResetToken($passwordResetToken, $request->token);
 
             if (!$isValidToken) {
-               Session::flash('success',['message' =>  '¡Token no válido!', 'duration' => 2000]);
+               Session::flash('error',['message' =>  '¡Token no válido!', 'duration' => 2500]);
                return view('auth.login');
             }
 
@@ -175,10 +175,10 @@ class ControllerAuth extends Controller
 
             // Delete the password reset token
             PasswordResetToken::where('email', $user->email)->delete();
-           Session::flash('success',['message' =>  '¡Contraseña restablecida exitosamente!', 'duration' => 2000]);
+           Session::flash('success',['message' =>  '¡Contraseña restablecida exitosamente!', 'duration' => 2500]);
            return view('auth.login');
         } catch (\Exception $e) {
-           Session::flash('success',['message' =>  '¡No se pudo restablecer la contraseña!', 'duration' => 2000]);
+           Session::flash('error',['message' =>  '¡No se pudo restablecer la contraseña!', 'duration' => 2500]);
             return view('auth.login');
         }
     }

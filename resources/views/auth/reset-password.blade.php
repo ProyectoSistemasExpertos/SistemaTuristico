@@ -6,7 +6,7 @@
 <p class="text-gray-400 mb-6">
     Ingresa tu nueva contraseña para restablecer tu cuenta.
 </p>
-<form method="post" action="{{ route('show-reset-password') }}">
+<form method="post" action="{{ route('reset-confirm') }}">
     @csrf
     <input type="hidden" id="token" name="token" value="{{ $token }}">
 

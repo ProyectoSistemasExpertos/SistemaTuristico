@@ -48,8 +48,8 @@ Route::get('/profile/{id}',[ControllerPersons::class,'profile'])->name('profile'
 
 Route::post('/register',[ControllerAuth::class,'register'])->name('register');
 Route::post('/login',[ControllerAuth::class,'login'])->name('login');
-Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('reset-link');
-Route::post('/reset-password',[ControllerAuth::class,'resetPassword']);
+Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('forgot-link');
+Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reset-confirm');
 Route::get('/logout',[ControllerAuth::class,'logout'])->name('logout');
 /* -------------------------------------------ViewsLogin-----------------------------------------  */
 Route::get('/home',function(){
