@@ -26,7 +26,6 @@
         </script>
         @endif
 
-      
 
         @php
         $categoryIcons = [
@@ -34,19 +33,11 @@
         2 => ['icon' => 'fa-umbrella-beach'],
         3 => ['icon' => 'fa-city'],
         ];
-
-        $categoryColors = [
-            1 => 'bg-success', // Color para la categoría 1
-            2 => 'bg-info',    // Color para la categoría 2
-            3 => 'bg-warning', // Color para la categoría 3
-        ];
         @endphp
-
         @foreach($bookings as $item)
-
-        <div class="card mb-2 {{ isset($recommendation_flag) && $recommendation_flag ? $categoryColors[$item->idCategory] : '' }}">
+        <div class="card mb-2">
             <div class="card-body">
-
+               
                 <div class="row g-2 mb-2">
                     <div class="col-md-4">
                         @if (!empty($item->image))
@@ -71,14 +62,43 @@
                         </div>
                     </div>
                 </div>
-
+              
             </div>
         </div>
-
         @endforeach
 
     </section>
+    <script>
+        $(document).ready(function() {
+            $('#ver-mas-link-{{ $item->idBooking }}').click(function(event) {
+                event.preventDefault(); // Evita la acción predeterminada del enlace (navegación)
 
+                // Obtiene la URL del enlace
+                var url = $(this).attr('href');
+
+                // Realiza la solicitud POST a la otra ruta
+                $.ajax({
+                    url: '/recommendation/create',
+                    type: 'POST',
+                    data: {
+                        idPerson: '{{ $item->idPerson }}',
+                        idCategory: '{{ $item->idCategory }}'
+                    },
+                    success: function(response) {
+                        // Maneja la respuesta de la solicitud POST según sea necesario
+                        console.log('Solicitud POST exitosa:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        // Maneja los errores de la solicitud POST según sea necesario
+                        console.error('Error en la solicitud POST:', status, error);
+                    }
+                });
+
+                // Redirige a la URL original del enlace
+                window.location.href = url;
+            });
+        });
+    </script>
 </div>
 
 <!-- Bootstrap CSS -->
