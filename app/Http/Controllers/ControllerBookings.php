@@ -45,7 +45,7 @@ class ControllerBookings extends Controller
                 $valoration[$booking->idBooking] = $averageScore;
             }
 
-            return view('body.index', compact('bookings', 'category', 'valoration'));
+            return view('body.index', compact('bookings', 'valoration'));
         } else {
             $booking = Bookings::findorfail($id);
 
@@ -73,7 +73,6 @@ class ControllerBookings extends Controller
                 )
                 ->get();
 
-            $category = Categories::all();
             $valoration = [];
 
             foreach ($bookings as $booking) {
@@ -81,7 +80,10 @@ class ControllerBookings extends Controller
                 $valoration[$booking->idBooking] = $averageScore;
             }
 
-            return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
+            
+            
+
+            return view('body/components/booking_complete', compact('bookings', 'valoration'));
         }
     } //End of index
 

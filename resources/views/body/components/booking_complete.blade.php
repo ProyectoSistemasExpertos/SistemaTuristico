@@ -31,7 +31,6 @@
         @foreach($bookings as $item)
         <div class="card mb-2">
             <div class="card-body ">
-            <a href="{{ route('booking.index') }}" class="btn btn-primary mb-2">Volver</a>
                 <div class="row g-2 mb-2">
                     <div class="col-md-4">
                     
