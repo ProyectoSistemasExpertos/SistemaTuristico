@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categories;
+use App\Models\Category;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,10 +12,10 @@ class ControllerCategorys extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $category = Categories::all();
+            $category = Category::all();
             return response()->json($category);
         } else {
-            $category = Categories::findorfail($id);
+            $category = Category::findorfail($id);
             return response()->json($category);
         }
     } //End of index
@@ -28,7 +28,7 @@ class ControllerCategorys extends Controller
             ]);
 
             $input = $request->all();
-            $category = new Categories();
+            $category = new Category();
             $category->typeCategory = $input['typeCategory'];
             $category->save();
 
@@ -52,7 +52,7 @@ class ControllerCategorys extends Controller
                 'typeCategory' => 'required'
             ]);
 
-            $category = Categories::find($id);
+            $category = Category::find($id);
 
             if (!$category) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
@@ -70,7 +70,7 @@ class ControllerCategorys extends Controller
     } //End of update
 
     public function destroy($id){
-        $category = Categories::where('idCategory', $id)->first();
+        $category = Category::where('idCategory', $id)->first();
         if (!$category) {
             return response()->json(['error' => 'La categoría no existe'], 404);
         }

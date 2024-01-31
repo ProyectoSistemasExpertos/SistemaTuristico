@@ -9,16 +9,9 @@ class PasswordResetToken extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'email'; // Assuming 'email' is the primary key
-    public $incrementing = false;
-
     protected $fillable = ['email', 'token'];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
-
-    // Relationship with the User model
+    // Relación con el modelo User
     public function user()
     {
         return $this->belongsTo(User::class, 'email', 'email');

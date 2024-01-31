@@ -11,7 +11,6 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
-        "slick-carousel": "^1.8.1",
-        "toastr": "^2.1.4"
+        "slick-carousel": "^1.8.1"
     }
 }

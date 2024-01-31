@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Valorations;
+use App\Models\Valoration;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -11,41 +11,41 @@ class ControllerValorations extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $booking = Valorations::join('users','users.id','=','valorations.idPerson')
-            ->join('bookings','bookings.idBooking','=','valorations.idBooking')
-            ->join('booking_gallerys','booking_gallerys.idBooking','=','bookings.idBooking')
+            $booking = Valoration::join('users','users.id','=','valoration.idPerson')
+            ->join('booking','booking.idBooking','=','valoration.idBooking')
+            ->join('booking_gallery','booking_gallery.idBooking','=','booking.idBooking')
             ->select(
-                'valorations.*',
+                'valoration.*',
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
-                'bookings.idBooking', 
-                'bookings.description',
-                'booking_gallerys.idBooking_gallery',
-                'booking_gallerys.image'
+                'booking.idBooking', 
+                'booking.description',
+                'booking_gallery.idBooking_gallery',
+                'booking_gallery.image'
             )
             ->get();
             return response()->json($booking);
         } else {
 
-            $booking =Valorations::findorfail($id);
+            $booking =Valoration::findorfail($id);
             
             if(!$booking){
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $booking = Valorations::join('users','users.id','=','valorations.idPerson')
-            ->join('bookings','bookings.idBooking','=','valorations.idBooking')
-            ->join('booking_gallerys','booking_gallerys.idBooking','=','bookings.idBooking')
-            ->where('bookings.idBooking','=',$id)
+            $booking = Valoration::join('users','users.id','=','valoration.idPerson')
+            ->join('booking','booking.idBooking','=','valoration.idBooking')
+            ->join('booking_gallery','booking_gallery.idBooking','=','booking.idBooking')
+            ->where('booking.idBooking','=',$id)
             ->select(
-                'valorations.*',
+                'valoration.*',
                 'users.idCard',
                 'users.name',
                 'users.firstLastName',
-                'bookings.idBooking',
-                'bookings.description',
-                'booking_gallerys.idBooking_gallery',
-                'booking_gallerys.image'
+                'booking.idBooking',
+                'booking.description',
+                'booking_gallery.idBooking_gallery',
+                'booking_gallery.image'
             )
             ->get();
             return response()->json($booking);
@@ -63,7 +63,7 @@ class ControllerValorations extends Controller
                 'idBooking' => 'required'
             ]);
 
-            $isValorationExists =  Valorations::whereIn('idBooking', [$request->input('idBooking')])
+            $isValorationExists =  Valoration::whereIn('idBooking', [$request->input('idBooking')])
             ->orWhere('idPerson',[$request->input('idPerson')])
             ->first();
 
@@ -76,7 +76,7 @@ class ControllerValorations extends Controller
             }
 
             $input = $request->all();
-            $valoration = new Valorations();
+            $valoration = new Valoration();
             $valoration->idValoration = $input['idValoration'];
             $valoration->score = $input['score'];
             $valoration->commentary = $input['commentary'];
@@ -107,8 +107,8 @@ class ControllerValorations extends Controller
                 'idBooking' => 'required'
             ]);
 
-            $valoration = Valorations::find($id);
-            $isValorationExists =  Valorations::whereIn('idBooking', [$request->input('idBooking')])
+            $valoration = Valoration::find($id);
+            $isValorationExists =  Valoration::whereIn('idBooking', [$request->input('idBooking')])
             ->orWhere('idPerson',[$request->input('idPerson')])
             ->first();
             if ($isValorationExists) {
@@ -143,7 +143,7 @@ class ControllerValorations extends Controller
     } //End of update
 
     public function destroy($id){
-        $valoration = Valorations::where('idValoration',$id)->first();
+        $valoration = Valoration::where('idValoration',$id)->first();
         $valoration->delete();
         return response()->json(['message' => 'Se ha elimiado correctamente!'], 200);
     }

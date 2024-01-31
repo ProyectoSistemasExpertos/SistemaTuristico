@@ -12,7 +12,7 @@ class Person extends Model
     public $timestamps = false;
 
     public function recomendation(){
-        return $this->belongsTo(Recommendations::class);
+        return $this->belongsTo(Recommendation::class);
     }
 }
 
