@@ -3,7 +3,6 @@
 
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -19,14 +18,20 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="background-color: #F1E9E7;">
         @if(session('success'))
         <script>
             toastr.success("{{ session('success') }}");
         </script>
         @endif
 
-      
+        @if(Session::has('success'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('success') }}
+        </div>
+        @endif
+
+
 
         @php
         $categoryIcons = [
@@ -36,23 +41,22 @@
         ];
 
         $categoryColors = [
-            1 => 'bg-success', // Color para la categoría 1
-            2 => 'bg-info',    // Color para la categoría 2
-            3 => 'bg-warning', // Color para la categoría 3
+        1 => '#BEF87D', // Color para la categoría 1
+        2 => '#EEF6B0', // Color para la categoría 2
+        3 => '#DAF1EB', // Color para la categoría 3
         ];
         @endphp
 
         @foreach($bookings as $item)
-
-        <div class="card mb-2 {{ isset($recommendation_flag) && $recommendation_flag ? $categoryColors[$item->idCategory] : '' }}">
+        <div class="card mb-2" style="background-color: {{ isset($recommendation_flag) && $recommendation_flag ? $categoryColors[$item->idCategory] : ''}}">
             <div class="card-body">
 
                 <div class="row g-2 mb-2">
                     <div class="col-md-4">
                         @if (!empty($item->image))
-                        <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva">
+                        <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva" style="max-width: 100%; height: auto;">
                         @else
-                        <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen">
+                        <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen" style="max-width: 100%; height: auto;">
                         @endif
                     </div>
                     <div class="col-md-8">
@@ -63,7 +67,7 @@
                         <h5 class="card-subtitle mb-2 text-muted">{{ $item->typeCategory }}</h5>
                         <p class="card-text mb-1"><strong>Ubicado en:</strong> {{ $item->location }}</p>
                         <p class="card-text mb-1"><strong>Máximo de personas:</strong> {{ $item->totalPossibleReservation }}</p>
-                        <p class="card-text mb-1"><strong>Precio por noche:</strong> ₡{{ $item->price }}</p>
+                        <p class="card-text mb-1"><strong>Precio:</strong> ₡{{ $item->price }}</p>
                         <!-- Asegúrate de tener las variables disponibles: $categoryIcons y $item->idCategory -->
                         <p class="card-text"><strong>Puntuación:</strong> {{ $valoration[$item->idBooking] }} <i class="fa-regular fa-star"></i></p>
                         <div class="action-container d-flex justify-content-between">

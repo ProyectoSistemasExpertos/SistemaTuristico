@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,17 +12,26 @@
 </head>
 
 <body>
+    <style>
+        .navbar-nav .nav-link {
+            color: white;
+            /* Cambia el color del texto a blanco */
+        }
+    </style>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ route('booking.index') }} ">Tuplas</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ route('booking.index') }}">
+        <img src="{{ asset('Tuplas.png') }}" alt="Logo de Tuplas" style="max-width: 10%; height: auto;">
+            Tuplas
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Historial de Reservaciones</a>
+                    <a class="nav-link" href="{{ route('history_by_user',auth()->user()->id ) }}">Historial de Reservaciones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('view-profile') }}">Perfil de Usuario</a>

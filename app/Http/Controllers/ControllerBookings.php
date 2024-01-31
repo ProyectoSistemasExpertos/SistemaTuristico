@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Toastr;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class ControllerBookings extends Controller
 {
@@ -43,10 +44,20 @@ class ControllerBookings extends Controller
 
             foreach ($bookings as $booking) {
                 $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
-                $valoration[$booking->idBooking] = $averageScore;
+                // Redondear el promedio a 2 decimales
+                $roundedAverageScore = round($averageScore, 2);
+                $valoration[$booking->idBooking] = $roundedAverageScore;
             }
+            
+            $isRecommendationExists = Recommendations::where('recommendations.idPerson', auth()->user()->id)->get();
+            //var_dump($isRecommendationExists);die();
 
-            return view('body.index', compact('bookings', 'valoration'));
+            if (!$isRecommendationExists->isEmpty()) {
+                //var_dump("Hola");
+                return redirect()->route('recommendation.showRecommendation', auth()->user()->id);
+            } else {
+                return view('body.index', compact('bookings', 'valoration'));
+            }
         } else {
             $booking = Bookings::findorfail($id);
 
@@ -83,41 +94,45 @@ class ControllerBookings extends Controller
                     'categories.typeCategory'
                 )
                 ->get();
-                foreach ($bookings as $booking) {
-                    $idCategory_aux = $booking->idCategory;
-                }
-                
-                $isRecommendationExists =  Recommendations::where('idPerson', auth()->user()->id)
-                ->where('idCategory',$idCategory_aux)
+            foreach ($bookings as $booking) {
+                $idCategory_aux = $booking->idCategory;
+            }
+
+            $isRecommendationExists =  Recommendations::where('idPerson', auth()->user()->id)
+                ->where('idCategory', $idCategory_aux)
                 ->first();
-    
-                //make recommendation
-                if (!$isRecommendationExists) {
-                    $recommendation = new Recommendations();
-                    $recommendation->idPerson = auth()->user()->id;
-                    $recommendation->idCategory = $idCategory_aux;
-                    $recommendation->counter = 0;
-                    $recommendation->save();
-    //$isRecommendationExists->idCategory == $request->input('idCategory')
-                }else{
-                    $updateRecommendation = Recommendations::findOrFail($isRecommendationExists->idRecommendation);
-                    $updateRecommendation->idPerson = auth()->user()->id;
-                    $updateRecommendation->idCategory = $idCategory_aux;
-                    $updateRecommendation->counter = $updateRecommendation->counter+1;
-                    $updateRecommendation->save();
-                }
-                
+
+            //make recommendation
+            if (!$isRecommendationExists) {
+                $recommendation = new Recommendations();
+                $recommendation->idPerson = auth()->user()->id;
+                $recommendation->idCategory = $idCategory_aux;
+                $recommendation->counter = 0;
+                $recommendation->save();
+                //$isRecommendationExists->idCategory == $request->input('idCategory')
+            } else {
+                $updateRecommendation = Recommendations::findOrFail($isRecommendationExists->idRecommendation);
+                $updateRecommendation->idPerson = auth()->user()->id;
+                $updateRecommendation->idCategory = $idCategory_aux;
+                $updateRecommendation->counter = $updateRecommendation->counter + 1;
+                $updateRecommendation->save();
+            }
+
             $valoration = [];
 
             foreach ($bookings as $booking) {
                 $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
-                $valoration[$booking->idBooking] = $averageScore;
+                // Redondear el promedio a 2 decimales
+                $roundedAverageScore = round($averageScore, 2);
+                $valoration[$booking->idBooking] = $roundedAverageScore;
             }
+            
 
             return view('body/components/booking_complete', compact('bookings', 'valoration'));
         }
     } //End of index
     public function store(Request $request)
+    
     {
         try {
             $input = $request->all();
@@ -256,16 +271,19 @@ class ControllerBookings extends Controller
 
             foreach ($bookings as $booking) {
                 $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
-                $valoration[$booking->idBooking] = $averageScore;
+                // Redondear el promedio a 2 decimales
+                $roundedAverageScore = round($averageScore, 2);
+                $valoration[$booking->idBooking] = $roundedAverageScore;
             }
+            
 
 
             if ($bookings->isEmpty()) {
                 // Mensaje de éxito en la sesión flash
-                session()->flash('success', 'El registro se ha guardado correctamente.');
+                Session::flash('success', '¡Tus datos han sido guardados con éxito!');
                 return redirect()->route('booking.index');
             }
-            
+
 
             return view('body.index', compact('bookings', 'valoration'));
         } catch (QueryException $e) {

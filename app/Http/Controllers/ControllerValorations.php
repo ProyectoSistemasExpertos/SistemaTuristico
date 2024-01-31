@@ -55,13 +55,6 @@ class ControllerValorations extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'idValoration' => 'required',
-                'score' => 'required',
-                'commentary' => 'required',
-                'idPerson' => 'required',
-                'idBooking' => 'required'
-            ]);
 
             $isValorationExists =  Valorations::whereIn('idBooking', [$request->input('idBooking')])
             ->orWhere('idPerson',[$request->input('idPerson')])
@@ -77,13 +70,13 @@ class ControllerValorations extends Controller
 
             $input = $request->all();
             $valoration = new Valorations();
-            $valoration->idValoration = $input['idValoration'];
             $valoration->score = $input['score'];
             $valoration->commentary = $input['commentary'];
-            $valoration->idPerson = $input['idPerson'];
+            $valoration->idPerson = auth()->user()->id;
             $valoration->idBooking = $input['idBooking'];
             $valoration->save();
-            return response()->json($valoration);
+
+            return redirect()->route('history_by_user',auth()->user()->id );
 
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];

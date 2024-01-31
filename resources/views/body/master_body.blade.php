@@ -9,6 +9,8 @@
   <!-- COLOCAR EL ICONO EN LA PESTAÑA DE LA APP -->
   <link rel="icon" type="image/png" href="/favicon.ico" />
 
+ 
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -28,7 +30,9 @@
 
 </head>
 
+
 <body class="hold-transition sidebar-mini layout-fixed">
+
   <div class="wrapper">
 
     <!-- Preloader
@@ -39,9 +43,9 @@
     <!-- Navbar -->
     @include('body.navbar')
     <div>
-        <!-- /.navbar -->
+      <!-- /.navbar -->
 
-        <!-- Main Sidebar Container -->        <!-- /.sidebar -->
+      <!-- Main Sidebar Container --> <!-- /.sidebar -->
     </div>
 
     <!-- Main Sidebar Container -->

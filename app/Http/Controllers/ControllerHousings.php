@@ -55,23 +55,15 @@ class ControllerHousings extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'initial_date' => 'required',
-                'final_date' => 'required',
-                'arrival_date' => 'required',
-                'total_person' => 'required',
-                'idPerson' => 'required',
-            ]);
-    
             $input = $request->all();
             $idBooking = $input['idBooking'];
-    
+
             // Verificar si la reserva ya existe en Housing
             $isHousingExists = Housings::where('idBooking', $idBooking)
                 ->where('initial_date', $input['initial_date'])
                 ->where('idPerson', $input['idPerson'])
                 ->first();
-    
+
             if ($isHousingExists) {
                 $notification = [
                     'message' => 'La reserva ya ha sido registrada para esta fecha y persona',
@@ -79,35 +71,35 @@ class ControllerHousings extends Controller
                 ];
                 return redirect()->back()->with($notification);
             }
-    
+
             $booking = Bookings::where('idBooking', $idBooking)->first();
             $housing = new Housings();
-    
+
             if ($booking && $booking->totalPossibleReservation >= $input['total_person']) {
                 $housing->initial_date = $input['initial_date'];
                 $housing->final_date = $input['final_date'];
                 $housing->arrival_date = $input['arrival_date'];
                 $housing->total_person = $input['total_person'];
-                $housing->idPerson = $input['idPerson'];
+                $housing->idPerson = auth()->user()->id;
                 $housing->idBooking = $input['idBooking'];
-    
+
                 $housing->save();
-    
+
                 $booking->state = '0';
                 $booking->save();
-    
+
                 $notification = [
                     'message' => 'Registro Completo',
                     'alert-type' => 'success'
                 ];
-    
+
                 return redirect()->route('booking.index', $idBooking)->with($notification);
             } else {
                 $notification = [
                     'message' => 'La cantidad de personas supera a la capacidad del hospedaje',
                     'alert-type' => 'error'
                 ];
-    
+
                 return redirect()->back()->with($notification);
             }
         } catch (QueryException $e) {
@@ -119,8 +111,6 @@ class ControllerHousings extends Controller
             }
         }
     }
-    
-
 
     public function update(Request $request, $id)
     {
@@ -227,34 +217,39 @@ class ControllerHousings extends Controller
         }
     } //End history_by_bookings
 
-    public function history_by_user($idUser)
+    public function history_by_user($idUser = null)
     {
         try {
-            $users = Bookings::join('housings', 'housings.idBooking', '=', 'bookings.idBooking')
-                ->join('users', 'users.id', '=', 'bookings.idPerson')
-                ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
-                ->where('housings.idPerson', '=', $idUser)
-                ->select(
-                    'bookings.*',
-                    'users.id as idUser',
-                    'users.name',
-                    'users.firstLastName',
-                    'users.secondLastName',
-                    'booking_gallerys.idBooking_gallery',
-                    'booking_gallerys.image',
-                    'housings.idHousing',
-                    'housings.initial_date',
-                    'housings.final_date',
-                    'housings.arrival_date',
-                    'housings.total_person'
-                )
-                ->get();
 
-            if ($users->isEmpty()) {
-                return view('history_by_user', ['users' => []]);
+            if ($idUser) {
+                $users = Bookings::join('housings', 'housings.idBooking', '=', 'bookings.idBooking')
+                    ->join('users', 'users.id', '=', 'bookings.idPerson')
+                    ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+                    ->where('housings.idPerson', '=', auth()->user()->id)
+                    ->select(
+                        'bookings.*',
+                        'users.id as idUser',
+                        'users.name',
+                        'users.firstLastName',
+                        'users.secondLastName',
+                        'booking_gallerys.idBooking_gallery',
+                        'booking_gallerys.image',
+                        'housings.idHousing',
+                        'housings.initial_date',
+                        'housings.final_date',
+                        'housings.arrival_date',
+                        'housings.total_person'
+                    )
+                    ->get();
+
+                if ($users->isEmpty()) {
+                    return view('body.components.notFound');
+                }
+
+                return view('body/modules/history_by_user', compact('users'));
+            } else {
+                var_dump("No traer id housing history by user");
             }
-
-            return view('body/modules/history_by_user', compact('users'));
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

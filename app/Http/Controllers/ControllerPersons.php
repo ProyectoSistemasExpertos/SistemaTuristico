@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categories;
 use App\Models\Person;
 use App\Models\Preferences;
 use App\Models\Recommendations;
@@ -213,7 +214,15 @@ class ControllerPersons extends Controller
         }
         $user = User::findOrFail($userId);
 
-        return view('body.modules.profile', compact('user'));
+        $category = Categories::join('preferences', 'preferences.idCategory', '=', 'categories.idCategory')
+                ->where('preferences.idPerson', '=', $userId)
+                ->select(
+                    'categories.*'
+                )
+                ->get();
+        //dd($category);
+        
+        return view('body.modules.profile', compact('user','category'));
     }
 
     public function showUpdateView()

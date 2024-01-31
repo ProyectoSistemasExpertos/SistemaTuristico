@@ -98,7 +98,7 @@ Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);
 Route::get('/housing/history_by_user/{idUser}',[ControllerHousings::class,'history_by_user']);
 //Route::get('/housing/history_by_bookings/{idBookings?}',[ControllerHousings::class,'history_by_bookings']);
 
-Route::get('/history-by-user/{idUser}', [ControllerHousings::class, 'history_by_user'])->name('history_by_user');
+Route::get('/history-by-user/{idUser?}', [ControllerHousings::class, 'history_by_user'])->name('history_by_user');
 //prueba mike
 Route::get('/nav-bar', [ControllerHousings::class, 'showNavbarView']);
 /* End housing */
@@ -118,7 +118,7 @@ Route::get('/booking_gallery/delete/{id}',[ControllerBooking_gallerys::class,'de
 
 /* -------------------------------------------Valoration-----------------------------------------  */
 Route::get('/valoration/{id?}',[ControllerValorations::class,'index']);
-Route::post('/valoration/create',[ControllerValorations::class, 'store']);
+Route::post('/valoration/create',[ControllerValorations::class, 'store'])->name('valoration.create');
 Route::put('/valoration/update/{id}', [ControllerValorations::class, 'update']);
 Route::delete('/valoration/delete/{id}',[ControllerValorations::class,'destroy']);
 
