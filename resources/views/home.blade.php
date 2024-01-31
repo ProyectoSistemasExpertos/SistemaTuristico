@@ -34,19 +34,17 @@
                 </div>
             </div>
             <div class="flex justify-center self-center z-10 absolute top-10 right-11 h-center">
-                @if(Session::has('success'))
+                @if(Session::has('success') && !empty(Session::get('success')['message']))
                 <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
                     {{ Session::get('success')['message'] }}
                 </div>
-                @elseif(Session::has('error'))
+                @elseif(Session::has('error') && !empty(Session::get('error')['message']))
                 <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
                     {{ Session::get('error')['message'] }}
                 </div>
                 @else
-                <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
-                    No hay mensajes en la sesión.
-                </div>
                 @endif
+
                 <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
 
                     @yield('content') <!-- Aquí es donde se renderizará tu vista específica (login o register) -->
@@ -84,29 +82,20 @@
             }, 100);
         });
     </script>
-    <script>
-        // Agregar este script al final de tu archivo Blade o al final de tu página HTML
+<script>
+    $(document).ready(function() {
+        // Verificar si hay un mensaje flash y si tiene contenido
+        var flashMessage = $('#flash-message');
 
-        // Esperar a que el DOM esté completamente cargado
-        $(document).ready(function() {
-            // Verificar si hay un mensaje flash
-            var flashMessage = $('#flash-message');
-            if (flashMessage.length > 0) {
-                // Obtener la duración del mensaje flash
-                var duration = {
-                    {
-                        Session::get('success')['duration'] ?? 2000
-                    }
-                };
-
-                // Ocultar el mensaje flash después de la duración especificada
-                setTimeout(function() {
-                    flashMessage.fadeOut('slow');
-                }, duration);
-            }
-        });
-    </script>
-
+        if (flashMessage.length > 0 && flashMessage.text().trim() !== '') {
+            // Obtener la duración del mensaje flash
+            var duration = {{ Session::get('success')['duration'] ?? Session::get('error')['duration'] ?? 2000 }};
+            // Ocultar el mensaje flash después de la duración especificada
+            setTimeout(function() {
+                flashMessage.fadeOut('slow');
+            }, duration);
+        }
+    });
+</script>
 </body>
-
 </html>

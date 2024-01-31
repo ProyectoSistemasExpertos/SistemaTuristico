@@ -34,7 +34,7 @@
 
                     <div class="flex items-center justify-between">
                         <div class="text-sm ml-auto">
-                            <a href="forgot-password" class="text-purple-700 hover:text-purple-600">
+                            <a href="{{ route('show-forgot-password') }}" class="text-purple-700 hover:text-purple-600">
                                 <strong>¿Olvidaste tu contraseña?</strong>
                             </a>
                         </div>
