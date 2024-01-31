@@ -198,8 +198,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\ProyectoInformatica\\Backend\\storage\\framework/cache/data',
-        'lock_path' => 'C:\\ProyectoInformatica\\Backend\\storage\\framework/cache/data',
+        'path' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\framework/cache/data',
+        'lock_path' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -372,13 +372,13 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\ProyectoInformatica\\Backend\\storage\\app',
+        'root' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\app',
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\ProyectoInformatica\\Backend\\storage\\app/public',
+        'root' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -398,7 +398,7 @@
     ),
     'links' => 
     array (
-      'C:\\ProyectoInformatica\\Backend\\public\\storage' => 'C:\\ProyectoInformatica\\Backend\\storage\\app/public',
+      'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\public\\storage' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -439,14 +439,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\ProyectoInformatica\\Backend\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\ProyectoInformatica\\Backend\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -511,7 +511,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\ProyectoInformatica\\Backend\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -585,7 +585,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\ProyectoInformatica\\Backend\\resources\\views/vendor/mail',
+        0 => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -698,7 +698,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\ProyectoInformatica\\Backend\\storage\\framework/sessions',
+    'files' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -719,9 +719,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\ProyectoInformatica\\Backend\\resources\\views',
+      0 => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\resources\\views',
     ),
-    'compiled' => 'C:\\ProyectoInformatica\\Backend\\storage\\framework\\views',
+    'compiled' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend\\storage\\framework\\views',
   ),
   'flare' => 
   array (
@@ -798,7 +798,7 @@
     array (
     ),
     'enable_runnable_solutions' => NULL,
-    'remote_sites_path' => 'C:\\ProyectoInformatica\\Backend',
+    'remote_sites_path' => 'C:\\Users\\josue\\Downloads\\ORACLE\\Backend',
     'local_sites_path' => '',
     'housekeeping_endpoint_prefix' => '_ignition',
     'settings_file_path' => '',
