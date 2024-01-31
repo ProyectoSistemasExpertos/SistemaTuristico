@@ -173,18 +173,12 @@ class ControllerRecommendations extends Controller
         if($recommendations->isEmpty()){
             return response()->json(['message' => 'No se encontraron recomendaciones para el idPerson dado.'], 404);
         }
-        $valoration = [];
 
-        foreach ($bookingsComplete as $booking) {
-            $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
-            $valoration[$booking->idBooking] = $averageScore;
-        }
-       
-        //dd($maxCounters);
-        
-        //return response()->json($bookings, 200);
-       //dd($bookings);
-       $recommendation_flag = true;
-        return view('body.index',compact('bookings','valoration','recommendation_flag'));
+        $maxCounters = $recommendations->max('counter');
+        $recommendationWithMaxContadores = $recommendations->where('counter', $maxCounters)->first();
+
+        return response()->json([
+            'recommendationWithMaxContadores' => $recommendationWithMaxContadores,
+        ], 200);
     }//End of makeRecommendation
 }
