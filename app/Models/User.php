@@ -12,11 +12,15 @@ class User extends Authenticatable
 {
     public function preferences()
     {
+<<<<<<< HEAD
         return $this->hasMany(Preference::class, 'idPerson', 'id');
+=======
+        return $this->hasMany(Preferences::class, 'idPerson');
+>>>>>>> 763370ad3d2cbd8ef46e83ffbed9a8ec9e8d8217
     }
 
     public function categories() {
-        return $this->belongsTo(Category::class, 'idCategory');
+        return $this->belongsTo(Categories::class, 'idCategory');
     }
 
     use HasApiTokens, HasFactory, Notifiable;
@@ -51,4 +55,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function passwordResetTokens()
+    {
+        return $this->hasMany(PasswordResetToken::class, 'email', 'email');
+    }
 }

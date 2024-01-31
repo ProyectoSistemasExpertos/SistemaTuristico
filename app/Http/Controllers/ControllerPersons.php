@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Person;
-use App\Models\Preference;
-use App\Models\Recommendation;
+use App\Models\Preferences;
+use App\Models\Recommendations;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -155,13 +155,13 @@ class ControllerPersons extends Controller
             $person = Person::findOrFail($id);
 
             // Check and delete recommendations
-            $recommendations = Recommendation::where('idPerson', $id)->get();
+            $recommendations = Recommendations::where('idPerson', $id)->get();
             foreach ($recommendations as $recommendation) {
                 $recommendation->delete();
             }
 
             // Check and delete preferences
-            $preferences = Preference::where('idPerson', $id)->get();
+            $preferences = Preferences::where('idPerson', $id)->get();
             foreach ($preferences as $preference) {
                 $preference->delete();
             }

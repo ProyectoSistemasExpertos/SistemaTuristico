@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
-use App\Models\Booking_gallery;
-use App\Models\Category;
-use App\Models\Valoration;
+use App\Models\Bookings;
+use App\Models\Booking_gallerys;
+use App\Models\Categories;
+use App\Models\Valorations;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Toastr;
 
 use Carbon\Carbon;
 
@@ -16,13 +17,13 @@ class ControllerBookings extends Controller
     public function index($id = null)
     {
         if (!$id) {
-            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
+            $bookings = Bookings::leftJoin('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+                ->join('users', 'users.id', '=', 'bookings.idPerson')
+                ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
                 ->select(
-                    'booking.*',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image',
+                    'bookings.*',
+                    'booking_gallerys.idBooking_gallery',
+                    'booking_gallerys.image',
                     'users.id as idUser',
                     'users.name',
                     'users.email',
@@ -32,56 +33,55 @@ class ControllerBookings extends Controller
                     'users.phone',
                     'users.address',
                     'users.idRol',
-                    'category.typeCategory'
+                    'categories.typeCategory'
                 )
                 ->get();
 
-            $category = Category::all();
+            $category = Categories::all();
             $valoration = [];
 
             foreach ($bookings as $booking) {
-                $averageScore = Valoration::where('idBooking', $booking->idBooking)->avg('score');
+                $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
                 $valoration[$booking->idBooking] = $averageScore;
             }
 
             return view('body.index', compact('bookings', 'category', 'valoration'));
         } else {
-            $booking = Booking::findorfail($id);
+            $booking = Bookings::findorfail($id);
 
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
-            $bookings = Booking::leftJoin('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-            ->join('users', 'users.id', '=', 'booking.idPerson')
-            ->join('category', 'category.idCategory', '=', 'booking.idCategory')
-            ->where('booking.idBooking', '=', $id)
-            ->select(
-                'booking.*',
-                'booking_gallery.idBooking_gallery',
-                'booking_gallery.image',
-                'users.id as idUser',
-                'users.name',
-                'users.email',
-                'users.idCard',
-                'users.firstLastName',
-                'users.secondLastName',
-                'users.phone',
-                'users.address',
-                'users.idRol',
-                'category.typeCategory'
-            )
-            ->get();
+            $bookings = Bookings::leftJoin('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+                ->join('users', 'users.id', '=', 'bookings.idPerson')
+                ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
+                ->where('bookings.idBooking', '=', $id)
+                ->select(
+                    'bookings.*',
+                    'booking_gallerys.idBooking_gallery',
+                    'booking_gallerys.image',
+                    'users.id as idUser',
+                    'users.name',
+                    'users.email',
+                    'users.idCard',
+                    'users.firstLastName',
+                    'users.secondLastName',
+                    'users.phone',
+                    'users.address',
+                    'users.idRol',
+                    'categories.typeCategory'
+                )
+                ->get();
 
-        $category = Category::all();
-        $valoration = [];
+            $category = Categories::all();
+            $valoration = [];
 
-        foreach ($bookings as $booking) {
-            $averageScore = Valoration::where('idBooking', $booking->idBooking)->avg('score');
-            $valoration[$booking->idBooking] = $averageScore;
-        }
+            foreach ($bookings as $booking) {
+                $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
+                $valoration[$booking->idBooking] = $averageScore;
+            }
 
-        return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
-          
+            return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
         }
     } //End of index
 
@@ -100,14 +100,14 @@ class ControllerBookings extends Controller
                 $input['image'] = null; // No se ha proporcionado ninguna imagen
             }
 
-            $booking = new Booking();
+            $booking = new Bookings();
             $booking->fill($input); // Llenar el modelo con los datos del formulario
             $booking->uploadDate = now()->toDateTimeString(); // Carbon se encargará de dar formato adecuado
             $booking->save();
 
             // Crear booking_gallery solo si hay una imagen
             if ($input['image'] !== null) {
-                $booking_gallery = new Booking_gallery(['image' => $input['image']]);
+                $booking_gallery = new Booking_gallerys(['image' => $input['image']]);
                 $booking->booking_gallery()->save($booking_gallery);
             }
 
@@ -143,8 +143,8 @@ class ControllerBookings extends Controller
                 'idPerson' => 'required'
             ]);
 
-            $booking = Booking::find($id);
-            $isBookingExists =  Booking::where('idPerson', [$request->input('idPerson')])
+            $booking = Bookings::find($id);
+            $isBookingExists = Bookings::where('idPerson', [$request->input('idPerson')])
                 ->first();
             if ($isBookingExists) {
                 if ($booking->idPerson != $request->input('idPerson')) {
@@ -179,7 +179,7 @@ class ControllerBookings extends Controller
     public function destroy($id)
     {
         try {
-            $booking = Booking::where('idBooking', $id)->first();
+            $booking = Bookings::where('idBooking', $id)->first();
 
             if (!$booking) {
                 return response()->json(['error' => 'No existe reserva con este código'], 400);
@@ -202,31 +202,42 @@ class ControllerBookings extends Controller
     public function filter_by_category($id)
     {
         try {
-            $booking = Booking::join('users', 'users.id', '=', 'booking.idPerson')
-                ->join('booking_gallery', 'booking_gallery.idBooking', '=', 'booking.idBooking')
-                ->join('category', 'category.idCategory', '=', 'booking.idCategory')
-                ->where('booking.idCategory', '=', $id)
+            $bookings = Bookings::join('users', 'users.id', '=', 'bookings.idPerson')
+                ->join('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+                ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
+                ->where('bookings.idCategory', '=', $id)
                 ->select(
-                    'booking.*',
+                    'bookings.*',
                     'users.idCard',
                     'users.name',
                     'users.firstLastName',
                     'users.secondLastName',
                     'users.phone',
                     'users.email',
-                    'booking_gallery.idBooking_gallery',
-                    'booking_gallery.image',
-                    'category.typeCategory'
+                    'booking_gallerys.idBooking_gallery',
+                    'booking_gallerys.image',
+                    'categories.typeCategory'
                 )
                 ->get();
 
-            if ($booking->isEmpty()) {
-                return response()->json(['error' => 'No hay registros con ese idCategory'], 404);
+            $valoration = [];
+
+            foreach ($bookings as $booking) {
+                $averageScore = Valorations::where('idBooking', $booking->idBooking)->avg('score');
+                $valoration[$booking->idBooking] = $averageScore;
             }
 
-            return response()->json($booking);
+
+            if ($bookings->isEmpty()) {
+                // Mensaje de éxito en la sesión flash
+                session()->flash('success', 'El registro se ha guardado correctamente.');
+                return redirect()->route('booking.index');
+            }
+            
+
+            return view('body.index', compact('bookings', 'valoration'));
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     } //End filter_by_category
-}//End controllerBooking
+} //End controllerBooking

@@ -46,7 +46,7 @@ Route::post('/rol/create',[ControllerRoles::class, 'store']);
 Route::put('/rol/update/{id}', [ControllerRoles::class, 'update']);
 Route::delete('/rol/delete/{id}',[ControllerRoles::class,'destroy']);
 
-/* -------------------------------------------Category-----------------------------------------  */
+/* -------------------------------------------Categories-----------------------------------------  */
 Route::get('/category/{id?}',[ControllerCategorys::class,'index']);
 Route::post('/category/create',[ControllerCategorys::class, 'store']);
 Route::put('/category/update/{id}', [ControllerCategorys::class, 'update']);
@@ -59,7 +59,7 @@ Route::put('/recommendation/update/{id}', [ControllerRecommendations::class, 'up
 Route::delete('/recommendation/delete/{id}',[ControllerRecommendations::class,'destroy']);
 Route::get('/recommendation/showRecommendation/{idPerson}', [ControllerRecommendations::class, 'showRecommendation']);
 
-/* -------------------------------------------Preference-----------------------------------------  */
+/* -------------------------------------------Preferences-----------------------------------------  */
 Route::get('/preference/{id?}',[ControllerPreferences::class,'index']);
 Route::post('/preference/create',[ControllerPreferences::class, 'store']);
 Route::put('/preference/update/{id}', [ControllerPreferences::class, 'update']);

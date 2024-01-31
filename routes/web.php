@@ -46,16 +46,19 @@ Route::get('/profile/{id}',[ControllerPersons::class,'profile'])->name('profile'
 
 /* -------------------------------------------Login-----------------------------------------  */
 
-Route::post('/register',[ControllerAuth::class,'register'])->name('register');;
+Route::post('/register',[ControllerAuth::class,'register'])->name('register');
 Route::post('/login',[ControllerAuth::class,'login'])->name('login');
-Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('forgot.password');;
-Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reset.password');;
+Route::post('/forgot-password',[ControllerAuth::class,'forgotPassword'])->name('forgot-link');
+Route::post('/reset-password',[ControllerAuth::class,'resetPassword'])->name('reset-confirm');
 Route::get('/logout',[ControllerAuth::class,'logout'])->name('logout');
 /* -------------------------------------------ViewsLogin-----------------------------------------  */
-Route::get('/register',[ControllerAuth::class,'showRegisterForm'])->name('register.show');
-Route::get('/login',[ControllerAuth::class,'showLoginForm'])->name('login.show');
-Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('forgotpass.show');
-Route::get('/reset-password',[ControllerAuth::class,'showResetPasswordForm'])->name('resetpass.show');
+Route::get('/home',function(){
+    return view('auth.login');
+});
+Route::get('/login',[ControllerAuth::class,'showLoginForm'])->name('show-login');
+Route::get('/register',[ControllerAuth::class,'showRegisterForm'])->name('show-register');
+Route::get('/forgot-password',[ControllerAuth::class,'showForgotPasswordForm'])->name('show-forgot-password');
+Route::get('/reset-password/{token}',[ControllerAuth::class,'showResetPasswordForm'])->name('show-reset-password');
 
 /* -------------------------------------------Person-----------------------------------------  */
 Route::get('/person/{id?}',[ControllerPersons::class,'index'])->name('person.index');
@@ -69,7 +72,7 @@ Route::post('/rol/create',[ControllerRoles::class, 'store'])->name('rol.store');
 Route::put('/rol/update/{id}', [ControllerRoles::class, 'update'])->name('rol.update');
 Route::delete('/rol/delete/{id}',[ControllerRoles::class,'destroy'])->name('rol.destroy');
 
-/* -------------------------------------------Category-----------------------------------------  */
+/* -------------------------------------------Categories-----------------------------------------  */
 Route::get('/category/{id?}',[ControllerCategorys::class,'index'])->name('category.index');
 Route::post('/category/create',[ControllerCategorys::class, 'store'])->name('category.create');
 Route::put('/category/update/{id}', [ControllerCategorys::class, 'update'])->name('category.update');
@@ -82,7 +85,7 @@ Route::put('/recommendation/update/{id}', [ControllerRecommendations::class, 'up
 Route::delete('/recommendation/delete/{id}',[ControllerRecommendations::class,'destroy'])->name('recommendation.delete');
 Route::get('/recommendation/showRecommendation/{idPerson}', [ControllerRecommendations::class, 'showRecommendation'])->name('recommendation.showRecommendation');
 
-/* -------------------------------------------Preference-----------------------------------------  */
+/* -------------------------------------------Preferences-----------------------------------------  */
 Route::get('/preference/{id?}',[ControllerPreferences::class,'index']);
 Route::post('/preference/create',[ControllerPreferences::class, 'store']);
 Route::put('/preference/update/{id}', [ControllerPreferences::class, 'update']);
@@ -91,7 +94,7 @@ Route::delete('/preference/delete/{id}',[ControllerPreferences::class,'destroy']
 Route::get('/preference/history_by_preferences/{idPerson}',[ControllerPreferences::class,'history_by_preferences']);
 
 /* -------------------------------------------Housing-----------------------------------------  */
-Route::get('/housing/{id?}',[ControllerHousings::class,'index']);
+Route::get('/housing/{id?}',[ControllerHousings::class,'index'])->name('housing.index');
 Route::post('/housing/create', [ControllerHousings::class, 'store'])->name('housing.store');
 Route::put('/housing/update/{id}', [ControllerHousings::class, 'update']);
 Route::delete('/housing/delete/{id}',[ControllerHousings::class,'destroy']);
