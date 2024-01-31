@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,13 +24,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Historial de Preferencias</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#">Historial de Reservaciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Perfil de Usuario</a>
+                    <a class="nav-link" href="{{ route('view-profile') }}">Perfil de Usuario</a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('logout')}}">

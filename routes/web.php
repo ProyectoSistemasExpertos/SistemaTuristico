@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ControllerLogin;
-
 use App\Http\Controllers\ControllerBooking_gallerys;
 use App\Http\Controllers\ControllerBookings;
 use App\Http\Controllers\ControllerCategorys;
@@ -11,7 +9,6 @@ use App\Http\Controllers\ControllerPreferences;
 use App\Http\Controllers\ControllerRecommendations;
 use App\Http\Controllers\ControllerValorations;
 use App\Http\Controllers\ControllerAuth;
-use App\Http\Controllers\ControllerDashboard;
 use App\Http\Controllers\ControllerRoles;
 use Illuminate\Support\Facades\Route;
 
@@ -41,8 +38,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //Route::get('/profile/{id}', [ControllerPersons::class, 'dataUser'])->name('profile');
 
-Route::put('/update/{id}', [ControllerPersons::class, 'update'])->name('update');
-Route::get('/profile/{id}',[ControllerPersons::class,'profile'])->name('profile');
+Route::post('/update', [ControllerPersons::class, 'update'])->name('update');
+Route::get('/profile',[ControllerPersons::class,'showProfileView'])->name('view-profile');
 
 /* -------------------------------------------Login-----------------------------------------  */
 

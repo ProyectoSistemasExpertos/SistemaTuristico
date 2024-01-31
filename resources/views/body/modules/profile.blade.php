@@ -1,5 +1,4 @@
 <!-- resources/views/user/profile.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,8 +68,10 @@
                         <p>{{$user->email}}</p>
                         <p>{{$user->phone}}</p>
                         <p>{{$user->address}}</p>
-                        @foreach ($user->preferences as $preference)
-                        <p>{{ $preference->idCategory }}</p>  
+                        @foreach($user->preferences as $preference)
+                        @if($preference->idPerson == $user->id)
+                        <p>pref {{$preference->idCategory}}</p>
+                        @endif
                         @endforeach
                         <!-- Más campos según sea necesario -->
 
@@ -83,7 +84,7 @@
     </div>
 </div>
 <!-- Incluir el modal desde otro archivo -->
-@include('body/modules/updateUser')
+@include('body.modules.update-profile')
 
 <!-- Scripts de Bootstrap y Popper.js (necesario para algunas funcionalidades de Bootstrap) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

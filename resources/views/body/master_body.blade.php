@@ -31,14 +31,18 @@
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
-    <!-- Preloader 
+    <!-- Preloader
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="{{ asset('backend/assets/dist/img/logo.gif') }}" alt="AdminLTELogo" height="90" width="90">
   </div>-->
 
     <!-- Navbar -->
     @include('body.navbar')
-    <!-- /.navbar -->
+    <div>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->        <!-- /.sidebar -->
+    </div>
 
     <!-- Main Sidebar Container -->
     @include('body.sidebar')

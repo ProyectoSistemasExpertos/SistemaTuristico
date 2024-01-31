@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ControllerPersons extends Controller
 {
@@ -37,6 +38,7 @@ class ControllerPersons extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
 
     public function store(Request $request)
     {
@@ -79,7 +81,6 @@ class ControllerPersons extends Controller
 
             $person->save();
 
-
             return response()->json($person, 201);
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
@@ -91,17 +92,11 @@ class ControllerPersons extends Controller
         } //End try-catch
     } //End of store
 
-    public function profile( $id){
 
-        $user = User::findOrFail($id);
 
-        return view('body/modules/profile', compact ('user'));
-    }
-    //está teniendo problemas!
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         try {
-
             $request->validate([
                 'idCard' => 'required',
                 'name' => 'required',
@@ -109,33 +104,39 @@ class ControllerPersons extends Controller
                 'secondLastName' => 'required',
                 'phone' => 'required',
                 'address' => 'required',
-                'idCategory' => 'required',
+                'idCategory' => 'required|integer',
             ]);
-            //$person =  Person::where('idCard', $request->input('idCard'))->first();
-
-            //$isPersonExists =  Person::whereIn('idCard', [$request->input('idCard')]);
-            //dd ($isPersonExists);
-            //$user = Person::find($isPersonExists->id);
-            $user = User::findOrFail($id);
+            $userId = Auth::id();
+            if (Auth::check()) {
+                $userId = Auth::id();
+            } else {
+                echo "El usuario no está autenticado";
+            }
+            $user = User::findOrFail($userId);
 
             if (!$user) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
+                //$user->preferences = $user->preferences()->get();
                 $user->idCard = $request->idCard;
                 $user->name = $request->name;
                 $user->firstLastName = $request->firstLastName;
                 $user->secondLastName = $request->secondLastName;
                 $user->phone = $request->phone;
                 $user->address = $request->address;
-                $user->save();
 
-                $user->preferences = $user->preferences()->get();
-
-                foreach ($user->preferences as $preference) {
-                    $category = $preference->categories;
+                $preferences = Preferences::where('idPerson', $request->id)->get();
+                foreach ($preferences as $preference) {
+                    $preference->idCategory = $request->idCategory;
+                    $preference->save();
                 }
 
-                return view('body.modules.profile', compact ('user'));
+                //$user->preferences->idCategory = $request->idCategory;
+
+                $user->save();
+                //$user->preferences->categories = $user->preferences->categories()->get();
+
+                return redirect()->route('view-profile')->with('success', 'Se ha actualizado correctamente.');
             } //end if exists
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
@@ -144,6 +145,9 @@ class ControllerPersons extends Controller
             }
         } //End try-catch
     } //End of update
+
+
+
 
     public function destroy($id)
     {
@@ -197,4 +201,23 @@ class ControllerPersons extends Controller
         }
     } //end destroy
 
+
+
+    public function showProfileView()
+    {
+        $userId = Auth::id();
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            echo "El usuario no está autenticado";
+        }
+        $user = User::findOrFail($userId);
+
+        return view('body.modules.profile', compact('user'));
+    }
+
+    public function showUpdateView()
+    {
+        return view('body.modules.update-profile');
+    }
 }
