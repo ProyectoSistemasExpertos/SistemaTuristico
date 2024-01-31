@@ -10,6 +10,7 @@ use App\Models\PasswordResetToken;
 use App\Http\Controllers\ControllerMail;
 use App\Models\Person;
 use App\Models\Preferences;
+use App\Models\Recommendations;
 use Illuminate\Support\Facades\Session;
 
 class ControllerAuth extends Controller
@@ -95,7 +96,17 @@ class ControllerAuth extends Controller
             $token = $user->createToken('access_token')->plainTextToken;
            Session::flash('success',['message' =>  '¡Inicio de sesión exitoso!', 'duration' => 2500]);
             //return response()->json(['message' => 'Inicio de sesión exitoso', 'user' => $user, 'access_token' => $token], 200);
-            return redirect()->route('booking.index')->with(201);
+            $idPerson = $user->id;
+            $isRecommendationExists = Recommendations::where('idPerson',$idPerson)->get();
+
+            if($isRecommendationExists->isEmpty()){
+                Session::flash('alert',['message' =>  '¡No existe una publicación de esta categoría!', 'duration' => 2500]);
+                return redirect()->route('booking.index')->with(201);
+            }
+            return redirect()->route('recommendation.showRecommendation',$user->id);
+           
+            //return redirect()->route('booking.index')->with(201);
+             //return response()->json(['message' => 'Inicio de sesión exitoso', 'user' => $user, 'access_token' => $token], 200);
         } else {
            Session::flash('error',['message' =>  '¡Credenciales inválidas!', 'duration' => 2500]);
             return view('auth.login');

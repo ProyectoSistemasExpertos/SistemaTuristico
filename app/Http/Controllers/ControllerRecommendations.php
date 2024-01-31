@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bookings;
 use App\Models\Recommendations;
+use App\Models\Valorations;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -133,7 +135,39 @@ class ControllerRecommendations extends Controller
     }//End of destroy
 
     public function showRecommendation($id){
-        $recommendations = Recommendations::where('idPerson', $id)->get();
+
+        $bookingsComplete = Bookings::leftJoin('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
+        ->join('users', 'users.id', '=', 'bookings.idPerson')
+        ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
+        ->select(
+            'bookings.*',
+            'booking_gallerys.idBooking_gallery',
+            'booking_gallerys.image',
+            'users.id as idUser',
+            'users.name',
+            'users.email',
+            'users.idCard',
+            'users.firstLastName',
+            'users.secondLastName',
+            'users.phone',
+            'users.address',
+            'users.idRol',
+            'categories.typeCategory'
+        )
+        ->get();
+        $recommendations = Recommendations::where('recommendations.idPerson', $id)
+        ->select(
+        'recommendations.idRecommendation',
+        'recommendations.idPerson as recommendation_person',
+        'recommendations.counter',
+        'recommendations.idCategory',
+        )
+        ->get();
+        $maxCounters = $recommendations->max('counter');
+        $recommendation_complete = $recommendations->where('counter', $maxCounters)->first();
+        $bookings = $bookingsComplete->where('idCategory',$recommendation_complete->idCategory);
+        //dd($recommendation_complete->idCategory);
+        //dd($bookings);
 
 
         if($recommendations->isEmpty()){
