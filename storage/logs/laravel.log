@@ -26053,3 +26053,40 @@
 #53 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\ProyectoInfo...')
 #54 {main}
 "} 
+[2024-01-31 06:48:56] local.ERROR: Target class [Illuminate\Foundation\Console\StorageUnlinkCommand] does not exist. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [Illuminate\\Foundation\\Console\\StorageUnlinkCommand] does not exist. at C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:914)
+[stacktrace]
+#0 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(293): Illuminate\\Container\\Container->build('Illuminate\\\\Foun...')
+#1 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(908): Illuminate\\Container\\Container->Illuminate\\Container\\{closure}(Object(Illuminate\\Foundation\\Application), Array)
+#2 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(795): Illuminate\\Container\\Container->build(Object(Closure))
+#3 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(957): Illuminate\\Container\\Container->resolve('Illuminate\\\\Foun...', Array, true)
+#4 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(731): Illuminate\\Foundation\\Application->resolve('Illuminate\\\\Foun...', Array)
+#5 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(942): Illuminate\\Container\\Container->make('Illuminate\\\\Foun...', Array)
+#6 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(249): Illuminate\\Foundation\\Application->make('Illuminate\\\\Foun...')
+#7 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(263): Illuminate\\Console\\Application->resolve('Illuminate\\\\Foun...')
+#8 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\ServiceProvider.php(404): Illuminate\\Console\\Application->resolveCommands(Array)
+#9 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(130): Illuminate\\Support\\ServiceProvider->Illuminate\\Support\\{closure}(Object(Illuminate\\Console\\Application))
+#10 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(77): Illuminate\\Console\\Application->bootstrap()
+#11 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(481): Illuminate\\Console\\Application->__construct(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Events\\Dispatcher), '10.43.0')
+#12 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Illuminate\\Foundation\\Console\\Kernel->getArtisan()
+#13 C:\\ProyectoInformatica\\Backend\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#14 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"Illuminate\\Foundation\\Console\\StorageUnlinkCommand\" does not exist at C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:912)
+[stacktrace]
+#0 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(912): ReflectionClass->__construct('Illuminate\\\\Foun...')
+#1 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(293): Illuminate\\Container\\Container->build('Illuminate\\\\Foun...')
+#2 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(908): Illuminate\\Container\\Container->Illuminate\\Container\\{closure}(Object(Illuminate\\Foundation\\Application), Array)
+#3 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(795): Illuminate\\Container\\Container->build(Object(Closure))
+#4 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(957): Illuminate\\Container\\Container->resolve('Illuminate\\\\Foun...', Array, true)
+#5 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(731): Illuminate\\Foundation\\Application->resolve('Illuminate\\\\Foun...', Array)
+#6 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(942): Illuminate\\Container\\Container->make('Illuminate\\\\Foun...', Array)
+#7 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(249): Illuminate\\Foundation\\Application->make('Illuminate\\\\Foun...')
+#8 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(263): Illuminate\\Console\\Application->resolve('Illuminate\\\\Foun...')
+#9 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\ServiceProvider.php(404): Illuminate\\Console\\Application->resolveCommands(Array)
+#10 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(130): Illuminate\\Support\\ServiceProvider->Illuminate\\Support\\{closure}(Object(Illuminate\\Console\\Application))
+#11 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(77): Illuminate\\Console\\Application->bootstrap()
+#12 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(481): Illuminate\\Console\\Application->__construct(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Events\\Dispatcher), '10.43.0')
+#13 C:\\ProyectoInformatica\\Backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Illuminate\\Foundation\\Console\\Kernel->getArtisan()
+#14 C:\\ProyectoInformatica\\Backend\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 {main}
+"} 
