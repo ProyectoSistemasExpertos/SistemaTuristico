@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bookings;
 use App\Models\Booking_gallerys;
 use App\Models\Categories;
+use App\Models\Recommendations;
 use App\Models\Valorations;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -45,19 +46,29 @@ class ControllerBookings extends Controller
                 $valoration[$booking->idBooking] = $averageScore;
             }
 
-            return view('body.index', compact('bookings', 'category', 'valoration'));
+            return view('body.index', compact('bookings', 'valoration'));
         } else {
             $booking = Bookings::findorfail($id);
 
             if (!$booking) {
                 return response()->json(['error' => 'No existe recomendación con este código'], 400);
             }
+
             $bookings = Bookings::leftJoin('booking_gallerys', 'booking_gallerys.idBooking', '=', 'bookings.idBooking')
                 ->join('users', 'users.id', '=', 'bookings.idPerson')
                 ->join('categories', 'categories.idCategory', '=', 'bookings.idCategory')
                 ->where('bookings.idBooking', '=', $id)
                 ->select(
-                    'bookings.*',
+                    'bookings.idBooking',
+                    'bookings.title',
+                    'bookings.description',
+                    'bookings.state',
+                    'bookings.price',
+                    'bookings.location',
+                    'bookings.totalPossibleReservation',
+                    'bookings.uploadDate',
+                    'bookings.idPerson',
+                    'bookings.idCategory',
                     'booking_gallerys.idBooking_gallery',
                     'booking_gallerys.image',
                     'users.id as idUser',
@@ -72,8 +83,30 @@ class ControllerBookings extends Controller
                     'categories.typeCategory'
                 )
                 ->get();
-
-            $category = Categories::all();
+                foreach ($bookings as $booking) {
+                    $idCategory_aux = $booking->idCategory;
+                }
+                
+                $isRecommendationExists =  Recommendations::where('idPerson', auth()->user()->id)
+                ->where('idCategory',$idCategory_aux)
+                ->first();
+    
+                //make recommendation
+                if (!$isRecommendationExists) {
+                    $recommendation = new Recommendations();
+                    $recommendation->idPerson = auth()->user()->id;
+                    $recommendation->idCategory = $idCategory_aux;
+                    $recommendation->counter = 0;
+                    $recommendation->save();
+    //$isRecommendationExists->idCategory == $request->input('idCategory')
+                }else{
+                    $updateRecommendation = Recommendations::findOrFail($isRecommendationExists->idRecommendation);
+                    $updateRecommendation->idPerson = auth()->user()->id;
+                    $updateRecommendation->idCategory = $idCategory_aux;
+                    $updateRecommendation->counter = $updateRecommendation->counter+1;
+                    $updateRecommendation->save();
+                }
+                
             $valoration = [];
 
             foreach ($bookings as $booking) {
@@ -81,7 +114,7 @@ class ControllerBookings extends Controller
                 $valoration[$booking->idBooking] = $averageScore;
             }
 
-            return view('body/components/booking_complete', compact('bookings', 'category', 'valoration'));
+            return view('body/components/booking_complete', compact('bookings', 'valoration'));
         }
     } //End of index
 
