@@ -14,7 +14,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Tuplas</a>
+        <a class="navbar-brand" href="{{ route('booking.index') }} ">Tuplas</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -29,6 +29,11 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Perfil de Usuario</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ route('logout')}}">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
                 </li>
             </ul>
         </div>

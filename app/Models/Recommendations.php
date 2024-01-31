@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Recommendation extends Model
+class Recommendations extends Model
 {
     protected $table = 'recommendations';
     protected $primaryKey = 'idRecommendation';
@@ -17,7 +17,7 @@ class Recommendation extends Model
     }
 
     public function place(){
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(Bookings::class);
     }
     
 }//End of recommendation
