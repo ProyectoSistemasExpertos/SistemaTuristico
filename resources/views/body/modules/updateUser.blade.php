@@ -23,7 +23,7 @@
             </div>
             <div class="modal-body">
                 <!-- Contenido del formulario -->
-                <form id="updateForm" action="{{ route('update', 1) }}" method="post">
+                <form id="updateForm" action="{{ route('update', $user->id) }}" method="post">
                 @csrf
                 @method('put')
                     <div class="form-group">
@@ -51,24 +51,13 @@
                         <input type="text" class="form-control" id="address" name="address" placeholder="Ingrese su correo electrónico"value="{{$user->address}}"required>
                     </div>
                     <div class="form-group">
-                    <select class="form-control" id="idCategory" name="idCategory">
-                    <option value="1"
-                    @foreach($user->preferences as $preference)
-                    @if($preference->idCategory == 1) selected @endif
-                    @endforeach
-                    >Montaña</option>
-                    <option value="2"
-                    @foreach($user->preferences as $preference)
-                    @if($preference->idCategory == 2) selected @endif
-                    @endforeach
-                    >Playa</option>
-                    <option value="3"
-                    @foreach($user->preferences as $preference)
-                    @if($preference->idCategory == 3) selected @endif
-                    @endforeach
-                    >Ciudad</option>
+                    <select class="form-control" id="opciones" name="opciones">
+                    <option value="playa">Playa</option>
+                    <option value="montana">Montaña</option>
+                    <option value="ciudad">Ciudad</option>
                     </select>
                     </div>
+
                     
                     <!-- Otros campos del formulario según sea necesario -->
 
@@ -78,6 +67,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Scripts de Bootstrap y Popper.js (necesario para algunas funcionalidades de Bootstrap) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

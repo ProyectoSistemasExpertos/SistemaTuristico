@@ -12,14 +12,6 @@ class Preference extends Model
     public $timestamps = false;
 
 
-    public function user()
-{
-    return $this->belongsTo(User::class, 'idPerson', 'id'); // Ajusta los nombres de columna según tu base de datos
-}
-    public function categories() {
-        return $this->belongsTo(Category::class, 'idCategory');
-    }
-
     public function person(){
         return $this->belongsTo(Person::class);
     }

@@ -12,9 +12,8 @@ class User extends Authenticatable
 {
     public function preferences()
     {
-        return $this->hasMany(Preference::class, 'idPerson', 'id');
+        return $this->hasMany(Preference::class, 'idPerson');
     }
-
     public function categories() {
         return $this->belongsTo(Category::class, 'idCategory');
     }

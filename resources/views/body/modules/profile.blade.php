@@ -69,10 +69,8 @@
                         <p>{{$user->email}}</p>
                         <p>{{$user->phone}}</p>
                         <p>{{$user->address}}</p>
-                        @foreach($user->preferences as $preference)
-                        @if($preference->idPerson == $user->id)
-                        <p>pref {{$preference->idCategory}}</p>
-                        @endif
+                        @foreach ($user->preferences as $preference)
+                        <p>{{ $preference->idCategory }}</p>  
                         @endforeach
                         <!-- Más campos según sea necesario -->
 

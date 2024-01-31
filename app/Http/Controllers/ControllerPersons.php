@@ -10,7 +10,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class ControllerPersons extends Controller
 {
@@ -98,9 +97,11 @@ class ControllerPersons extends Controller
 
         return view('body/modules/profile', compact ('user'));
     }
+    //está teniendo problemas!
     public function update(Request $request, $id)
     {
         try {
+
             $request->validate([
                 'idCard' => 'required',
                 'name' => 'required',
@@ -108,7 +109,7 @@ class ControllerPersons extends Controller
                 'secondLastName' => 'required',
                 'phone' => 'required',
                 'address' => 'required',
-                'idCategory' => 'required|integer',
+                'idCategory' => 'required',
             ]);
             //$person =  Person::where('idCard', $request->input('idCard'))->first();
 
@@ -120,26 +121,21 @@ class ControllerPersons extends Controller
             if (!$user) {
                 return response()->json(['message' => 'No se ha encontrado un registro.'], 404);
             } else {
-                //$user->preferences = $user->preferences()->get();
                 $user->idCard = $request->idCard;
                 $user->name = $request->name;
                 $user->firstLastName = $request->firstLastName;
                 $user->secondLastName = $request->secondLastName;
                 $user->phone = $request->phone;
                 $user->address = $request->address;
-                
-            $preferences = Preference::where('idPerson', $id)->get();
-            foreach ($preferences as $preference) {
-                $preference->idCategory = $request->idCategory;
-                $preference->save();
-            }
-
-                //$user->preferences->idCategory = $request->idCategory;
-
                 $user->save();
-                //$user->preferences->categories = $user->preferences->categories()->get();
 
-                return view('body.modules.profile', compact('user'));
+                $user->preferences = $user->preferences()->get();
+
+                foreach ($user->preferences as $preference) {
+                    $category = $preference->categories;
+                }
+
+                return view('body.modules.profile', compact ('user'));
             } //end if exists
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
