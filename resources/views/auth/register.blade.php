@@ -99,7 +99,7 @@
                         <option value="3">Ciudades</option>
                     </select>
                 </div>
-                <input type="checkbox" id="idRol" name="idRol" value="on" class="text-s">
+                <input type="hidden" id="idRol" name="idRol" value="on" class="text-s">
                 <strong>Soy vendedor</strong>
                 <div>
                     <button type="submit" class="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-2 mt-2 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500">

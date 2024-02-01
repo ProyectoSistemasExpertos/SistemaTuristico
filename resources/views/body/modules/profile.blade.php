@@ -45,7 +45,13 @@
             background-color: #218838;
         }
     </style>
+     @php
+    $imageUrls = [
+    "https://img.freepik.com/vector-gratis/marco-facebook-cambio-climatico-plano-organico_23-2148928533.jpg?w=740&t=st=1706749055~exp=1706749655~hmac=2679e15d26d50284574ab5786b94091c49a8a6563bb3fd1cc2717ace578a3b92" 
+    ];
+     @endphp
 </head>
+  
 
 <body class="bg-info">
 
@@ -58,7 +64,9 @@
                     <div class="row align-items-center">
                         <!-- Imagen del perfil -->
                         <div class="col-md-3">
-                            <img class="img-fluid rounded" src="{{ asset('sinFoto.png') }}" alt="Logo de Tuplas">
+                            @foreach ($imageUrls as $index => $imageUrl)
+                            <img  class="img-fluid rounded" src="{{ $imageUrl }}" alt="Imagen {{ $index + 1 }}" style="max-width: 100%; height: auto;">
+                           @endforeach
                         </div>
                         <!-- Información del usuario y botón de edición -->
                         <div class="col-md-9 user-info">

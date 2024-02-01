@@ -10,7 +10,7 @@
             <div class="row g-2 mb-2">
                 <div class="col-md-4">
                     @if (!empty($user->image))
-                    <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $user->image) }}" alt="sin imagen">
+                     <img class="img-fluid rounded" src="{{$user->image }}" alt="Imagen de la reserva" style="max-width: 100%; height: auto;">
                     @else
                     <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen">
                     @endif
@@ -22,7 +22,7 @@
                     <p class="card-text mb-1"><Strong>Ubicado en: </Strong>{{$user->location}}</p>
                     <p class="card-text mb-1"><strong>Reservado para un total de personas:
                         </strong>{{$user->totalPossibleReservation}}</p>
-                    <p class="card-text mb-1"><strong>Precio :</strong>₡ {{$user->price}}</p>
+                    <p class="card-text mb-1"><strong>Precio por persona:</strong> ₡{{$user->price}}</p>
                     <p class="card-text mb-1"><strong>Publicado por: </strong>{{$user->name}} {{$user->firstLastName}} {{$user->secondLastName}}</p>
                     <p class="card-text mb-1"><strong>Su día de llegada fue el: </strong>{{$user->arrival_date}}</p>
                     <p class="card-text mb-1"><strong>Y finalizó el: </strong>{{$user->final_date}}</p>

@@ -18,12 +18,18 @@
             /* Cambia el color del texto a blanco */
         }
     </style>
-
+ @php
+    $imageUrls = [
+   "https://cdn.pixabay.com/photo/2016/06/09/18/36/logo-1446293_960_720.png"
+    ];
+    @endphp
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="{{ route('booking.index') }}">
-        <img src="{{ asset('Tuplas.png') }}" alt="Logo de Tuplas" style="max-width: 10%; height: auto;">
+            @foreach ($imageUrls as $index => $imageUrl)
+        <img src="{{ $imageUrl }}" alt="Imagen {{ $index}}" style="max-width: 10%; height: auto;">
             Tuplas
+              @endforeach
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

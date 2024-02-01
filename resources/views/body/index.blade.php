@@ -54,7 +54,7 @@
                 <div class="row g-2 mb-2">
                     <div class="col-md-4">
                         @if (!empty($item->image))
-                        <img class="img-fluid rounded" src="{{ asset('upload/booking_images/' . $item->image) }}" alt="Imagen de la reserva" style="max-width: 100%; height: auto;">
+                         <img class="img-fluid rounded" src="{{$item->image }}" alt="Imagen de la reserva" style="max-width: 100%; height: auto;">
                         @else
                         <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen" style="max-width: 100%; height: auto;">
                         @endif
@@ -67,7 +67,7 @@
                         <h5 class="card-subtitle mb-2 text-muted">{{ $item->typeCategory }}</h5>
                         <p class="card-text mb-1"><strong>Ubicado en:</strong> {{ $item->location }}</p>
                         <p class="card-text mb-1"><strong>Máximo de personas:</strong> {{ $item->totalPossibleReservation }}</p>
-                        <p class="card-text mb-1"><strong>Precio:</strong> ₡{{ $item->price }}</p>
+                        <p class="card-text mb-1"><strong>Precio por persona:</strong> ₡{{ $item->price }}</p>
                         <!-- Asegúrate de tener las variables disponibles: $categoryIcons y $item->idCategory -->
                         <p class="card-text"><strong>Puntuación:</strong> {{ $valoration[$item->idBooking] }} <i class="fa-regular fa-star"></i></p>
                         <div class="action-container d-flex justify-content-between">

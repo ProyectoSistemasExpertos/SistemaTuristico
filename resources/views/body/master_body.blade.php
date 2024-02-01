@@ -5,9 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sistema Turístico</title>
+  
+@php
+    $iconUrl = "https://www.flaticon.es/svg/static/icons/svg/3702/3702563.svg"; // URL directa al archivo SVG del icono
+@endphp
 
-  <!-- COLOCAR EL ICONO EN LA PESTAÑA DE LA APP -->
-  <link rel="icon" type="image/png" href="/favicon.ico" />
+<!-- COLOCAR EL ICONO EN LA PESTAÑA DE LA APP -->
+<link rel="icon" type="image/svg+xml" href="{{$iconUrl}}" />
+
 
  
 
