@@ -2,6 +2,7 @@
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<a  href="{{ route('show-login') }}" class="flex mb-2 justify-right w-14  bg-purple-800 hover:bg-purple-700 text-gray-100 p-1 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500">Volver</a>
 <div class="row justify-content-center">
     <div class="col-md-35">
         <div class="card-body">

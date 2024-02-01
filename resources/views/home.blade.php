@@ -11,29 +11,35 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
     @php
     $imageUrls = [
-    "https://www.govisitcostarica.co.cr/images/photos/desk-la-paz-waterfall-costa-rica(1).jpg",
-    "https://www.govisitcostarica.co.cr/images/photos/desk-montezuma-waterfall-on-the-nicoya-peninsula-near-santa-teresa.jpg",
-    "https://www.govisitcostarica.co.cr/images/photos/desk-hills-in-monteverde.jpg",
-    "https://www.govisitcostarica.co.cr/images/photos/desk-cloudforest-monteverde.jpg",
-    "https://www.govisitcostarica.co.cr/images/photos/desk-corcovado-national-park-beach-sunset.jpg"
+        "https://images.unsplash.com/photo-1592227068146-bd177328e578?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1611223156134-07ade11dfe6a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1592593210599-492c25d93ef9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1480480565647-1c4385c7c0bf?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1550853123-b81beb0b1449?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1586768019524-c6e902168263?q=80&w=1917&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1562559094-0739564bbc71?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1580094333632-438bdc04f79f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1552727131-5fc6af16796d?q=80&w=1949&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://s1.1zoom.me/b4737/158/Germany_Mountains_Forests_Lake_Scenery_Hintersee_549340_1920x1080.jpg",
+
     ];
     @endphp
 </head>
 
 <body>
-    <div class="bg-purple-900 absolute top-0 left-0 bottom-0 right-0 leading-5 overflow-hidden">
+    <div class="bg-purple-900 w-screen absolute top-0 left-0 bottom-0 right-0 leading-5 overflow-hidden">
         <div class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
-            <div class="w-full">
+            <div class="w-screen h-screen">
                 <div class="slick-carousel">
 
                     @foreach ($imageUrls as $index => $imageUrl)
                     <div>
-                        <img src="{{ $imageUrl }}" alt="Imagen {{ $index + 1 }}" class="w-full h-full object-cover">
+                        <img src="{{ $imageUrl }}" alt="Imagen {{ $index + 1 }}" class="w-screen h-screen object-cover">
                     </div>
                     @endforeach
                 </div>
             </div>
-            <div class="flex justify-center self-center z-10 absolute top-10 right-11 h-center">
+            <div class="flex justify-center self-center z-10 absolute top-10 right-5 h-center">
                 @if(Session::has('success') && !empty(Session::get('success')['message']))
                 <div id="flash-message" class="fixed top-1 left-2 p-4 bg-green-500 text-white border border-white rounded">
                     {{ Session::get('success')['message'] }}
@@ -47,7 +53,7 @@
 
                 <div class="p-12 bg-white mx-auto rounded-3xl w-96 mt-25">
 
-                    @yield('content') <!-- Aquí es donde se renderizará tu vista específica (login o register) -->
+                    @yield('content') <!-- Aquí es donde se renderizará (login o register) -->
                 </div>
             </div>
         </div>

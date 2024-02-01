@@ -4,33 +4,31 @@
 
 <div class="row justify-content-center">
     <div class="col-md-25">
-
         <div class="card-body">
             <form method="POST" action="{{ route('register') }}" class="max-w-md mx-auto">
                 @csrf
                 <h1 class="text-gray-800 font-bold text-xl">Regístrate</h1>
                 <p class="text-xs font-bold text-gray-600 mb-1">Por favor, completa el siguiente formulario...</p>
-
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-1">
 
-                <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                    </svg>
-                    <input id="name" name="name" placeholder="Nombre" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
-                    @error('name')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                    </svg>
-                    <input id="firstLastName" name="firstLastName" placeholder="Primer Apellido" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
-                    @error('firstLastName')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                        <input id="name" name="name" placeholder="Nombre" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
+                        @error('name')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                        <input id="firstLastName" name="firstLastName" placeholder="Primer Apellido" class="pl-2 text-xs w-full focus:outline-none" type="text" value="" required autofocus>
+                        @error('firstLastName')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="flex items-center border-2 py-2 px-1 rounded-lg mb-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
@@ -99,8 +97,7 @@
                         <option value="3">Ciudades</option>
                     </select>
                 </div>
-                <input type="hidden" id="idRol" name="idRol" value="on" class="text-s">
-                <strong>Soy vendedor</strong>
+                <input type="hidden" id="idRol" name="idRol" value="off" class="text-s">
                 <div>
                     <button type="submit" class="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-2 mt-2 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500">
                         Registrarse
@@ -111,9 +108,7 @@
                 ¿Ya tienes una cuenta? <a href="{{ route('show-login') }}" class="text-sm text-purple-700 hover:text-purple-700">
                     <strong> Ingresar</strong>
                 </a>
-
             </p>
-
         </div>
     </div>
 </div>
