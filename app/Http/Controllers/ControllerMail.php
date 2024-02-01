@@ -11,10 +11,10 @@ class ControllerMail extends Controller
     public function sendResetPasswordEmail($email, $token)
     {
         try {
-            $resetLink = 'http://localhost:8000/reset-password/' . $token;
-            
+            $resetLink = 'http://patricklisby.com/reset-password/' . $token;
+
             Mail::to($email)->send(new ResetPasswordMail($resetLink));
-            
+
             return response()->json(['message' => 'Correo de recuperación enviado exitosamente'], 200);
         } catch (\Exception $e) {
             dd($e->getMessage());
