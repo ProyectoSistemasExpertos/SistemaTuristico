@@ -28,7 +28,7 @@
         <a class="navbar-brand" href="{{ route('booking.index') }}">
             @foreach ($imageUrls as $index => $imageUrl)
         <img src="{{ $imageUrl }}" alt="Imagen {{ $index}}" style="max-width: 10%; height: auto;">
-            Tuplas
+            <strong>TU</strong>plas
               @endforeach
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,21 +37,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('history_by_user',auth()->user()->id ) }}">Historial de Reservaciones</a>
+                    <a class="nav-link" href="{{ route('history_by_user',auth()->user()->id ) }}"><strong> Historial de Reservaciones</a></strong>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('view-profile') }}">Perfil de Usuario</a>
+                    <a class="nav-link" href="{{ route('view-profile') }}"><strong> Perfil de Usuario</a></strong>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="{{ route('logout')}}">
+                    <a class="nav-link" href="{{ route('logout')}}"><strong> Salir</strong>
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
-
-
 </body>
 
 </html>

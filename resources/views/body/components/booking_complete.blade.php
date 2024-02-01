@@ -1,22 +1,25 @@
 @extends('body.master_body')
 @section('body')
-
-
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    .star-rating {
+        color: #FFD700;
+        /* Color amarillo dorado para las estrellas */
+    }
 
+    .star-rating .fa-regular.fa-star {
+        color: #CCCCCC;
+        /* Color gris para las estrellas no seleccionadas */
+    }
+</style>
+<!-- Agrega el CSS de Toastr -->
+<!-- Bootstrap CSS y Popper.js -->
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-md-6 mb-4">
-                </div><!-- /.col -->
-
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
     <section class="content">
 
         @php
@@ -33,9 +36,9 @@
             <div class="card-body ">
                 <div class="row g-2 mb-2">
                     <div class="col-md-4">
-                    
+
                         @if (!empty($item->image))
-                          <img class="img-fluid rounded" src="{{$item->image }}" alt="Imagen de la reserva" style="max-width: 100%; height: auto;">
+                        <img class="img-fluid rounded" src="{{$item->image }}" alt="Imagen de la reserva" style="max-width: 100%; height: auto;">
                         @else
                         <img class="img-fluid rounded" src="{{ asset('upload/sinFoto.jpg') }}" alt="Sin imagen" style="max-width: 100%; height: auto;">
                         @endif
@@ -45,22 +48,59 @@
                             <i class="fa-solid {{ $categoryIcons[$item->idCategory]['icon'] }}"></i>
                             {{ $item->title }}
                         </h3>
-                        <h5 class="card-subtitle mb-2 text-muted">{{ $item->typeCategory }}</h5>
-                        <p class="card-text mb-1"><strong>Descripción:</strong> {{ $item->description }}</p>
-                        <p class="card-text mb-1"><strong>Ubicado en:</strong> {{ $item->location }}</p>
-                        <p class="card-text mb-1"><strong>Máximo de personas:</strong> {{ $item->totalPossibleReservation }}</p>
-                        <p class="card-text mb-1"><strong>Precio por persona:</strong> ₡{{ $item->price }}</p>
-                        <!-- Asegúrate de tener las variables disponibles: $categoryIcons y $item->idCategory -->
-                        <p class="card-text"><strong>Puntuación:</strong> {{ $valoration[$item->idBooking] }} <i class="fa-regular fa-star"></i></p>
+                        <h5 class="card-text mb-1 text-muted">
+                            <strong>
+                                <i class="fas fa-info-circle"></i>
+                                Descripción:
+                            </strong>
+                            {{ $item->description }}
+                        </h5>
+                        <h5 class="card-subtitle mb-1 text-muted">
+                            @if($item->typeCategory == 'Montaña')
+                            <i class="material-icons">terrain</i>
+                            @elseif($item->typeCategory == 'Playa')
+                            <i class="material-icons">beach_access</i>
+                            @elseif($item->typeCategory == 'Ciudad')
+                            <i class="material-icons">location_city</i>
+                            @else
+                            <i class="material-icons">category</i>
+                            @endif
+                            {{ $item->typeCategory }}
+                        </h5>
+                        <h5 class="card-subtitle mb-1 text-muted">
+                            <i class="material-icons">place</i>
+                            {{ $item->location }}
+                        </h5>
+                        <h5 class="card-subtitle mb-1 text-muted">
+                            <i class="material-icons">group</i>
+                            Máximo de personas: {{ $item->totalPossibleReservation }}
+                        </h5>
+
+                        <h5 class="card-subtitle mb-1 text-muted">
+                            <i class="material-icons">attach_money</i>
+                            Precio por persona: ₡{{ $item->price }}
+                        </h5>
+
                         <div class="action-container d-flex justify-content-between">
-                        <a class="btn btn-primary mb-2 ml-auto" data-bs-toggle="modal" data-bs-target="#reservarModal">
-                            Reservar
-                        </a>
-                     </div>
-                        
+                            <h5 class="card-text">
+                                &nbsp;&nbsp;&nbsp;
+                                <span class="star-rating">
+                                    @for ($i = 1; $i <= 5; $i++) @if ($i <=$valoration[$item->idBooking])
+                                        <i class="fa-solid fa-star"></i>
+                                        @else
+                                        <i class="fa-regular fa-star"></i>
+                                        @endif
+                                        @endfor
+                                </span>
+                            </h5>
+                            <a class="btn btn-primary text-white mb-2 ml-auto" data-bs-toggle="modal" data-bs-target="#reservarModal">
+                                <strong>Reservar</strong>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
-              
+
             </div>
         </div>
         @endforeach
@@ -73,7 +113,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="reservarModalLabel">¿Deseas reservar?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <!-- Contenido del formulario de reserva -->
@@ -118,17 +158,23 @@
     </section>
 </div>
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS -->
 <script>
+    function cerrarModal() {
+        //APLICA LO MISMO QUE data-bs-dismiss="modal" pero en esta funcion
+        $('#reservarModal').modal('hide');
+
+    }
+
     function confirmarReserva() {
         // Capturar datos del formulario
         var formData = new FormData(document.getElementById('reservarForm'));
-
         // Realizar petición AJAX
         $.ajax({
             type: 'POST',
@@ -138,21 +184,19 @@
             contentType: false,
             success: function(response) {
                 // Manejar la respuesta aquí (puede redirigir o mostrar un mensaje)
-                console.log(response);
                 $('#reservarForm')[0].reset();
-                    // Cerrar el modal
-                    $('#reservarModal').modal('hide');
+                // Cerrar el modal
+                $('#reservarModal').modal('hide');
             },
             error: function(error) {
                 // Manejar el error aquí (puede mostrar un mensaje de error)
-                console.log(error.responseJSON);
+                console.log(error);
             }
         });
-        
+        cerrarModal();
     }
-    $('#reservarModal').on('hidden.bs.modal', function () {
-            $('#reservarForm')[0].reset();
-        });
-    
+    $('#reservarModal').on('hidden.bs.modal', function() {
+        $('#reservarForm')[0].reset();
+    });
 </script>
 @endsection
